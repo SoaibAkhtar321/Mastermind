@@ -104,7 +104,7 @@ export function HeroBannerCarousel() {
           aria-hidden="true"
           viewBox="0 0 720 480"
           preserveAspectRatio="none"
-          className="pointer-events-none absolute right-0 top-0 h-full w-[58%] sm:w-[50%] lg:w-[46%]"
+          className="pointer-events-none absolute right-0 top-0 h-full w-[50%] sm:w-[48%] lg:w-[46%]"
         >
           <path
             d="M230,0 C110,120 70,310 150,480 L720,480 L720,0 Z"
@@ -152,7 +152,7 @@ export function HeroBannerCarousel() {
               {/* Left Text & CTA Zone */}
               <div className="relative z-20 max-w-[66%] sm:max-w-[60%] lg:max-w-none lg:col-span-7 flex flex-col justify-between h-full lg:h-auto lg:justify-center gap-2.5 sm:gap-4">
                 <div className="space-y-2 sm:space-y-3">
-                  <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
+                  <p className="inline-block rounded-md bg-[#0F2A6B]/55 px-2 py-0.5 sm:bg-transparent sm:p-0 text-[10.5px] sm:text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-[var(--gold)]">
                     {slide.eyebrow}
                   </p>
 

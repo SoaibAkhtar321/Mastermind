@@ -145,7 +145,7 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
   const tickerItems = siteConfig.tickerMessages;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--cream)] text-[var(--ink)] pb-[68px] md:pb-0">
+    <div className="min-h-screen flex flex-col bg-[var(--cream)] text-[var(--ink)]">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-[var(--royal)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
@@ -402,6 +402,42 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
             </div>
           </nav>
         )}
+        {/* Mobile Sticky Quick Contact Strip (Positioned in header so bottom-right host badges never cover actions) */}
+        <div
+          role="region"
+          aria-label="Quick Contact Actions"
+          className="md:hidden border-t border-[var(--hairline)] bg-[var(--cream)]/85 px-3 py-1.5"
+        >
+          <div className="mx-auto grid max-w-[1200px] grid-cols-3 gap-1.5">
+            <a
+              href={getTelHref(0)}
+              className="btn-press flex min-h-[38px] items-center justify-center gap-1.5 rounded-lg border border-[var(--hairline)] bg-white px-2 py-1 text-xs font-bold text-[var(--navy)] active:bg-[var(--cream)]"
+            >
+              <Phone className="h-3.5 w-3.5 text-[var(--royal)] shrink-0" aria-hidden="true" />
+              <span>Call</span>
+            </a>
+
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-press flex min-h-[38px] items-center justify-center gap-1.5 rounded-lg bg-[var(--whatsapp)] px-2 py-1 text-xs font-bold text-[var(--ink)] active:bg-[var(--whatsapp-hover)]"
+            >
+              <MessageCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span>WhatsApp</span>
+            </a>
+
+            <a
+              href={directionsHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-press flex min-h-[38px] items-center justify-center gap-1.5 rounded-lg border border-[var(--hairline)] bg-white px-2 py-1 text-xs font-bold text-[var(--navy)] active:bg-[var(--cream)]"
+            >
+              <Navigation className="h-3.5 w-3.5 text-[var(--royal)] shrink-0" aria-hidden="true" />
+              <span>Directions</span>
+            </a>
+          </div>
+        </div>
       </header>
 
       {/* Subpage Back Button & Breadcrumb Navigation Bar */}
@@ -665,62 +701,25 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
             </div>
           </div>
 
-          {/* Bottom Copyright & NAP Strip */}
-          <div className="mt-10 border-t border-white/15 pt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-white/70">
+          {/* Bottom Copyright & NAP Strip (extra bottom clearance so bottom-right host badges never overlap footer text) */}
+          <div className="mt-10 border-t border-white/15 pt-6 pb-14 md:pb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-white/70">
             <p>{siteConfig.footer.copyright}</p>
             <p className="text-white/60">{siteConfig.address.napLine}</p>
           </div>
         </div>
       </footer>
 
-      {/* Desktop Floating Round WhatsApp Button (bottom-right) */}
+      {/* Desktop Floating Round WhatsApp Button (lifted clear of bottom-right host badges) */}
       <a
         href={waHref}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with MASTERMIND ACADEMY on WhatsApp"
         title="Chat on WhatsApp"
-        className="btn-press hidden md:flex fixed bottom-6 right-6 z-40 h-14 w-14 items-center justify-center rounded-full bg-[var(--whatsapp)] text-[var(--ink)] shadow-[0_12px_26px_-6px_rgba(16,28,58,0.45)] hover:bg-[var(--whatsapp-hover)]"
+        className="btn-press hidden md:flex fixed bottom-20 right-6 z-40 h-14 w-14 items-center justify-center rounded-full bg-[var(--whatsapp)] text-[var(--ink)] shadow-[0_12px_26px_-6px_rgba(16,28,58,0.45)] hover:bg-[var(--whatsapp-hover)]"
       >
         <MessageCircle className="h-6 w-6" aria-hidden="true" />
       </a>
-
-      {/* Sticky White Mobile Bottom Bar (Call, WhatsApp, Directions — 44px+ tap targets) */}
-      <div
-        role="region"
-        aria-label="Quick Contact Actions"
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-[var(--hairline)] px-2 pt-1.5 pb-[max(0.45rem,env(safe-area-inset-bottom))] shadow-[0_-6px_20px_rgba(16,28,58,0.08)]"
-      >
-        <div className="grid grid-cols-3 gap-1.5">
-          <a
-            href={getTelHref(0)}
-            className="btn-press flex min-h-[48px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1 text-[11px] font-bold text-[var(--navy)] active:bg-[var(--cream)]"
-          >
-            <Phone className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
-            <span>Call</span>
-          </a>
-
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-press flex min-h-[48px] flex-col items-center justify-center gap-0.5 rounded-xl bg-[var(--whatsapp)] px-2 py-1 text-[11px] font-bold text-[var(--ink)] active:bg-[var(--whatsapp-hover)]"
-          >
-            <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
-            <span>WhatsApp</span>
-          </a>
-
-          <a
-            href={directionsHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-press flex min-h-[48px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1 text-[11px] font-bold text-[var(--navy)] active:bg-[var(--cream)]"
-          >
-            <Navigation className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
-            <span>Directions</span>
-          </a>
-        </div>
-      </div>
     </div>
   );
 }
