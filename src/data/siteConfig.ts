@@ -322,11 +322,11 @@ export const siteConfig = {
 
   location: {
     googleMapsEmbedUrl: '',
-    googleMapsDirectionsUrl: 'https://maps.app.goo.gl/zhXBYmF9PXgMV4a59?g_st=ac',
+    googleMapsDirectionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=15.879063,74.514022',
     googleMapsSatelliteUrl:
-      'https://www.google.com/maps/@15.879063,74.514022,19z/data=!3m1!1e3',
+      'https://www.google.com/maps/place/15.879063,74.514022/@15.879063,74.514022,20z/data=!3m1!1e3',
     googleMapsFallbackQuery:
-      '15.879063,74.514022 (MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi)',
+      '15.879063,74.514022',
     latitude: '15.879063',
     longitude: '74.514022',
     plusCode: 'VGH7+JJC Belagavi, Karnataka',
@@ -812,6 +812,11 @@ export function getSafeGoogleMapsEmbedUrl(): string {
 }
 
 export function getDirectionsUrl(): string {
+  const lat = siteConfig.location.latitude.trim();
+  const lng = siteConfig.location.longitude.trim();
+  if (lat && lng) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${lat},${lng}`)}`;
+  }
   const custom = sanitizeExternalUrl(siteConfig.location.googleMapsDirectionsUrl);
   if (custom) {
     return custom;
@@ -822,6 +827,11 @@ export function getDirectionsUrl(): string {
 }
 
 export function getOpenInMapsUrl(): string {
+  const lat = siteConfig.location.latitude.trim();
+  const lng = siteConfig.location.longitude.trim();
+  if (lat && lng) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lat},${lng}`)}`;
+  }
   const custom = sanitizeExternalUrl(siteConfig.location.googleMapsDirectionsUrl);
   if (custom) {
     return custom;
