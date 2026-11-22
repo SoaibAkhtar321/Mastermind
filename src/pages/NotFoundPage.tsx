@@ -1,13 +1,28 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Phone } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Home, Phone } from 'lucide-react';
 import { getTelHref } from '../data/siteConfig';
 import { NOINDEX_ROBOTS } from '../lib/seo';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { Layout } from '../components/Layout';
 
 export function NotFoundPage() {
+  const navigate = useNavigate();
   const breadcrumbs = useMemo(() => [{ name: 'Home', path: '/' }], []);
+
+  const handleGoBack = () => {
+    const historyIdx =
+      typeof window !== 'undefined' &&
+      window.history.state &&
+      typeof window.history.state.idx === 'number'
+        ? window.history.state.idx
+        : 0;
+    if (historyIdx > 0) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
 
   useDocumentHead({
     path: '/404',
@@ -30,16 +45,24 @@ export function NotFoundPage() {
               Page Not Found
             </h1>
             <p className="text-base text-[var(--muted)]">
-              The link may have moved. Return to the MASTERMIND ACADEMY home page or call our Nehru
-              Nagar, Belagavi centre directly.
+              The link may have moved. Go back to your previous page, return to the MASTERMIND
+              ACADEMY home page, or call our Nehru Nagar, Belagavi centre directly.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Link
-                to="/"
-                className="btn-cta inline-flex min-h-[46px] items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold"
+              <button
+                type="button"
+                onClick={handleGoBack}
+                className="btn-cta inline-flex min-h-[46px] items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                <span>Back to Home</span>
+                <span>Go Back</span>
+              </button>
+              <Link
+                to="/"
+                className="btn-press inline-flex min-h-[46px] items-center gap-2 rounded-xl border border-[var(--border)] bg-white px-5 py-2.5 text-sm font-bold text-[var(--ink)] hover:border-[var(--royal)] hover:text-[var(--royal)]"
+              >
+                <Home className="h-4 w-4" aria-hidden="true" />
+                <span>Home</span>
               </Link>
               <a
                 href={getTelHref(0)}

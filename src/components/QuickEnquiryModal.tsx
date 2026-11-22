@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Phone, X } from 'lucide-react';
 import { useEnquiryModal } from '../context/EnquiryModalContext';
@@ -9,6 +10,17 @@ import { WhatsAppEnquiryForm } from './WhatsAppEnquiryForm';
 export function QuickEnquiryModal() {
   const { isOpen, defaultProgram, closeEnquiryModal } = useEnquiryModal();
   const prefersReduced = useReducedMotion();
+  const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    if (prevPathRef.current !== location.pathname) {
+      prevPathRef.current = location.pathname;
+      if (isOpen) {
+        closeEnquiryModal();
+      }
+    }
+  }, [location.pathname, isOpen, closeEnquiryModal]);
 
   useEffect(() => {
     if (!isOpen) return;

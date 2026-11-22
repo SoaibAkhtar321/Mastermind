@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import {
+  ArrowLeft,
   ChevronDown,
   ChevronRight,
   Clock,
+  Mail,
   MapPin,
   Menu,
   MessageCircle,
   Navigation,
   Phone,
+  ShieldCheck,
   X,
 } from 'lucide-react';
 import {
@@ -32,27 +35,78 @@ interface LayoutProps {
   whatsappMessage?: string;
 }
 
+const scrollPositions = new Map<string, number>();
+
 export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [programsOpen, setProgramsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const prefersReduced = useReducedMotion();
   const { openEnquiryModal } = useEnquiryModal();
 
+  // Save current scroll position continuously for this history entry so Back restores it accurately
+  useEffect(() => {
+    const saveScroll = () => {
+      scrollPositions.set(location.key, window.scrollY);
+      setScrolled(window.scrollY > 8);
+    };
+    saveScroll();
+    window.addEventListener('scroll', saveScroll, { passive: true });
+    return () => {
+      scrollPositions.set(location.key, window.scrollY);
+      window.removeEventListener('scroll', saveScroll);
+    };
+  }, [location.key]);
+
+  // Close menus on route change and handle scroll restoration properly (restore on Back/POP, top/hash on PUSH)
   useEffect(() => {
     setMobileMenuOpen(false);
     setProgramsOpen(false);
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [location.pathname]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    if (navigationType === 'POP') {
+      const savedY = scrollPositions.get(location.key);
+      if (typeof savedY === 'number') {
+        requestAnimationFrame(() => window.scrollTo({ top: savedY, behavior: 'auto' }));
+        return;
+      }
+    }
+
+    if (location.hash) {
+      const targetId = location.hash.replace(/^#/, '');
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        requestAnimationFrame(() =>
+          targetEl.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' })
+        );
+        return;
+      }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [location.pathname, location.hash, location.key, navigationType, prefersReduced]);
+
+  const handleGoBack = () => {
+    const fallbackPath =
+      breadcrumbs && breadcrumbs.length > 1
+        ? breadcrumbs[breadcrumbs.length - 2]?.path || '/'
+        : '/';
+    const historyIdx =
+      typeof window !== 'undefined' &&
+      window.history.state &&
+      typeof window.history.state.idx === 'number'
+        ? window.history.state.idx
+        : 0;
+
+    if (historyIdx > 0) {
+      navigate(-1);
+    } else {
+      navigate(fallbackPath);
+    }
+  };
 
   useEffect(() => {
     const onOutsideClick = (e: MouseEvent) => {
@@ -350,35 +404,49 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
         )}
       </header>
 
-      {/* Breadcrumb Bar on Subpages */}
+      {/* Subpage Back Button & Breadcrumb Navigation Bar */}
       {breadcrumbs && breadcrumbs.length > 1 && (
         <div className="bg-[var(--cream-deep)] border-b border-[var(--hairline)]">
-          <nav
-            aria-label="Breadcrumb"
-            className="mx-auto max-w-[1200px] px-4 sm:px-6 py-2.5 text-xs sm:text-sm text-[var(--muted)]"
-          >
-            <ol className="flex flex-wrap items-center gap-1.5">
-              {breadcrumbs.map((crumb, idx) => {
-                const isLast = idx === breadcrumbs.length - 1;
-                return (
-                  <li key={crumb.path} className="inline-flex items-center gap-1.5">
-                    {idx > 0 && (
-                      <ChevronRight className="h-3.5 w-3.5 text-[var(--gold-text)]" aria-hidden="true" />
-                    )}
-                    {isLast ? (
-                      <span aria-current="page" className="font-semibold text-[var(--ink)]">
-                        {crumb.name}
-                      </span>
-                    ) : (
-                      <Link to={crumb.path} className="hover:text-[var(--royal)] transition-colors">
-                        {crumb.name}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-          </nav>
+          <div className="mx-auto flex max-w-[1200px] items-center gap-3 px-4 sm:px-6 py-2">
+            <button
+              type="button"
+              onClick={handleGoBack}
+              aria-label="Go back to previous page"
+              className="btn-press inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg border border-[var(--hairline)] bg-white px-3 py-1 text-xs sm:text-sm font-bold text-[var(--navy)] hover:border-[var(--royal)] hover:text-[var(--royal)] transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span>Back</span>
+            </button>
+
+            <span aria-hidden="true" className="h-4 w-px bg-[var(--hairline)] shrink-0" />
+
+            <nav
+              aria-label="Breadcrumb"
+              className="min-w-0 flex-1 text-xs sm:text-sm text-[var(--muted)]"
+            >
+              <ol className="flex flex-wrap items-center gap-1.5">
+                {breadcrumbs.map((crumb, idx) => {
+                  const isLast = idx === breadcrumbs.length - 1;
+                  return (
+                    <li key={crumb.path} className="inline-flex items-center gap-1.5">
+                      {idx > 0 && (
+                        <ChevronRight className="h-3.5 w-3.5 text-[var(--gold-text)]" aria-hidden="true" />
+                      )}
+                      {isLast ? (
+                        <span aria-current="page" className="font-semibold text-[var(--ink)]">
+                          {crumb.name}
+                        </span>
+                      ) : (
+                        <Link to={crumb.path} className="hover:text-[var(--royal)] transition-colors">
+                          {crumb.name}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+          </div>
         </div>
       )}
 
@@ -406,69 +474,14 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
 
       <footer className="bg-[var(--ink)] text-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 py-14 lg:py-16">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
-            {/* Logo on White Plate */}
-            <div className="md:col-span-4 space-y-4">
-              <BrandLogo variant="full" className="max-w-[230px] w-full p-3" />
-              <p className="text-sm leading-relaxed text-white/80 max-w-sm">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12">
+            {/* Brand & Centre Address */}
+            <div className="lg:col-span-3 space-y-4">
+              <BrandLogo variant="full" className="max-w-[220px] w-full p-3" />
+              <p className="text-sm leading-relaxed text-white/80">
                 {siteConfig.subline}. Small, personal classes in Nehru Nagar, Belagavi.
               </p>
-            </div>
-
-            {/* Programs */}
-            <div className="md:col-span-3 space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
-                Programs
-              </h2>
-              <ul className="space-y-2 text-sm text-white/85">
-                {corePrograms.map((program) => (
-                  <li key={program.id}>
-                    <Link
-                      to={program.slug}
-                      className="hover:text-[var(--gold)] transition-colors inline-block py-0.5"
-                    >
-                      {program.shortTitle}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Institute */}
-            <div className="md:col-span-2 space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
-                Institute
-              </h2>
-              <ul className="space-y-2 text-sm text-white/85">
-                <li>
-                  <Link to="/about" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/lecturers" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
-                    Lecturers
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/faq" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div className="md:col-span-3 space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
-                Contact
-              </h2>
-              <address className="not-italic space-y-2.5 text-sm text-white/85">
+              <address className="not-italic space-y-2 text-sm text-white/80 pt-1">
                 <p className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-[var(--gold)] shrink-0 mt-1" aria-hidden="true" />
                   <span>
@@ -483,42 +496,117 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                     ) : null}
                   </span>
                 </p>
-
-                <div className="space-y-1.5 pt-1 tabular-nums">
-                  {siteConfig.phones.map((phone, idx) => (
-                    <div key={phone}>
-                      <a
-                        href={getTelHref(idx)}
-                        className="inline-flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
-                      >
-                        <Phone className="h-4 w-4 text-[var(--gold)] shrink-0" aria-hidden="true" />
-                        <span>{phone}</span>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-
-                {safeEmail && (
-                  <p>
-                    <a
-                      href={`mailto:${safeEmail}`}
-                      className="hover:text-[var(--gold)] underline-offset-2 hover:underline"
-                    >
-                      {safeEmail}
-                    </a>
-                  </p>
-                )}
-
                 {siteConfig.timings.trim() && (
-                  <p className="flex items-center gap-2 pt-1 text-sm font-semibold text-[var(--gold)] tabular-nums">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-[var(--gold)] tabular-nums">
                     <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
                     <span>Open: {siteConfig.timings.trim()}</span>
                   </p>
                 )}
               </address>
+            </div>
+
+            {/* Programs & Institute */}
+            <div className="lg:col-span-3 grid grid-cols-2 gap-6 sm:gap-8">
+              <div className="space-y-3">
+                <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                  Programs
+                </h2>
+                <ul className="space-y-2 text-sm text-white/85">
+                  {corePrograms.map((program) => (
+                    <li key={program.id}>
+                      <Link
+                        to={program.slug}
+                        className="hover:text-[var(--gold)] transition-colors inline-block py-0.5"
+                      >
+                        {program.shortTitle}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="space-y-3">
+                <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                  Institute
+                </h2>
+                <ul className="space-y-2 text-sm text-white/85">
+                  <li>
+                    <Link to="/about" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/lecturers" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
+                      Lecturers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/faq" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
+                      FAQ
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="hover:text-[var(--gold)] transition-colors inline-block py-0.5">
+                      Contact
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Dedicated Help & Support Section */}
+            <div className="lg:col-span-3 space-y-3">
+              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                Help &amp; Support
+              </h2>
+              <p className="text-xs leading-relaxed text-white/75">
+                Reach out for course guidance, batch timings, grievance redressal, or data requests.
+              </p>
+
+              {safeEmail && (
+                <a
+                  href={`mailto:${safeEmail}?subject=${encodeURIComponent(
+                    'Help & Support — MASTERMIND ACADEMY'
+                  )}`}
+                  className="flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white hover:border-[var(--gold)] hover:text-[var(--gold)] transition-colors"
+                >
+                  <Mail className="h-4 w-4 text-[var(--gold)] shrink-0" aria-hidden="true" />
+                  <span className="min-w-0">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-white/60">
+                      Support Email
+                    </span>
+                    <span className="font-semibold break-all">{safeEmail}</span>
+                  </span>
+                </a>
+              )}
+
+              <div className="space-y-1.5 pt-1 text-sm text-white/85 tabular-nums">
+                {siteConfig.phones.map((phone, idx) => (
+                  <div key={phone}>
+                    <a
+                      href={getTelHref(idx)}
+                      className="inline-flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
+                    >
+                      <Phone className="h-4 w-4 text-[var(--gold)] shrink-0" aria-hidden="true" />
+                      <span>{phone}</span>
+                    </a>
+                  </div>
+                ))}
+                <div>
+                  <a
+                    href={waHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 hover:text-[var(--gold)] transition-colors"
+                  >
+                    <MessageCircle className="h-4 w-4 text-[var(--whatsapp)] shrink-0" aria-hidden="true" />
+                    <span>WhatsApp Support</span>
+                  </a>
+                </div>
+              </div>
 
               {socialLinks.length > 0 && (
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="flex flex-wrap items-center gap-2 pt-2">
                   {socialLinks.map((item) => (
                     <a
                       key={item.id}
@@ -533,11 +621,54 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                 </div>
               )}
             </div>
+
+            {/* Legal, Privacy & DPDP Act, 2023 Details */}
+            <div className="lg:col-span-3 space-y-3">
+              <h2 className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span>Legal &amp; Policies</span>
+              </h2>
+              <ul className="space-y-2 text-sm text-white/85">
+                <li>
+                  <Link
+                    to="/privacy-policy"
+                    className="hover:text-[var(--gold)] underline-offset-4 hover:underline transition-colors inline-block py-0.5"
+                  >
+                    Privacy Policy (DPDP Act, 2023)
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/terms-and-conditions"
+                    className="hover:text-[var(--gold)] underline-offset-4 hover:underline transition-colors inline-block py-0.5"
+                  >
+                    Terms &amp; Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/data-rights"
+                    className="hover:text-[var(--gold)] underline-offset-4 hover:underline transition-colors inline-block py-0.5"
+                  >
+                    Data Rights &amp; Grievance Redressal
+                  </Link>
+                </li>
+              </ul>
+
+              <p className="rounded-xl border border-white/15 bg-white/5 p-3 text-xs leading-relaxed text-white/75">
+                We do not use advertising or tracking cookies. Enquiry details are shared via
+                WhatsApp only with your consent and used solely to respond about classes. For
+                students under 18, parent/guardian consent applies. Email our Help &amp; Support
+                desk anytime to withdraw consent or request data correction/erasure under India&rsquo;s
+                DPDP Act, 2023.
+              </p>
+            </div>
           </div>
 
-          <div className="mt-10 border-t border-white/15 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/70">
+          {/* Bottom Copyright & NAP Strip */}
+          <div className="mt-10 border-t border-white/15 pt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-white/70">
             <p>{siteConfig.footer.copyright}</p>
-            <p>{siteConfig.address.napLine}</p>
+            <p className="text-white/60">{siteConfig.address.napLine}</p>
           </div>
         </div>
       </footer>

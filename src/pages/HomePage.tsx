@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Clock,
   Globe,
+  Mail,
   MapPin,
   MessageCircle,
   Navigation,
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 import {
   getDirectionsUrl,
+  getSafeEmail,
   getSafeGoogleMapsEmbedUrl,
   getTelHref,
   getWhatsAppUrl,
@@ -187,6 +189,7 @@ export function HomePage() {
       ? 'Four Levels'
       : 'Focus';
 
+  const safeEmail = getSafeEmail();
   const safeMapEmbedUrl = getSafeGoogleMapsEmbedUrl();
   const hasEmbedMap = Boolean(safeMapEmbedUrl);
   const testimonials = siteConfig.testimonials;
@@ -845,18 +848,32 @@ export function HomePage() {
                     Fill the form and we will get in touch with you soon.
                   </p>
 
-                  <div className="pt-2 space-y-2 text-sm font-semibold text-[var(--navy)] tabular-nums">
+                  <div className="pt-2 space-y-1.5 text-sm font-semibold text-[var(--navy)] tabular-nums">
                     {siteConfig.phones.map((num, idx) => (
                       <div key={num}>
                         <a
                           href={getTelHref(idx)}
-                          className="inline-flex min-h-[44px] items-center gap-2 hover:text-[var(--royal)]"
+                          className="inline-flex min-h-[40px] items-center gap-2 hover:text-[var(--royal)]"
                         >
                           <Phone className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
                           <span>{num}</span>
                         </a>
                       </div>
                     ))}
+                    {safeEmail && (
+                      <div className="pt-1">
+                        <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
+                          Help &amp; Support Email
+                        </span>
+                        <a
+                          href={`mailto:${safeEmail}`}
+                          className="inline-flex min-h-[40px] items-center gap-2 hover:text-[var(--royal)] break-all"
+                        >
+                          <Mail className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
+                          <span>{safeEmail}</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
 

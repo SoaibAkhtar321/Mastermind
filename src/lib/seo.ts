@@ -52,6 +52,9 @@ export const ALL_INDEXABLE_ROUTES: { path: string; priority: string; changefreq:
   })),
   { path: '/faq', priority: '0.8', changefreq: 'monthly' },
   { path: '/contact', priority: '0.9', changefreq: 'monthly' },
+  { path: '/privacy-policy', priority: '0.5', changefreq: 'yearly' },
+  { path: '/terms-and-conditions', priority: '0.5', changefreq: 'yearly' },
+  { path: '/data-rights', priority: '0.5', changefreq: 'yearly' },
 ];
 
 export function resolveBaseUrl(): string {
@@ -458,7 +461,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
   const lecturerPages: PageSeoMeta[] = siteConfig.lecturers.map((lecturer) => ({
     path: `/lecturers/${lecturer.id}`,
     title: `${lecturer.name}, ${lecturer.qualification} | Faculty · MASTERMIND ACADEMY, Belagavi`,
-    description: `${lecturer.name} (${lecturer.qualification}) — ${lecturer.experience} at MASTERMIND ACADEMY in Nehru Nagar, Belagavi. Focus: ${lecturer.focusArea}.`,
+    description: `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`,
     pageType: 'ProfilePage',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -498,7 +501,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/lecturers',
       title: 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
       description:
-        'Meet our B.E graduate faculty in Belagavi: Laxmi (B.E, 10+ years of HR experience) and Pooja (B.E, 3+ years of experience in core subjects).',
+        'Meet our B.E graduate faculty in Belagavi: Laxmi (B.E, 10+ years of prior HR experience and teaching experience) and Pooja (B.E, 3+ years of experience in core subjects).',
       pageType: 'CollectionPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -523,11 +526,48 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/contact',
       title: 'Contact & Location | MASTERMIND ACADEMY, Belagavi',
       description:
-        'Visit MASTERMIND ACADEMY in Nehru Nagar, Belagavi 590010 (open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or WhatsApp us.',
+        'Visit MASTERMIND ACADEMY in Nehru Nagar, Belagavi 590010 (open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or email mastermindacademy2627@gmail.com.',
       pageType: 'ContactPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
         { name: 'Contact', path: '/contact' },
+      ],
+      schemas: [],
+    },
+    {
+      path: '/privacy-policy',
+      title: 'Privacy Policy & DPDP Act Notice | MASTERMIND ACADEMY',
+      description:
+        'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
+      pageType: 'WebPage',
+      breadcrumbs: [
+        { name: 'Home', path: '/' },
+        { name: 'Privacy Policy & DPDP Notice', path: '/privacy-policy' },
+      ],
+      schemas: [],
+    },
+    {
+      path: '/terms-and-conditions',
+      title: 'Terms & Conditions | MASTERMIND ACADEMY, Belagavi',
+      description:
+        'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th, and B.E/B.Com/Diploma classes in Belagavi.',
+      pageType: 'WebPage',
+      breadcrumbs: [
+        { name: 'Home', path: '/' },
+        { name: 'Terms & Conditions', path: '/terms-and-conditions' },
+      ],
+      schemas: [],
+    },
+    {
+      path: '/data-rights',
+      title: 'DPDP Data Rights & Grievance Redressal | MASTERMIND ACADEMY',
+      description:
+        'Exercise your rights under India’s Digital Personal Data Protection (DPDP) Act, 2023 — withdraw consent, request data access, correction, erasure, or raise a grievance with MASTERMIND ACADEMY.',
+      pageType: 'WebPage',
+      breadcrumbs: [
+        { name: 'Home', path: '/' },
+        { name: 'Privacy Policy', path: '/privacy-policy' },
+        { name: 'DPDP Data Rights & Grievance', path: '/data-rights' },
       ],
       schemas: [],
     },
@@ -636,13 +676,16 @@ export function generateLlmsTxt(baseUrl?: string): string {
     `- [Classes 6th to 10th — All Core Subjects](${link('/school-tuition-classes-6-to-10-belagavi')}): All core subjects across CBSE, ICSE, KVS and State Board`,
     `- [B.E, B.Com & Diploma Core Subjects](${link('/be-bca-diploma-classes-belagavi')}): Core subject coaching for B.E, B.Com and Diploma college students`,
     `- [About Us](${link('/about')}): Teaching approach (Learn, Practice, Excel) and institute background`,
-    `- [Faculty & Lecturers](${link('/lecturers')}): Laxmi (B.E, 10+ years of experience as HR) and Pooja (B.E, 3+ years of experience in core subjects)`,
+    `- [Faculty & Lecturers](${link('/lecturers')}): Laxmi (B.E, 10+ years of prior HR experience & teaching experience) and Pooja (B.E, 3+ years of experience in core subjects)`,
     ...siteConfig.lecturers.map(
       (lecturer) =>
         `- [${lecturer.name}, ${lecturer.qualification}](${link(`/lecturers/${lecturer.id}`)}): Dedicated faculty profile for ${lecturer.name} (${lecturer.qualification}) — ${lecturer.experience}`
     ),
     `- [FAQ](${link('/faq')}): Direct answers on Spoken English, Classes 6th to 10th, B.E/B.Com/Diploma, timings and enrolment`,
-    `- [Contact & Location](${link('/contact')}): Nehru Nagar, Belagavi 590010 directions, timings (7:00 AM to 8:30 PM), phone and WhatsApp enquiry`,
+    `- [Contact & Location](${link('/contact')}): Nehru Nagar, Belagavi 590010 directions, timings (7:00 AM to 8:30 PM), phone, help & support email, and WhatsApp enquiry`,
+    `- [Privacy Policy & DPDP Act Notice](${link('/privacy-policy')}): Digital Personal Data Protection (DPDP) Act, 2023 notice, children's data safeguards, and grievance contact`,
+    `- [Terms & Conditions](${link('/terms-and-conditions')}): Website usage and institute enrolment terms`,
+    `- [DPDP Data Rights & Grievance Redressal](${link('/data-rights')}): Consent withdrawal, access, correction, erasure, nomination, and grievance portal`,
     '',
     '## Full Context',
     `- [llms-full.txt](${link('/llms-full.txt')})`,

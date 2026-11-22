@@ -9,6 +9,9 @@ import { LecturersPage } from './pages/LecturersPage';
 import { TeacherProfilePage } from './pages/TeacherProfilePage';
 import { FaqPage } from './pages/FaqPage';
 import { ContactPage } from './pages/ContactPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsPage } from './pages/TermsPage';
+import { DataRightsPage } from './pages/DataRightsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export function AppRoutes() {
@@ -40,6 +43,9 @@ export function AppRoutes() {
           <Route path="/faculty/:id" element={<TeacherProfilePage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-and-conditions" element={<TermsPage />} />
+          <Route path="/data-rights" element={<DataRightsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <QuickEnquiryModal />

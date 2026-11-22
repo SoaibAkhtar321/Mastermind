@@ -52,6 +52,7 @@ export function WhatsAppEnquiryForm({
   });
   const [mode, setMode] = useState<string>(OFFLINE_MODE);
   const [message, setMessage] = useState('');
+  const [whatsappConsent, setWhatsappConsent] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [error, setError] = useState('');
   const [readyUrl, setReadyUrl] = useState('');
@@ -101,6 +102,10 @@ export function WhatsAppEnquiryForm({
     }
     if (digits.length < 10 || digits.length > 15) {
       setError('Please enter a valid 10-digit WhatsApp number.');
+      return;
+    }
+    if (!whatsappConsent) {
+      setError('Please tick the consent box to send your enquiry on WhatsApp.');
       return;
     }
 
@@ -277,6 +282,24 @@ export function WhatsAppEnquiryForm({
           className={`${inputClass} min-h-[72px]`}
         />
       </div>
+
+      {/* Simple WhatsApp Consent Checkbox */}
+      <label
+        htmlFor={`${uid}-whatsapp-consent`}
+        className="flex items-start gap-2.5 pt-0.5 cursor-pointer"
+      >
+        <input
+          id={`${uid}-whatsapp-consent`}
+          type="checkbox"
+          checked={whatsappConsent}
+          onChange={(e) => setWhatsappConsent(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--hairline)] accent-[var(--royal)] cursor-pointer"
+        />
+        <span className="text-xs sm:text-sm leading-snug text-[var(--muted)]">
+          I agree to send my enquiry details to MASTERMIND ACADEMY via WhatsApp.{' '}
+          <span className="text-[var(--red)]">*</span>
+        </span>
+      </label>
 
       {error && (
         <p role="alert" className="text-sm font-semibold text-[var(--red)]">

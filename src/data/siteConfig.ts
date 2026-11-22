@@ -8,12 +8,11 @@
  * FIELDS THAT STILL NEED TO BE FILLED (currently empty and auto-hidden in UI
  * and JSON-LD schema until you add them):
  * 1.  siteUrl                      : Your live HTTPS domain (e.g. "https://mastermindacademybelagavi.com")
- * 2.  email                        : Official institute email address
- * 3.  address.landmark             : Nearby landmark in Nehru Nagar, Belagavi
- * 4.  location.googleMapsEmbedUrl  : Google Maps iframe embed URL (Share -> Embed a map)
- * 5.  location.googleMapsDirectionsUrl : Verified Google Business Profile directions link
- * 6.  location.latitude            : Exact latitude coordinate (e.g. "15.8825")
- * 7.  location.longitude           : Exact longitude coordinate (e.g. "74.5135")
+ * 2.  address.landmark             : Nearby landmark in Nehru Nagar, Belagavi
+ * 3.  location.googleMapsEmbedUrl  : Google Maps iframe embed URL (Share -> Embed a map)
+ * 4.  location.googleMapsDirectionsUrl : Verified Google Business Profile directions link
+ * 5.  location.latitude            : Exact latitude coordinate (e.g. "15.8825")
+ * 6.  location.longitude           : Exact longitude coordinate (e.g. "74.5135")
  * 8.  social.instagram             : Full Instagram profile URL
  * 9.  social.facebook              : Full Facebook page URL
  * 10. social.youtube               : Full YouTube channel URL
@@ -269,7 +268,7 @@ export const siteConfig = {
     'Hello MASTERMIND ACADEMY, I would like to enquire about your classes in Nehru Nagar, Belagavi.',
 
   // Contact & Institute Hours
-  email: '',
+  email: 'mastermindacademy2627@gmail.com',
   timings: '7:00 AM to 8:30 PM',
   opensTime: '07:00',
   closesTime: '20:30',
@@ -338,14 +337,14 @@ export const siteConfig = {
       },
     ],
     leadershipNote:
-      'Classes at MASTERMIND ACADEMY in Nehru Nagar, Belagavi are taught by qualified B.E graduate lecturers: Laxmi (B.E), who brings 10+ years of experience as HR, and Pooja (B.E), who brings 3+ years of experience in core subjects.',
+      'Classes at MASTERMIND ACADEMY in Nehru Nagar, Belagavi are taught by qualified B.E graduate lecturers: Laxmi (B.E), who has 10+ years of prior HR experience along with teaching experience, and Pooja (B.E), who has 3+ years of experience in core subjects.',
   },
 
   whyChooseUs: [
     {
       title: 'Experienced B.E graduate lecturers',
       detail:
-        'Learn from Laxmi (B.E, 10+ years of experience as HR) and Pooja (B.E, 3+ years of experience in core subjects) who explain concepts in simple language and answer every doubt patiently.',
+        'Learn from Laxmi (B.E, 10+ years of prior HR experience and teaching experience) and Pooja (B.E, 3+ years of experience in core subjects) who explain concepts in simple language and answer every doubt patiently.',
     },
     {
       title: 'Three focused academic & communication tracks',
@@ -610,9 +609,9 @@ export const siteConfig = {
       name: 'Laxmi',
       qualification: 'B.E',
       role: 'Lecturer, MASTERMIND ACADEMY',
-      experience: '10+ years of experience as HR',
+      experience: '10+ years of prior HR experience & teaching experience',
       focusArea: 'Spoken English (All 4 Levels) & Interview Mastery',
-      bio: 'Laxmi (B.E) brings 10+ years of experience as HR to MASTERMIND ACADEMY in Nehru Nagar, Belagavi. Drawing from her corporate HR background, she guides kids, housewives, freshers, job seekers and students across all four Spoken English levels — including Interview Mastery, communication clarity and personal confidence.',
+      bio: 'Laxmi (B.E) has 10+ years of prior professional experience working in HR, along with hands-on experience in teaching. At MASTERMIND ACADEMY in Nehru Nagar, Belagavi, she combines her HR background and teaching experience to guide kids, housewives, freshers, job seekers and students across all four Spoken English levels — including Interview Mastery, communication clarity and personal confidence.',
       photo: '', // Optional real portrait path when available
     },
     {
@@ -673,13 +672,19 @@ export const siteConfig = {
     {
       question: 'Who teaches the classes at MASTERMIND ACADEMY, Belagavi?',
       answer:
-        'Classes at MASTERMIND ACADEMY in Nehru Nagar, Belagavi are taught by qualified B.E graduate lecturers: Laxmi (B.E), who has 10+ years of experience as HR, and Pooja (B.E), who has 3+ years of experience in core subjects.',
+        'Classes at MASTERMIND ACADEMY in Nehru Nagar, Belagavi are taught by qualified B.E graduate lecturers: Laxmi (B.E), who has 10+ years of prior HR experience along with teaching experience, and Pooja (B.E), who has 3+ years of experience in core subjects.',
+      category: 'general',
+    },
+    {
+      question: 'How do I contact Help & Support or submit a privacy request under the DPDP Act?',
+      answer:
+        'For help, support, consent withdrawal, or any personal data request under India’s Digital Personal Data Protection (DPDP) Act, 2023, email mastermindacademy2627@gmail.com, call 90194 16236 / 81239 50627 (7:00 AM to 8:30 PM), or use our DPDP Data Rights page.',
       category: 'general',
     },
     {
       question: 'How do I enrol or ask about fees?',
       answer:
-        'Call or WhatsApp us on 90194 16236 or 81239 50627, or visit our centre in Nehru Nagar, Belagavi, Karnataka 590010 between 7:00 AM and 8:30 PM.',
+        'Call or WhatsApp us on 90194 16236 or 81239 50627, email mastermindacademy2627@gmail.com, or visit our centre in Nehru Nagar, Belagavi, Karnataka 590010 between 7:00 AM and 8:30 PM.',
       category: 'general',
     },
   ] as FaqItem[],

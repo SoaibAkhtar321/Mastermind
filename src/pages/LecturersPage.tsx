@@ -69,7 +69,7 @@ export function LecturersPage() {
     path: '/lecturers',
     title: 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
     description:
-      'Meet our B.E graduate faculty in Belagavi: Laxmi (B.E, 10+ years of HR experience) and Pooja (B.E, 3+ years of experience in core subjects).',
+      'Meet our B.E graduate faculty in Belagavi: Laxmi (B.E, 10+ years of prior HR experience and teaching experience) and Pooja (B.E, 3+ years of experience in core subjects).',
     pageType: 'CollectionPage',
     breadcrumbs,
     schemas,

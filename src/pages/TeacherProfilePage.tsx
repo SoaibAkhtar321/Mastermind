@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
@@ -60,8 +60,23 @@ const classroomCommitments = [
 
 export function TeacherProfilePage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { openEnquiryModal } = useEnquiryModal();
   const lecturer = getLecturerById(id || '');
+
+  const handleBack = () => {
+    const historyIdx =
+      typeof window !== 'undefined' &&
+      window.history.state &&
+      typeof window.history.state.idx === 'number'
+        ? window.history.state.idx
+        : 0;
+    if (historyIdx > 0) {
+      navigate(-1);
+    } else {
+      navigate('/lecturers');
+    }
+  };
 
   const breadcrumbs = useMemo(
     () =>
@@ -92,7 +107,7 @@ export function TeacherProfilePage() {
       ? `${lecturer.name}, ${lecturer.qualification} | Faculty · MASTERMIND ACADEMY, Belagavi`
       : 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
     description: lecturer
-      ? `${lecturer.name} (${lecturer.qualification}) — ${lecturer.experience} at MASTERMIND ACADEMY in Nehru Nagar, Belagavi. Focus: ${lecturer.focusArea}.`
+      ? `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`
       : 'Meet our qualified B.E graduate lecturers at MASTERMIND ACADEMY in Nehru Nagar, Belagavi.',
     pageType: 'ProfilePage',
     breadcrumbs,
@@ -145,13 +160,20 @@ export function TeacherProfilePage() {
         </svg>
 
         <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 pt-6 pb-10 lg:pt-10 lg:pb-14">
-          {/* Back Link */}
-          <div className="mb-6">
-            <Link
-              to="/lecturers"
-              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-white/20 transition-colors"
+          {/* Back & All Faculty Links */}
+          <div className="mb-6 flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg bg-white/15 px-3.5 py-1.5 text-xs sm:text-sm font-bold text-white hover:bg-white/25 transition-colors cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4 text-[var(--gold)] shrink-0" aria-hidden="true" />
+              <span>Go Back</span>
+            </button>
+            <Link
+              to="/lecturers"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white/90 hover:bg-white/20 transition-colors"
+            >
               <span>All Faculty &amp; Lecturers</span>
             </Link>
           </div>

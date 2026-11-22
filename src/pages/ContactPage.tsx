@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Clock,
   ExternalLink,
@@ -7,6 +8,7 @@ import {
   MessageCircle,
   Navigation,
   Phone,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   getDirectionsUrl,
@@ -36,7 +38,7 @@ export function ContactPage() {
     path: '/contact',
     title: 'Contact & Location | MASTERMIND ACADEMY, Belagavi',
     description:
-      'Visit MASTERMIND ACADEMY in Nehru Nagar, Belagavi 590010 (open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or WhatsApp us.',
+      'Visit MASTERMIND ACADEMY in Nehru Nagar, Belagavi 590010 (open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or email mastermindacademy2627@gmail.com.',
     pageType: 'ContactPage',
     breadcrumbs,
   });
@@ -173,13 +175,21 @@ export function ContactPage() {
                 </a>
 
                 {safeEmail && (
-                  <div className="border-t border-[var(--hairline)] pt-3.5 flex items-center gap-3 text-sm">
-                    <Mail className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
+                  <div className="border-t border-[var(--hairline)] pt-4 space-y-1.5">
+                    <div className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)]">
+                      Help &amp; Support Email
+                    </div>
                     <a
-                      href={`mailto:${safeEmail}`}
-                      className="font-bold text-[var(--ink)] hover:text-[var(--royal)] underline underline-offset-2"
+                      href={`mailto:${safeEmail}?subject=${encodeURIComponent(
+                        'Help & Support — MASTERMIND ACADEMY'
+                      )}`}
+                      className="flex min-h-[46px] items-center justify-between gap-2 rounded-xl border border-[var(--hairline)] bg-[var(--cream)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] hover:border-[var(--royal)] hover:text-[var(--royal)] transition-colors"
                     >
-                      {safeEmail}
+                      <span className="inline-flex items-center gap-2.5 min-w-0">
+                        <Mail className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
+                        <span className="break-all">{safeEmail}</span>
+                      </span>
+                      <span className="text-xs font-bold text-[var(--royal)] shrink-0">Email</span>
                     </a>
                   </div>
                 )}
@@ -188,11 +198,26 @@ export function ContactPage() {
                   <div className="border-t border-[var(--hairline)] pt-3.5 flex items-start gap-3 text-sm text-[var(--muted)]">
                     <Clock className="h-4 w-4 text-[var(--royal)] shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
-                      <div className="font-bold text-[var(--ink)]">Timings</div>
-                      <div>{siteConfig.timings.trim()}</div>
+                      <div className="font-bold text-[var(--ink)]">Institute Timings</div>
+                      <div>Open: {siteConfig.timings.trim()}</div>
                     </div>
                   </div>
                 )}
+
+                <div className="border-t border-[var(--hairline)] pt-3.5 flex items-start gap-3 text-xs text-[var(--muted)]">
+                  <ShieldCheck className="h-4 w-4 text-[var(--royal)] shrink-0 mt-0.5" aria-hidden="true" />
+                  <p className="leading-relaxed">
+                    For privacy questions, consent withdrawal, or grievances under the DPDP Act,
+                    2023, email our support desk above or visit{' '}
+                    <Link
+                      to="/data-rights"
+                      className="font-bold text-[var(--royal)] underline underline-offset-2"
+                    >
+                      Data Rights &amp; Grievance
+                    </Link>
+                    .
+                  </p>
+                </div>
 
                 {socialLinks.length > 0 && (
                   <div className="border-t border-[var(--hairline)] pt-3.5 space-y-2">
