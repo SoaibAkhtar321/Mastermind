@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="canvas" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFBF2"/>
+      <stop offset="55%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EDF3FF"/>
+    </linearGradient>
+    <linearGradient id="royal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#F5B301"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#canvas)"/>
+  <!-- Subtle geometric accent rings -->
+  <circle cx="1050" cy="110" r="210" fill="#1D4ED8" opacity="0.05"/>
+  <circle cx="130" cy="540" r="180" fill="#F5B301" opacity="0.09"/>
+  <!-- Top gold hairline -->
+  <rect x="0" y="0" width="1200" height="8" fill="url(#gold)"/>
+
+  <!-- Left Emblem -->
+  <g transform="translate(88, 128)">
+    <rect width="340" height="374" rx="28" fill="#FFFFFF" stroke="#DCE5F4" stroke-width="2"/>
+    <g transform="translate(36, 26) scale(1.48)">
+      <polygon points="24,42 78,20 128,40 74,62" fill="url(#royal)"/>
+      <path d="M46,54 L46,74 C62,82 94,82 108,72 L108,52 Z" fill="#1E40AF"/>
+      <path d="M38,42 L38,76" stroke="#F5B301" stroke-width="4" stroke-linecap="round"/>
+      <path d="M32,76 L44,76 L47,94 L29,94 Z" fill="url(#gold)"/>
+      <path d="M42,118 L48,76 L68,76 L80,96 L94,76 L114,76 L120,118 L103,118 L100,92 L85,114 L77,114 L62,92 L59,118 Z" fill="url(#royal)"/>
+      <path d="M54,120 C82,95 118,94 140,48 C126,78 96,88 54,120 Z" fill="url(#gold)"/>
+      <polygon points="140,14 145,28 160,29 148,38 152,52 140,44 128,52 132,38 120,29 135,28" fill="url(#gold)"/>
+      <!-- Stack of books -->
+      <rect x="116" y="88" width="44" height="11" rx="2" fill="#2563EB"/>
+      <rect x="118" y="100" width="44" height="11" rx="2" fill="#D62828"/>
+      <rect x="116" y="112" width="44" height="11" rx="2" fill="#15803D"/>
+      <!-- Open book -->
+      <path d="M18,132 C46,120 70,122 90,136 C110,122 134,120 162,132 C134,128 110,132 90,142 C70,132 46,128 18,132 Z" fill="url(#royal)"/>
+      <path d="M24,127 C48,117 70,119 90,132 C110,119 132,117 156,127" fill="none" stroke="#F5B301" stroke-width="3.2" stroke-linecap="round"/>
+    </g>
+    <text x="170" y="294" text-anchor="middle" fill="#1D4ED8" font-family="Georgia, serif" font-size="34" font-weight="700" letter-spacing="1.5">MASTERMIND</text>
+    <polygon points="56,308 284,308 276,322 284,336 56,336 64,322" fill="#D62828"/>
+    <text x="170" y="328" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="16" font-weight="700" letter-spacing="6">ACADEMY</text>
+    <text x="170" y="360" text-anchor="middle" fill="#0B2A6F" font-family="Georgia, serif" font-style="italic" font-size="15">Learn · Practice · Excel</text>
+  </g>
+
+  <!-- Right Copy -->
+  <g transform="translate(480, 152)">
+    <text x="0" y="24" fill="#9A7424" font-family="system-ui, sans-serif" font-size="18" font-weight="700" letter-spacing="2">NEHRU NAGAR, BELAGAVI · OPEN 7:00 AM – 8:30 PM</text>
+    <text x="0" y="96" fill="#101C3A" font-family="Georgia, serif" font-size="50" font-weight="700">MASTERMIND ACADEMY</text>
+    <text x="0" y="156" fill="#1F4FB5" font-family="Georgia, serif" font-size="34" font-weight="600">Education is food to a hungry soul.</text>
+    <text x="0" y="206" fill="#334155" font-family="system-ui, sans-serif" font-size="16" font-weight="500">Spoken English is for everyone: kids, housewives, freshers, job seekers, students, etc.</text>
+
+    <line x1="0" y1="238" x2="640" y2="238" stroke="#E6DEC5" stroke-width="2"/>
+
+    <text x="0" y="278" fill="#101C3A" font-family="system-ui, sans-serif" font-size="16" font-weight="700">1. Spoken English (4 Levels)  ·  2. Classes 6th to 10th (All Core Subjects)</text>
+    <text x="0" y="314" fill="#334155" font-family="system-ui, sans-serif" font-size="17">3. Core Subjects for B.E, B.Com &amp; Diploma  ·  CBSE, ICSE, KVS, State Board</text>
+
+    <rect x="0" y="352" width="400" height="50" rx="10" fill="#E9BF5A"/>
+    <text x="200" y="384" text-anchor="middle" fill="#101C3A" font-family="system-ui, sans-serif" font-size="20" font-weight="700">Call: 90194 16236  ·  81239 50627</text>
+  </g>
+</svg>

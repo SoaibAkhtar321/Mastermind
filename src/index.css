@@ -1,0 +1,167 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    color: var(--ink);
+    background-color: var(--cream);
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+    background-color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--royal);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+.font-poster {
+  font-family: var(--font-poster);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Primary CTA Button — driven by single --cta variable */
+.btn-cta {
+  background: var(--cta);
+  color: var(--cta-ink);
+  box-shadow: 0 6px 18px -10px rgba(16, 28, 58, 0.45);
+  transition:
+    transform 150ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 160ms ease,
+    filter 160ms ease,
+    box-shadow 180ms ease;
+}
+
+.btn-cta:hover {
+  background: var(--cta-hover);
+  filter: brightness(0.98);
+  box-shadow: 0 10px 22px -10px rgba(16, 28, 58, 0.5);
+}
+
+.btn-cta:active {
+  transform: scale(0.97);
+}
+
+/* Facts Band background — uses single --cta variable */
+.band-cta {
+  background: var(--cta);
+  color: var(--cta-ink);
+}
+
+/* Coaching Card Surface: 16px radius, hairline border, very light shadow */
+.card-coaching {
+  background-color: var(--white);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 16px -10px rgba(16, 28, 58, 0.1);
+  transition:
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 180ms ease;
+}
+
+.card-coaching-hover:hover {
+  transform: translateY(-3px);
+  border-color: rgba(233, 191, 90, 0.85);
+  box-shadow: 0 14px 28px -14px rgba(16, 28, 58, 0.16);
+}
+
+/* Poster Card Lift */
+.poster-card {
+  border-radius: var(--radius-poster);
+  box-shadow: 0 12px 26px -14px rgba(16, 28, 58, 0.25);
+  transition:
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.poster-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 36px -16px rgba(16, 28, 58, 0.34);
+}
+
+/* Interactive Button Press */
+.btn-press {
+  transition:
+    transform 150ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Top Ticker Marquee (pauses on hover, disabled under prefers-reduced-motion) */
+@keyframes tickerScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 30s linear infinite;
+}
+
+.ticker-wrap:hover .ticker-track,
+.ticker-wrap:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbars cleanly on horizontal snap carousels & tabs */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .ticker-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .poster-card,
+  .card-coaching,
+  .card-coaching-hover,
+  .btn-cta,
+  .btn-press {
+    transition: none !important;
+    transform: none !important;
+  }
+}

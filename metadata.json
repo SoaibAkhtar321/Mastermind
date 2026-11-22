@@ -1,0 +1,6 @@
+{
+  "name": "Mastermind Academy, Belagavi",
+  "description": "Coaching institute in Nehru Nagar, Belagavi offering Spoken English (online and offline), Interview Mastery, Class 6 to 10 tuition (CBSE, ICSE, KVS, State Board), and B.E, BCA and Diploma classes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

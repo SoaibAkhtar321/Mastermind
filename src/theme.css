@@ -1,0 +1,42 @@
+/* ============================================================================
+   MASTERMIND ACADEMY — SINGLE THEME TOKENS FILE (src/theme.css)
+   Switch --cta (and --cta-ink) here to change all primary CTA buttons & facts band.
+   ============================================================================ */
+
+:root {
+  /* Core Brand Palette */
+  --cream: #FAF6E6;
+  --cream-deep: #F1EBD4;
+  --white: #FFFFFF;
+  --ink: #101C3A;
+  --muted: #4C556A;
+  --royal: #1F4FB5;
+  --navy: #0F2A6B;
+  --gold: #E9BF5A;
+  --gold-text: #9A7424;
+  --red: #C8281E;
+  --red-hover: #A81F17;
+
+  /* Single Primary CTA Variable (easily switchable to gold gradient later) */
+  --cta: var(--red);
+  --cta-hover: var(--red-hover);
+  --cta-ink: #FFFFFF;
+
+  /* WhatsApp Button Accent (used ONLY on WhatsApp actions) */
+  --whatsapp: #25D366;
+  --whatsapp-hover: #1EBE5D;
+  --whatsapp-ink: #101C3A;
+
+  /* Structural Surfaces & Borders */
+  --hairline: #E3DAC2;
+  --sand-placeholder: #EDE4CC;
+
+  /* Typography */
+  --font-poster: "Barlow Condensed", system-ui, -apple-system, sans-serif;
+  --font-sans: "Barlow", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Radii & Spacing Scale (8px base) */
+  --radius-card: 16px;
+  --radius-poster: 20px;
+  --container-max: 1200px;
+}

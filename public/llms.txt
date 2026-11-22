@@ -1,0 +1,23 @@
+# Mastermind Academy
+
+> Mastermind Academy is a coaching institute in Nehru Nagar, Belagavi, Karnataka, offering Spoken English classes (online and offline), Interview Mastery with Personality Development, Class 6 to 10 school tuition for CBSE, ICSE, KVS and State Board, and academic coaching for B.E, BCA and Diploma students.
+
+Tagline: Learn · Practice · Excel (Education Hub for a Brighter Future)
+Location: Nehru Nagar, Belagavi, Karnataka 590010
+Areas Served: Nehru Nagar, Belagavi and nearby areas
+Phone / WhatsApp: 90194 16236, 81239 50627
+Lecturers: Laxmi (B.E), Pooja (B.E)
+
+## Key Pages
+- [Home](/): Overview of Mastermind Academy in Nehru Nagar, Belagavi
+- [Spoken English Classes](/spoken-english-classes-belagavi): Kids (Offline, 2 months), Beginners/Intermediate & Advanced (Online and Offline, 2 to 3 months)
+- [Interview Mastery & Personality Development](/interview-mastery-personality-development-belagavi): 2-month practical program covering mock interviews, GD, body language and grooming
+- [School Tuition Classes 6 to 10](/school-tuition-classes-6-to-10-belagavi): CBSE, ICSE, KVS and State Board coaching
+- [B.E, BCA & Diploma Classes](/be-bca-diploma-classes-belagavi): Academic support and communication coaching for college students
+- [About Us](/about): Teaching approach (Learn, Practice, Excel) and institute background
+- [Lecturers](/lecturers): Qualified B.E graduate lecturers Laxmi and Pooja
+- [FAQ](/faq): Direct answers on batches, online classes, boards, course duration and enrolment
+- [Contact & Location](/contact): Nehru Nagar, Belagavi 590010 directions, phone and WhatsApp enquiry
+
+## Full Context
+- [llms-full.txt](/llms-full.txt)

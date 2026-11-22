@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFFBF2"/>
+    </linearGradient>
+    <linearGradient id="royal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="100%" stop-color="#F5B301"/>
+    </linearGradient>
+  </defs>
+  <rect width="180" height="180" rx="36" fill="url(#bg)"/>
+  <rect x="4" y="4" width="172" height="172" rx="32" fill="none" stroke="#DCE5F4" stroke-width="3"/>
+  <!-- Cap -->
+  <polygon points="28,48 84,26 134,46 78,68" fill="url(#royal)"/>
+  <path d="M50,60 L50,82 C66,90 98,90 112,80 L112,57 Z" fill="#1E40AF"/>
+  <!-- Tassel -->
+  <path d="M42,48 L42,84" stroke="#F5B301" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M35,84 L49,84 L52,104 L32,104 Z" fill="url(#gold)"/>
+  <!-- M -->
+  <path d="M46,126 L52,82 L73,82 L86,104 L100,82 L120,82 L126,126 L108,126 L105,100 L89,122 L81,122 L66,100 L63,126 Z" fill="url(#royal)"/>
+  <!-- Gold Swoosh -->
+  <path d="M58,129 C86,103 122,102 146,56 C132,86 100,95 58,129 Z" fill="url(#gold)"/>
+  <!-- Star -->
+  <polygon points="146,20 151.2,34.4 166.5,35.2 154.6,44.8 158.6,59.5 146,51.1 133.4,59.5 137.4,44.8 125.5,35.2 140.8,34.4" fill="url(#gold)"/>
+  <!-- Open book & Red Ribbon -->
+  <path d="M26,136 C50,126 72,128 90,140 C108,128 130,126 154,136 C130,132 108,136 90,146 C72,136 50,132 26,136 Z" fill="url(#royal)"/>
+  <rect x="34" y="148" width="112" height="18" rx="4" fill="#D62828"/>
+  <text x="90" y="161" text-anchor="middle" fill="#FFFFFF" font-family="Georgia, serif" font-size="11" font-weight="700" letter-spacing="2.4">MASTERMIND</text>
+</svg>

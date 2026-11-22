@@ -1,0 +1,874 @@
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  Briefcase,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Globe,
+  MapPin,
+  MessageCircle,
+  Navigation,
+  Phone,
+  Smile,
+} from 'lucide-react';
+import {
+  getDirectionsUrl,
+  getSafeGoogleMapsEmbedUrl,
+  getTelHref,
+  getWhatsAppUrl,
+  siteConfig,
+  type ProgramItem,
+} from '../data/siteConfig';
+import { buildFaqSchema, buildPersonSchemas } from '../lib/seo';
+import { useDocumentHead } from '../hooks/useDocumentHead';
+import { useEnquiryModal } from '../context/EnquiryModalContext';
+import { Layout } from '../components/Layout';
+import { HeroBannerCarousel } from '../components/HeroBannerCarousel';
+import { SmartPhoto } from '../components/SmartPhoto';
+import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
+import {
+  AnimatedCounter,
+  EASE_OUT,
+  Reveal,
+  SectionHeading,
+} from '../components/MotionPrimitives';
+
+const posterOrder: ProgramItem['id'][] = [
+  'spoken-english',
+  'school-tuition',
+  'be-bca-diploma',
+];
+
+const posterCardStyles: Record<
+  ProgramItem['id'],
+  {
+    bgClass: string;
+    titleClass: string;
+    subClass: string;
+    curveFill: string;
+    btnClass: string;
+    posterTitle: string;
+    posterSub: string;
+    caption: string;
+    photo: string;
+    alt: string;
+  }
+> = {
+  'spoken-english': {
+    bgClass: 'bg-[var(--royal)]',
+    titleClass: 'text-white',
+    subClass: 'text-white/90',
+    curveFill: '#E9BF5A',
+    btnClass: 'bg-white text-[var(--navy)]',
+    posterTitle: 'SPOKEN ENGLISH',
+    posterSub: '4 Levels · Online & Offline',
+    caption: 'Kids, Beginners/Intermediates, Advanced & Interview Mastery',
+    photo: siteConfig.mediaSlots.spokenEnglishVisual,
+    alt: 'Learners practising spoken English conversation in a bright study room',
+  },
+  'school-tuition': {
+    bgClass: 'bg-[var(--gold)]',
+    titleClass: 'text-[var(--ink)]',
+    subClass: 'text-[var(--ink)]/85',
+    curveFill: '#FFFFFF',
+    btnClass: 'bg-[var(--ink)] text-white',
+    posterTitle: 'CLASSES 6TH TO 10TH',
+    posterSub: 'All Core Subjects · CBSE, ICSE, KVS, State',
+    caption: 'All core school subjects with strong basics & exam preparation',
+    photo: siteConfig.mediaSlots.schoolTuitionVisual,
+    alt: 'School learners studying textbooks and writing notes at a wooden desk',
+  },
+  'interview-mastery': {
+    bgClass: 'bg-[var(--navy)]',
+    titleClass: 'text-white',
+    subClass: 'text-[var(--gold)]',
+    curveFill: '#E9BF5A',
+    btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
+    posterTitle: 'INTERVIEW MASTERY',
+    posterSub: 'Personality Dev · 2 Months',
+    caption: 'Mock interviews, GD and body language',
+    photo: siteConfig.mediaSlots.interviewMasteryVisual,
+    alt: 'Graduate practising clear answers during a mock interview session',
+  },
+  'be-bca-diploma': {
+    bgClass: 'bg-[var(--navy)]',
+    titleClass: 'text-white',
+    subClass: 'text-[var(--gold)]',
+    curveFill: '#E9BF5A',
+    btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
+    posterTitle: 'B.E, B.COM & DIPLOMA',
+    posterSub: 'Core Subjects',
+    caption: 'Core subject coaching by qualified B.E graduate lecturers',
+    photo: siteConfig.mediaSlots.beBcaDiplomaVisual,
+    alt: 'College learners collaborating over technical notebooks and a laptop',
+  },
+};
+
+const spokenEnglishLevels = [
+  {
+    icon: Smile,
+    title: 'Kids',
+    mode: 'Offline',
+    duration: '2 months',
+  },
+  {
+    icon: BookOpen,
+    title: 'Beginners or Intermediates',
+    mode: 'Online and Offline',
+    duration: '2 to 3 months',
+  },
+  {
+    icon: Award,
+    title: 'Advanced Level',
+    mode: 'Online and Offline',
+    duration: '2 to 3 months',
+  },
+  {
+    icon: Briefcase,
+    title: 'Interview Mastery',
+    mode: 'Practical Coaching',
+    duration: '2 months',
+  },
+];
+
+const glanceTabOrder: { id: ProgramItem['id']; label: string }[] = [
+  { id: 'spoken-english', label: 'Spoken English' },
+  { id: 'school-tuition', label: 'Classes 6th to 10th' },
+  { id: 'be-bca-diploma', label: 'B.E, B.Com & Diploma' },
+];
+
+export function HomePage() {
+  const { openEnquiryModal } = useEnquiryModal();
+  const prefersReduced = useReducedMotion();
+  const [activeTabId, setActiveTabId] = useState<ProgramItem['id']>('spoken-english');
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [testimonialOffset, setTestimonialOffset] = useState(0);
+
+  const breadcrumbs = useMemo(() => [{ name: 'Home', path: '/' }], []);
+  const schemas = useMemo(
+    () => [buildFaqSchema(siteConfig.faqs), ...buildPersonSchemas()],
+    []
+  );
+
+  useDocumentHead({
+    path: '/',
+    title: 'MASTERMIND ACADEMY, Belagavi | Spoken English & Tuition',
+    description:
+      'MASTERMIND ACADEMY in Nehru Nagar, Belagavi (7:00 AM–8:30 PM) offers Spoken English (4 levels), Classes 6th to 10th all core subjects, and B.E, B.Com & Diploma core subjects.',
+    pageType: 'WebPage',
+    breadcrumbs,
+    schemas,
+  });
+
+  const orderedPrograms = posterOrder
+    .map((id) => siteConfig.programs.find((p) => p.id === id))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+  const activeProgram =
+    siteConfig.programs.find((p) => p.id === activeTabId) ?? siteConfig.programs[0];
+
+  const activeBoardsOrLevels = activeProgram.boards?.length
+    ? `All core subjects (${activeProgram.boards.join(', ')})`
+    : activeProgram.batches?.length
+      ? activeProgram.batches.map((b) => b.level).join(', ')
+      : activeProgram.curriculum?.length
+        ? 'Self-intro, GD, Mock Interviews & Grooming'
+        : 'Core subjects for B.E, B.Com and Diploma streams';
+
+  const activeBoardsLabel = activeProgram.boards?.length
+    ? 'Subjects & Boards'
+    : activeProgram.batches?.length
+      ? 'Four Levels'
+      : 'Focus';
+
+  const safeMapEmbedUrl = getSafeGoogleMapsEmbedUrl();
+  const hasEmbedMap = Boolean(safeMapEmbedUrl);
+  const testimonials = siteConfig.testimonials;
+  const visibleTestimonials = useMemo(() => {
+    if (testimonials.length === 0) return [];
+    const count = Math.min(3, testimonials.length);
+    return Array.from({ length: count }, (_, i) => {
+      return testimonials[(testimonialOffset + i) % testimonials.length];
+    });
+  }, [testimonials, testimonialOffset]);
+
+  return (
+    <Layout breadcrumbs={breadcrumbs}>
+      {/* =====================================================================
+          3) HERO = 4-SLIDE HTML & CSS POSTER BANNER CAROUSEL
+      ===================================================================== */}
+      <HeroBannerCarousel />
+
+      {/* =====================================================================
+          4) OUR COURSES — 4 POSTER CARDS (4:5, rounded-20px, solid brand colours)
+      ===================================================================== */}
+      <section id="courses" className="py-[56px] lg:py-[96px]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <SectionHeading title="Our Courses" />
+          </Reveal>
+
+          {/* 3 Core Offerings: 2-Row Balanced Grid on Mobile (2 + 1 full-width), 3-Column Row on Desktop */}
+          <div className="mt-8 lg:mt-12 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:gap-6">
+            {orderedPrograms.map((program, idx) => {
+              const style = posterCardStyles[program.id];
+              const isThirdOnMobile = idx === 2;
+              return (
+                <Reveal
+                  key={program.id}
+                  delay={idx * 0.05}
+                  className={isThirdOnMobile ? 'col-span-2 md:col-span-1' : ''}
+                >
+                  <div className="flex flex-col h-full">
+                    <Link
+                      to={program.slug}
+                      className={`poster-card group relative block w-full overflow-hidden ${
+                        isThirdOnMobile ? 'aspect-[16/10] md:aspect-[4/5]' : 'aspect-[4/5]'
+                      } ${style.bgClass}`}
+                    >
+                      {/* Soft Decorative Curved Shape Behind Photo */}
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 260 220"
+                        className="pointer-events-none absolute -right-4 -bottom-4 w-[78%] h-[62%] opacity-90"
+                      >
+                        <path
+                          d="M40,220 C15,120 70,25 185,10 C225,5 250,25 260,55 L260,220 Z"
+                          fill={style.curveFill}
+                          fillOpacity="0.28"
+                        />
+                        <circle cx="195" cy="155" r="88" fill={style.curveFill} fillOpacity="0.88" />
+                      </svg>
+
+                      {/* Top-Left Big Condensed Title & Small Sub-line */}
+                      <div
+                        className={`relative z-10 p-3 sm:p-5 ${
+                          isThirdOnMobile ? 'max-w-[56%] md:max-w-none' : ''
+                        }`}
+                      >
+                        <h3
+                          className={`font-poster uppercase text-[22px] min-[390px]:text-[25px] sm:text-[32px] leading-[0.98] ${style.titleClass}`}
+                        >
+                          {style.posterTitle}
+                        </h3>
+                        <p
+                          className={`mt-1 text-[11px] sm:text-xs font-semibold leading-tight ${style.subClass}`}
+                        >
+                          {style.posterSub}
+                        </p>
+                      </div>
+
+                      {/* Bottom-Right Photo Slot */}
+                      <div
+                        className={`pointer-events-none absolute right-2 bottom-2 sm:right-3.5 sm:bottom-3.5 z-10 aspect-[4/3] overflow-hidden rounded-xl border-2 border-white shadow-md bg-[var(--sand-placeholder)] transition-transform duration-300 group-hover:scale-[1.03] ${
+                          isThirdOnMobile ? 'w-[44%] md:w-[68%]' : 'w-[64%] sm:w-[68%]'
+                        }`}
+                      >
+                        <SmartPhoto
+                          src={style.photo}
+                          alt={style.alt}
+                          width={640}
+                          height={480}
+                          aspectClass="h-full w-full"
+                          placeholderLabel={program.shortTitle}
+                        />
+                      </div>
+
+                      {/* "Learn More" Button — Always Visible on Mobile, Hover-Reveal on Desktop */}
+                      <span
+                        className={`absolute left-2.5 bottom-2.5 sm:left-4 sm:bottom-4 z-20 inline-flex items-center gap-1 rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 text-[10.5px] sm:text-xs font-bold shadow-sm transition-all duration-200 opacity-100 lg:opacity-0 lg:translate-y-1.5 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-focus-visible:opacity-100 lg:group-focus-visible:translate-y-0 ${style.btnClass}`}
+                      >
+                        <span>Learn More</span>
+                        <ArrowRight className="h-3 w-3 shrink-0" aria-hidden="true" />
+                      </span>
+                    </Link>
+
+                    {/* Short Caption Underneath Each Card */}
+                    <p className="mt-2 px-0.5 text-xs sm:text-sm font-medium leading-snug text-[var(--muted)] text-center">
+                      {style.caption}
+                    </p>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          5) PROMO STRIP — SPOKEN ENGLISH FOR EVERY LEVEL (Soft Gold Banner)
+      ===================================================================== */}
+      <section className="py-[56px] lg:py-[96px] pt-0 lg:pt-0">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-[20px] bg-[var(--gold)] p-6 sm:p-8 lg:p-10 shadow-[0_14px_30px_-16px_rgba(16,28,58,0.22)]">
+              <div className="grid grid-cols-1 gap-7 lg:grid-cols-12 lg:items-center">
+                {/* Left Content: Heading + 4 Level Tiles + Enquire Now */}
+                <div className="lg:col-span-8 space-y-6">
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--navy)]">
+                      MASTERMIND ACADEMY · Belagavi
+                    </p>
+                    <h2 className="font-poster uppercase text-[34px] sm:text-[44px] leading-none text-[var(--ink)]">
+                      Spoken English for every level
+                    </h2>
+                    <p className="text-sm sm:text-base font-semibold text-[var(--ink)]/90 max-w-2xl">
+                      Spoken English is for everyone: kids, housewives, freshers, job seekers,
+                      students, etc.
+                    </p>
+                  </div>
+
+                  {/* Four Level Tiles (2x2 Grid on sm+, stacked cleanly on narrow mobile) */}
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {spokenEnglishLevels.map((level) => {
+                      const Icon = level.icon;
+                      return (
+                        <div
+                          key={level.title}
+                          className="rounded-2xl bg-white/95 p-4 border border-[var(--ink)]/10 shadow-2xs flex items-start gap-3"
+                        >
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--navy)] text-[var(--gold)]">
+                            <Icon className="h-4 w-4" aria-hidden="true" />
+                          </span>
+                          <div>
+                            <h3 className="text-sm sm:text-base font-bold text-[var(--ink)] leading-snug">
+                              {level.title}
+                            </h3>
+                            <p className="mt-0.5 text-xs font-semibold text-[var(--royal)]">
+                              {level.mode}
+                            </p>
+                            <p className="text-xs text-[var(--muted)] tabular-nums">
+                              {level.duration}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => openEnquiryModal('Spoken English (Beginners or Intermediates)')}
+                      className="btn-cta inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-2.5 text-sm sm:text-base font-bold cursor-pointer whitespace-nowrap"
+                    >
+                      <span>Enquire Now</span>
+                      <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    </button>
+
+                    <Link
+                      to="/spoken-english-classes-belagavi"
+                      className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-bold text-[var(--navy)] hover:underline underline-offset-4"
+                    >
+                      <span>See batch details</span>
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Right Student Photo Slot (Drops cleanly below on mobile) */}
+                <div className="lg:col-span-4">
+                  <div className="mx-auto max-w-[360px] lg:max-w-none overflow-hidden rounded-2xl border-4 border-white shadow-md">
+                    <SmartPhoto
+                      src={siteConfig.mediaSlots.heroMain}
+                      alt="Learners practising spoken English around a sunlit table"
+                      width={960}
+                      height={720}
+                      aspectClass="aspect-[4/3]"
+                      placeholderLabel="Spoken English Classes"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          6) FIND US — LOCATION HIGHLIGHTED (Hides Map Card if Embed URL Empty)
+      ===================================================================== */}
+      <section className="bg-white py-[56px] lg:py-[96px] border-y border-[var(--hairline)]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <div
+              className={
+                hasEmbedMap
+                  ? 'grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center'
+                  : 'mx-auto max-w-3xl text-center'
+              }
+            >
+              {/* Left (or Centred when no map embed): Heading, Address, 3 Buttons */}
+              <div className={hasEmbedMap ? 'lg:col-span-6 space-y-5' : 'space-y-5'}>
+                <div className={hasEmbedMap ? 'space-y-2' : 'space-y-2 flex flex-col items-center'}>
+                  <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold-text)]">
+                    <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                    <span>Location · Belagavi</span>
+                  </p>
+                  <h2 className="text-[28px] sm:text-[34px] font-bold leading-[1.15] text-[var(--ink)]">
+                    Find MASTERMIND ACADEMY in Nehru Nagar, Belagavi
+                  </h2>
+                </div>
+
+                <address className="not-italic space-y-1.5 text-base text-[var(--muted)]">
+                  <p className="font-bold text-[var(--ink)]">{siteConfig.name}</p>
+                  <p>{siteConfig.address.fullFormatted}</p>
+                  {siteConfig.address.landmark.trim() && (
+                    <p className="text-sm">{siteConfig.address.landmark.trim()}</p>
+                  )}
+                  {siteConfig.timings.trim() && (
+                    <p
+                      className={`inline-flex items-center gap-1.5 pt-1 text-sm font-bold text-[var(--royal)] tabular-nums ${
+                        hasEmbedMap ? '' : 'justify-center'
+                      }`}
+                    >
+                      <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <span>Open: {siteConfig.timings.trim()}</span>
+                    </p>
+                  )}
+                </address>
+
+                <div
+                  className={`flex flex-wrap gap-3 pt-1 ${
+                    hasEmbedMap ? 'justify-start' : 'justify-center'
+                  }`}
+                >
+                  <a
+                    href={getDirectionsUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-cta inline-flex min-h-[46px] items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold whitespace-nowrap"
+                  >
+                    <Navigation className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span>Get Directions</span>
+                  </a>
+
+                  <a
+                    href={getTelHref(0)}
+                    className="btn-press inline-flex min-h-[46px] items-center gap-2 rounded-xl border border-[var(--navy)] bg-white px-5 py-2.5 text-sm font-bold text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white whitespace-nowrap tabular-nums"
+                  >
+                    <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span>Call</span>
+                  </a>
+
+                  <a
+                    href={getWhatsAppUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-press inline-flex min-h-[46px] items-center gap-2 rounded-xl bg-[var(--whatsapp)] px-5 py-2.5 text-sm font-bold text-[var(--ink)] hover:bg-[var(--whatsapp-hover)] whitespace-nowrap"
+                  >
+                    <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Right: Large Rounded Google Map Embed (Hidden automatically if embed URL is empty or invalid) */}
+              {hasEmbedMap && (
+                <div className="lg:col-span-6">
+                  <div className="overflow-hidden rounded-[20px] border border-[var(--hairline)] bg-[var(--cream)] shadow-sm aspect-[16/10] w-full">
+                    <iframe
+                      title="MASTERMIND ACADEMY, Nehru Nagar, Belagavi Map"
+                      src={safeMapEmbedUrl}
+                      className="h-full w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      sandbox="allow-scripts allow-same-origin allow-popups"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          7) PROGRAM DETAILS TABS — "COURSES AT A GLANCE"
+      ===================================================================== */}
+      <section className="py-[56px] lg:py-[96px]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <SectionHeading title="Courses at a Glance" />
+          </Reveal>
+
+          {/* Underline-Style Scrollable Tabs */}
+          <div className="mt-8 border-b border-[var(--hairline)]">
+            <div
+              role="tablist"
+              aria-label="Course details tabs"
+              className="flex items-center justify-start sm:justify-center gap-2 sm:gap-6 overflow-x-auto no-scrollbar -mb-px"
+            >
+              {glanceTabOrder.map((tab) => {
+                const active = activeTabId === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setActiveTabId(tab.id)}
+                    className={`relative min-h-[48px] shrink-0 px-3 sm:px-4 py-3 text-sm sm:text-base font-bold transition-colors whitespace-nowrap cursor-pointer ${
+                      active ? 'text-[var(--royal)]' : 'text-[var(--muted)] hover:text-[var(--ink)]'
+                    }`}
+                  >
+                    {tab.label}
+                    {active && (
+                      <motion.span
+                        layoutId="courses-glance-underline"
+                        transition={{ duration: 0.2, ease: EASE_OUT }}
+                        className="absolute inset-x-0 bottom-0 h-[3px] rounded-t-full bg-[var(--royal)]"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Compact White Info Card */}
+          <div className="mx-auto mt-6 max-w-4xl">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeProgram.id}
+                initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
+                role="tabpanel"
+                className="card-coaching p-6 sm:p-8"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--hairline)] pb-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">
+                    {activeProgram.title}
+                  </h3>
+                  <Link
+                    to={activeProgram.slug}
+                    className="inline-flex min-h-[40px] items-center gap-1 text-sm font-bold text-[var(--royal)] hover:underline whitespace-nowrap"
+                  >
+                    <span>Full Details</span>
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+
+                <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
+                      Who it is for
+                    </dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium">
+                      {activeProgram.whoItIsFor}
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
+                      Mode
+                    </dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium">
+                      {activeProgram.mode}
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
+                      Duration
+                    </dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium tabular-nums">
+                      {activeProgram.duration}
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
+                      {activeBoardsLabel}
+                    </dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium">
+                      {activeBoardsOrLevels}
+                    </dd>
+                  </div>
+                </dl>
+
+                <div className="mt-6 pt-5 border-t border-[var(--hairline)] flex flex-wrap items-center gap-3">
+                  <a
+                    href={getWhatsAppUrl(activeProgram.whatsappMessage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-press inline-flex min-h-[46px] items-center gap-2 rounded-xl bg-[var(--whatsapp)] px-5 py-2.5 text-sm font-bold text-[var(--ink)] hover:bg-[var(--whatsapp-hover)] whitespace-nowrap"
+                  >
+                    <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span>Enquire on WhatsApp</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => openEnquiryModal(activeProgram.shortTitle)}
+                    className="btn-press inline-flex min-h-[46px] items-center gap-1.5 rounded-xl border border-[var(--navy)] bg-white px-5 py-2.5 text-sm font-bold text-[var(--navy)] hover:bg-[var(--cream)] cursor-pointer whitespace-nowrap"
+                  >
+                    <span>Quick Enquiry Form</span>
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          7B) OUR FACULTY — MEET OUR QUALIFIED B.E LECTURERS
+      ===================================================================== */}
+      <section className="bg-white py-[56px] lg:py-[96px] border-t border-[var(--hairline)]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 space-y-8">
+          <Reveal>
+            <SectionHeading
+              title="Our Faculty"
+              subtitle="Taught by qualified B.E graduate lecturers focused on clear concepts, daily speaking practice and personal attention."
+            />
+          </Reveal>
+
+          <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3.5 sm:gap-6">
+            {siteConfig.lecturers.map((lecturer, idx) => (
+              <Reveal key={lecturer.id} delay={idx * 0.06}>
+                <Link
+                  to={`/lecturers/${lecturer.id}`}
+                  className="card-coaching card-coaching-hover group rounded-2xl border border-[var(--hairline)] bg-[var(--cream)] p-4 sm:p-6 h-full flex flex-col items-center justify-between text-center gap-3"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <div
+                      aria-hidden="true"
+                      className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--navy)] font-poster text-2xl text-[var(--gold)] ring-2 ring-[var(--gold)] ring-offset-2 ring-offset-[var(--cream)]"
+                    >
+                      {lecturer.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold text-[var(--ink)] group-hover:text-[var(--royal)] transition-colors">
+                        {lecturer.name}, {lecturer.qualification}
+                      </h3>
+                      <p className="mt-1 inline-block rounded-md bg-[var(--gold)]/30 px-2 py-0.5 text-[11px] sm:text-xs font-bold text-[var(--navy)]">
+                        {lecturer.experience}
+                      </p>
+                      <p className="mt-1.5 text-xs sm:text-sm text-[var(--muted)] line-clamp-3">
+                        {lecturer.bio.trim()}
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className="mt-1 inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[var(--royal)]">
+                    <span>View Profile</span>
+                    <ArrowRight
+                      className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link
+              to="/lecturers"
+              className="btn-press inline-flex min-h-[46px] items-center gap-2 rounded-xl border border-[var(--navy)] bg-white px-5 py-2.5 text-sm font-bold text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white"
+            >
+              <span>Meet Our Faculty &amp; What They Teach</span>
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          8) TESTIMONIALS — 3-CARD CAROUSEL (HIDDEN AUTOMATICALLY WHILE EMPTY)
+      ===================================================================== */}
+      {testimonials.length > 0 && (
+        <section className="bg-white py-[56px] lg:py-[96px] border-t border-[var(--hairline)]">
+          <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+            <div className="flex flex-col items-center gap-4">
+              <SectionHeading title="Loved by Students. Trusted by Parents." />
+
+              {testimonials.length > 3 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setTestimonialOffset(
+                        (prev) => (prev - 1 + testimonials.length) % testimonials.length
+                      )
+                    }
+                    aria-label="Previous testimonials"
+                    className="btn-press inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--hairline)] bg-[var(--cream)] text-[var(--navy)] hover:border-[var(--royal)] cursor-pointer"
+                  >
+                    <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setTestimonialOffset((prev) => (prev + 1) % testimonials.length)
+                    }
+                    aria-label="Next testimonials"
+                    className="btn-press inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--hairline)] bg-[var(--cream)] text-[var(--navy)] hover:border-[var(--royal)] cursor-pointer"
+                  >
+                    <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+              {visibleTestimonials.map((item) => (
+                <blockquote key={`${item.name}-${item.program}`} className="card-coaching p-6 flex flex-col justify-between gap-4">
+                  <p className="text-base leading-relaxed text-[var(--ink)]">
+                    &ldquo;{item.quote}&rdquo;
+                  </p>
+                  <footer className="border-t border-[var(--hairline)] pt-3 text-xs font-bold text-[var(--navy)]">
+                    {item.name} · {item.role} ({item.program})
+                  </footer>
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* =====================================================================
+          9) FACTS BAND (FULL-WIDTH RED using --cta variable, Animated Once on Scroll)
+      ===================================================================== */}
+      <section aria-label="Institute facts" className="band-cta py-[56px] lg:py-[88px]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <SectionHeading title="Why Families Choose MASTERMIND ACADEMY" tone="dark" />
+          </Reveal>
+
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {siteConfig.facts.map((fact, idx) => (
+              <Reveal key={fact.id} delay={idx * 0.05}>
+                <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-[2px]">
+                  <div className="font-poster text-[44px] sm:text-[56px] leading-none text-[var(--gold)]">
+                    <AnimatedCounter
+                      display={fact.display}
+                      target={fact.countTarget}
+                      prefix={fact.countPrefix}
+                      suffix={fact.countSuffix}
+                    />
+                  </div>
+                  <div className="mt-2 text-base sm:text-lg font-bold text-white leading-snug">
+                    {fact.label}
+                  </div>
+                  {fact.sublabel && (
+                    <div className="mt-0.5 text-xs sm:text-sm text-white/85">{fact.sublabel}</div>
+                  )}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          10) FAQ ACCORDION (Approved FAQs, FAQPage Schema Kept)
+      ===================================================================== */}
+      <section className="py-[56px] lg:py-[96px]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <SectionHeading title="Frequently Asked Questions" />
+          </Reveal>
+
+          <div className="mx-auto mt-8 max-w-3xl space-y-3">
+            {siteConfig.faqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div key={faq.question} className="card-coaching overflow-hidden">
+                  <h3 className="text-base font-bold text-[var(--ink)]">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                      aria-expanded={isOpen}
+                      className="flex w-full min-h-[54px] items-center justify-between gap-4 px-5 py-3.5 text-left hover:bg-[var(--cream)]/60 transition-colors cursor-pointer"
+                    >
+                      <span>{faq.question}</span>
+                      <ChevronDown
+                        className={`h-5 w-5 shrink-0 text-[var(--royal)] transition-transform duration-200 ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </h3>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                        transition={{ duration: 0.22, ease: EASE_OUT }}
+                        className="overflow-hidden"
+                      >
+                        <p className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          11) "GOT ANY QUESTIONS?" FORM — 2-COLUMN CREAM CARD
+      ===================================================================== */}
+      <section id="enquire" className="bg-white py-[56px] lg:py-[96px] border-t border-[var(--hairline)]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <div className="rounded-[20px] border border-[var(--hairline)] bg-[var(--cream)] p-6 sm:p-8 lg:p-10 shadow-xs">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
+                {/* Left Column */}
+                <div className="lg:col-span-5 space-y-4">
+                  <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold-text)]">
+                    <Globe className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                    <span>MASTERMIND ACADEMY · Belagavi</span>
+                  </p>
+                  <h2 className="font-poster uppercase text-[36px] sm:text-[46px] leading-none text-[var(--ink)]">
+                    Got Any Questions?
+                  </h2>
+                  <p className="text-base leading-relaxed text-[var(--muted)]">
+                    Fill the form and we will get in touch with you soon.
+                  </p>
+
+                  <div className="pt-2 space-y-2 text-sm font-semibold text-[var(--navy)] tabular-nums">
+                    {siteConfig.phones.map((num, idx) => (
+                      <div key={num}>
+                        <a
+                          href={getTelHref(idx)}
+                          className="inline-flex min-h-[44px] items-center gap-2 hover:text-[var(--royal)]"
+                        >
+                          <Phone className="h-4 w-4 text-[var(--royal)] shrink-0" aria-hidden="true" />
+                          <span>{num}</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right Column: WhatsApp Form */}
+                <div className="lg:col-span-7">
+                  <WhatsAppEnquiryForm />
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </Layout>
+  );
+}
