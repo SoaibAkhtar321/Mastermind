@@ -19,9 +19,11 @@ import {
   Smile,
 } from 'lucide-react';
 import {
+  INTERVIEW_PROGRAM_NAME,
+  SPOKEN_ENGLISH_AUDIENCE,
   getDirectionsUrl,
+  getProgramById,
   getSafeEmail,
-  getSafeGoogleMapsEmbedUrl,
   getTelHref,
   getWhatsAppUrl,
   siteConfig,
@@ -34,6 +36,8 @@ import { Layout } from '../components/Layout';
 import { HeroBannerCarousel } from '../components/HeroBannerCarousel';
 import { SmartPhoto } from '../components/SmartPhoto';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
+import { FormatOrdinals } from '../components/FormatText';
+import { AcademyLocationMap } from '../components/AcademyLocationMap';
 import {
   AnimatedCounter,
   EASE_OUT,
@@ -69,8 +73,9 @@ const posterCardStyles: Record<
     curveFill: '#E9BF5A',
     btnClass: 'bg-white text-[var(--navy)]',
     posterTitle: 'SPOKEN ENGLISH',
-    posterSub: '4 Levels · Online & Offline',
-    caption: 'Kids, Beginners/Intermediates, Advanced & Interview Mastery',
+    posterSub: '4 Levels · Online & Offline Across India',
+    caption:
+      'Kids, Beginners/Intermediates, Advanced & Interview Mastery with Personality Skill Development Program',
     photo: siteConfig.mediaSlots.spokenEnglishVisual,
     alt: 'Learners practising spoken English conversation in a bright study room',
   },
@@ -81,8 +86,8 @@ const posterCardStyles: Record<
     curveFill: '#FFFFFF',
     btnClass: 'bg-[var(--ink)] text-white',
     posterTitle: 'CLASSES 6TH TO 10TH',
-    posterSub: 'All Core Subjects · CBSE, ICSE, KVS, State',
-    caption: 'All core school subjects with strong basics & exam preparation',
+    posterSub: 'All Subjects · CBSE, ICSE, KVS, State',
+    caption: 'All school subjects with strong basics & exam preparation (Online & Offline)',
     photo: siteConfig.mediaSlots.schoolTuitionVisual,
     alt: 'School learners studying textbooks and writing notes at a wooden desk',
   },
@@ -92,9 +97,9 @@ const posterCardStyles: Record<
     subClass: 'text-[var(--gold)]',
     curveFill: '#E9BF5A',
     btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
-    posterTitle: 'INTERVIEW MASTERY',
-    posterSub: 'Personality Dev · 2 Months',
-    caption: 'Mock interviews, GD and body language',
+    posterTitle: 'INTERVIEW MASTERY WITH PERSONALITY SKILL DEVELOPMENT',
+    posterSub: 'Online & Offline · 2 Months',
+    caption: 'Self-introduction, GD sessions, mock interviews & body language',
     photo: siteConfig.mediaSlots.interviewMasteryVisual,
     alt: 'Graduate practising clear answers during a mock interview session',
   },
@@ -105,39 +110,14 @@ const posterCardStyles: Record<
     curveFill: '#E9BF5A',
     btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
     posterTitle: 'B.E, B.COM & DIPLOMA',
-    posterSub: 'Core Subjects',
+    posterSub: 'Core Subjects · Online & Offline',
     caption: 'Core subject coaching by qualified B.E graduate lecturers',
     photo: siteConfig.mediaSlots.beBcaDiplomaVisual,
     alt: 'College learners collaborating over technical notebooks and a laptop',
   },
 };
 
-const spokenEnglishLevels = [
-  {
-    icon: Smile,
-    title: 'Kids',
-    mode: 'Offline',
-    duration: '2 months',
-  },
-  {
-    icon: BookOpen,
-    title: 'Beginners or Intermediates',
-    mode: 'Online and Offline',
-    duration: '2 to 3 months',
-  },
-  {
-    icon: Award,
-    title: 'Advanced Level',
-    mode: 'Online and Offline',
-    duration: '2 to 3 months',
-  },
-  {
-    icon: Briefcase,
-    title: 'Interview Mastery',
-    mode: 'Practical Coaching',
-    duration: '2 months',
-  },
-];
+const levelIcons = [Smile, BookOpen, Award, Briefcase];
 
 const glanceTabOrder: { id: ProgramItem['id']; label: string }[] = [
   { id: 'spoken-english', label: 'Spoken English' },
@@ -160,9 +140,9 @@ export function HomePage() {
 
   useDocumentHead({
     path: '/',
-    title: 'MASTERMIND ACADEMY, Belagavi | Spoken English & Tuition',
+    title: 'MASTERMIND ACADEMY, Belagavi | Spoken English & Tuition Across India',
     description:
-      'MASTERMIND ACADEMY in Nehru Nagar, Belagavi (7:00 AM–8:30 PM) offers Spoken English (4 levels), Classes 6th to 10th all core subjects, and B.E, B.Com & Diploma core subjects.',
+      'MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi (Online & Offline across India, 7:00 AM–8:30 PM) offers Spoken English (4 levels including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, and B.E, B.Com & Diploma core subjects.',
     pageType: 'WebPage',
     breadcrumbs,
     schemas,
@@ -172,26 +152,27 @@ export function HomePage() {
     .map((id) => siteConfig.programs.find((p) => p.id === id))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
+  const spokenEnglishProgram = getProgramById('spoken-english');
+  const spokenEnglishBatches = spokenEnglishProgram.batches ?? [];
+
   const activeProgram =
     siteConfig.programs.find((p) => p.id === activeTabId) ?? siteConfig.programs[0];
 
-  const activeBoardsOrLevels = activeProgram.boards?.length
-    ? `All core subjects (${activeProgram.boards.join(', ')})`
+  const activeDetailItems: string[] = activeProgram.boards?.length
+    ? activeProgram.boards.map((board) => `${board} — All Subjects`)
     : activeProgram.batches?.length
-      ? activeProgram.batches.map((b) => b.level).join(', ')
+      ? activeProgram.batches.map((b) => b.level)
       : activeProgram.curriculum?.length
-        ? 'Self-intro, GD, Mock Interviews & Grooming'
-        : 'Core subjects for B.E, B.Com and Diploma streams';
+        ? activeProgram.curriculum
+        : ['B.E Core Subjects', 'B.Com Core Subjects', 'Diploma Core Subjects'];
 
   const activeBoardsLabel = activeProgram.boards?.length
     ? 'Subjects & Boards'
     : activeProgram.batches?.length
       ? 'Four Levels'
-      : 'Focus';
+      : 'Core Tracks';
 
   const safeEmail = getSafeEmail();
-  const safeMapEmbedUrl = getSafeGoogleMapsEmbedUrl();
-  const hasEmbedMap = Boolean(safeMapEmbedUrl);
   const testimonials = siteConfig.testimonials;
   const visibleTestimonials = useMemo(() => {
     if (testimonials.length === 0) return [];
@@ -204,12 +185,12 @@ export function HomePage() {
   return (
     <Layout breadcrumbs={breadcrumbs}>
       {/* =====================================================================
-          3) HERO = 4-SLIDE HTML & CSS POSTER BANNER CAROUSEL
+          3) HERO = POSTER BANNER CAROUSEL
       ===================================================================== */}
       <HeroBannerCarousel />
 
       {/* =====================================================================
-          4) OUR COURSES — 4 POSTER CARDS (4:5, rounded-20px, solid brand colours)
+          4) OUR COURSES — POSTER CARDS (rounded-20px, solid brand colours)
       ===================================================================== */}
       <section id="courses" className="py-[56px] lg:py-[96px]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
@@ -258,12 +239,12 @@ export function HomePage() {
                         <h3
                           className={`font-poster uppercase text-[22px] min-[390px]:text-[25px] sm:text-[32px] leading-[0.98] ${style.titleClass}`}
                         >
-                          {style.posterTitle}
+                          <FormatOrdinals text={style.posterTitle} />
                         </h3>
                         <p
                           className={`mt-1 text-[11px] sm:text-xs font-semibold leading-tight ${style.subClass}`}
                         >
-                          {style.posterSub}
+                          <FormatOrdinals text={style.posterSub} />
                         </p>
                       </div>
 
@@ -294,7 +275,7 @@ export function HomePage() {
 
                     {/* Short Caption Underneath Each Card */}
                     <p className="mt-2 px-0.5 text-xs sm:text-sm font-medium leading-snug text-[var(--muted)] text-center">
-                      {style.caption}
+                      <FormatOrdinals text={style.caption} />
                     </p>
                   </div>
                 </Reveal>
@@ -311,45 +292,77 @@ export function HomePage() {
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <Reveal>
             <div className="relative overflow-hidden rounded-[20px] bg-[var(--gold)] p-6 sm:p-8 lg:p-10 shadow-[0_14px_30px_-16px_rgba(16,28,58,0.22)]">
-              <div className="grid grid-cols-1 gap-7 lg:grid-cols-12 lg:items-center">
-                {/* Left Content: Heading + 4 Level Tiles + Enquire Now */}
+              <div className="grid grid-cols-1 gap-7 lg:grid-cols-12 lg:items-start">
+                {/* Left Content: Heading + Highlighted Bulleted Audience + 4 Level Tiles */}
                 <div className="lg:col-span-8 space-y-6">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--navy)]">
-                      MASTERMIND ACADEMY · Belagavi
+                      MASTERMIND ACADEMY · Online &amp; Offline Across India
                     </p>
                     <h2 className="font-poster uppercase text-[34px] sm:text-[44px] leading-none text-[var(--ink)]">
-                      Spoken English for every level
+                      Spoken English for Every Level
                     </h2>
-                    <p className="text-sm sm:text-base font-semibold text-[var(--ink)]/90 max-w-2xl">
-                      Spoken English is for everyone: kids, housewives, freshers, job seekers,
-                      students, etc.
-                    </p>
+
+                    {/* Highlighted Capitalized Audience Bullet List */}
+                    <div className="rounded-2xl bg-[var(--navy)] p-4 sm:p-5 text-white">
+                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                        Spoken English Is For Everyone
+                      </p>
+                      <ul className="mt-2.5 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1.5 list-disc pl-5 text-sm sm:text-base font-extrabold tracking-wide text-white marker:text-[var(--gold)]">
+                        {SPOKEN_ENGLISH_AUDIENCE.map((group) => (
+                          <li key={group}>{group}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
-                  {/* Four Level Tiles (2x2 Grid on sm+, stacked cleanly on narrow mobile) */}
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {spokenEnglishLevels.map((level) => {
-                      const Icon = level.icon;
+                  {/* Four Level Tiles with Bulleted Points */}
+                  <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                    {spokenEnglishBatches.map((batch, idx) => {
+                      const Icon = levelIcons[idx] ?? BookOpen;
+                      const isInterviewLevel = batch.level === INTERVIEW_PROGRAM_NAME;
                       return (
                         <div
-                          key={level.title}
-                          className="rounded-2xl bg-white/95 p-4 border border-[var(--ink)]/10 shadow-2xs flex items-start gap-3"
+                          key={batch.level}
+                          className={`rounded-2xl bg-white/95 p-4 border border-[var(--ink)]/10 shadow-2xs flex flex-col justify-between gap-2.5 ${
+                            isInterviewLevel ? 'sm:col-span-2' : ''
+                          }`}
                         >
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--navy)] text-[var(--gold)]">
-                            <Icon className="h-4 w-4" aria-hidden="true" />
-                          </span>
-                          <div>
-                            <h3 className="text-sm sm:text-base font-bold text-[var(--ink)] leading-snug">
-                              {level.title}
-                            </h3>
-                            <p className="mt-0.5 text-xs font-semibold text-[var(--royal)]">
-                              {level.mode}
-                            </p>
-                            <p className="text-xs text-[var(--muted)] tabular-nums">
-                              {level.duration}
-                            </p>
+                          <div className="flex items-start gap-3">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--navy)] text-[var(--gold)]">
+                              <Icon className="h-4 w-4" aria-hidden="true" />
+                            </span>
+                            <div className="min-w-0">
+                              <h3 className="text-sm sm:text-base font-bold text-[var(--ink)] leading-snug">
+                                {batch.level}
+                              </h3>
+                              <p className="mt-0.5 text-xs font-semibold text-[var(--royal)]">
+                                {batch.mode} · <span className="tabular-nums">{batch.duration}</span>
+                              </p>
+                            </div>
                           </div>
+
+                          <ul
+                            className={`list-disc pl-5 space-y-1 text-xs sm:text-sm text-[var(--muted)] marker:text-[var(--royal)] ${
+                              isInterviewLevel ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 space-y-0' : ''
+                            }`}
+                          >
+                            {batch.highlights.map((point) => (
+                              <li key={point}>{point}</li>
+                            ))}
+                          </ul>
+
+                          {isInterviewLevel && (
+                            <div className="pt-1">
+                              <Link
+                                to="/interview-mastery-personality-development-belagavi"
+                                className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[var(--royal)] hover:underline underline-offset-4"
+                              >
+                                <span>Explore full program details</span>
+                                <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                              </Link>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -376,7 +389,7 @@ export function HomePage() {
                 </div>
 
                 {/* Right Student Photo Slot (Drops cleanly below on mobile) */}
-                <div className="lg:col-span-4">
+                <div className="lg:col-span-4 lg:sticky lg:top-24">
                   <div className="mx-auto max-w-[360px] lg:max-w-none overflow-hidden rounded-2xl border-4 border-white shadow-md">
                     <SmartPhoto
                       src={siteConfig.mediaSlots.heroMain}
@@ -395,53 +408,47 @@ export function HomePage() {
       </section>
 
       {/* =====================================================================
-          6) FIND US — LOCATION HIGHLIGHTED (Hides Map Card if Embed URL Empty)
+          6) FIND US — LOCATION HIGHLIGHTED (Nehru Nagar, 2nd Cross + Satellite Map)
       ===================================================================== */}
       <section className="bg-white py-[56px] lg:py-[96px] border-y border-[var(--hairline)]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <Reveal>
-            <div
-              className={
-                hasEmbedMap
-                  ? 'grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center'
-                  : 'mx-auto max-w-3xl text-center'
-              }
-            >
-              {/* Left (or Centred when no map embed): Heading, Address, 3 Buttons */}
-              <div className={hasEmbedMap ? 'lg:col-span-6 space-y-5' : 'space-y-5'}>
-                <div className={hasEmbedMap ? 'space-y-2' : 'space-y-2 flex flex-col items-center'}>
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
+              {/* Left: Heading, Address, Exact Coordinates & Action Buttons */}
+              <div className="lg:col-span-5 space-y-5">
+                <div className="space-y-2">
                   <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold-text)]">
                     <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                    <span>Location · Belagavi</span>
+                    <span>Offline Centre in Belagavi · Online Across India</span>
                   </p>
                   <h2 className="text-[28px] sm:text-[34px] font-bold leading-[1.15] text-[var(--ink)]">
-                    Find MASTERMIND ACADEMY in Nehru Nagar, Belagavi
+                    <FormatOrdinals text="Find MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi" />
                   </h2>
                 </div>
 
                 <address className="not-italic space-y-1.5 text-base text-[var(--muted)]">
                   <p className="font-bold text-[var(--ink)]">{siteConfig.name}</p>
-                  <p>{siteConfig.address.fullFormatted}</p>
+                  <p>
+                    <FormatOrdinals text={siteConfig.address.fullFormatted} />
+                  </p>
+                  <p className="text-xs sm:text-sm font-medium text-[var(--muted)] tabular-nums">
+                    GPS: {siteConfig.location.latitude}, {siteConfig.location.longitude} ·{' '}
+                    {siteConfig.location.plusCode}
+                  </p>
                   {siteConfig.address.landmark.trim() && (
-                    <p className="text-sm">{siteConfig.address.landmark.trim()}</p>
+                    <p className="text-sm">
+                      <FormatOrdinals text={siteConfig.address.landmark.trim()} />
+                    </p>
                   )}
                   {siteConfig.timings.trim() && (
-                    <p
-                      className={`inline-flex items-center gap-1.5 pt-1 text-sm font-bold text-[var(--royal)] tabular-nums ${
-                        hasEmbedMap ? '' : 'justify-center'
-                      }`}
-                    >
+                    <p className="inline-flex items-center gap-1.5 pt-1 text-sm font-bold text-[var(--royal)] tabular-nums">
                       <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
                       <span>Open: {siteConfig.timings.trim()}</span>
                     </p>
                   )}
                 </address>
 
-                <div
-                  className={`flex flex-wrap gap-3 pt-1 ${
-                    hasEmbedMap ? 'justify-start' : 'justify-center'
-                  }`}
-                >
+                <div className="flex flex-wrap gap-3 pt-1">
                   <a
                     href={getDirectionsUrl()}
                     target="_blank"
@@ -472,22 +479,10 @@ export function HomePage() {
                 </div>
               </div>
 
-              {/* Right: Large Rounded Google Map Embed (Hidden automatically if embed URL is empty or invalid) */}
-              {hasEmbedMap && (
-                <div className="lg:col-span-6">
-                  <div className="overflow-hidden rounded-[20px] border border-[var(--hairline)] bg-[var(--cream)] shadow-sm aspect-[16/10] w-full">
-                    <iframe
-                      title="MASTERMIND ACADEMY, Nehru Nagar, Belagavi Map"
-                      src={safeMapEmbedUrl}
-                      className="h-full w-full border-0"
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      sandbox="allow-scripts allow-same-origin allow-popups"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              )}
+              {/* Right: Interactive Google Maps Satellite View at Exact Coordinates */}
+              <div className="lg:col-span-7">
+                <AcademyLocationMap />
+              </div>
             </div>
           </Reveal>
         </div>
@@ -522,7 +517,7 @@ export function HomePage() {
                       active ? 'text-[var(--royal)]' : 'text-[var(--muted)] hover:text-[var(--ink)]'
                     }`}
                   >
-                    {tab.label}
+                    <FormatOrdinals text={tab.label} />
                     {active && (
                       <motion.span
                         layoutId="courses-glance-underline"
@@ -550,7 +545,7 @@ export function HomePage() {
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--hairline)] pb-4">
                   <h3 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">
-                    {activeProgram.title}
+                    <FormatOrdinals text={activeProgram.title} />
                   </h3>
                   <Link
                     to={activeProgram.slug}
@@ -566,8 +561,14 @@ export function HomePage() {
                     <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
                       Who it is for
                     </dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium">
-                      {activeProgram.whoItIsFor}
+                    <dd className="mt-1.5 text-sm leading-relaxed text-[var(--ink)]">
+                      <ul className="list-disc pl-4 space-y-1 font-bold marker:text-[var(--royal)]">
+                        {activeProgram.whoItIsForList.map((item) => (
+                          <li key={item}>
+                            <FormatOrdinals text={item} />
+                          </li>
+                        ))}
+                      </ul>
                     </dd>
                   </div>
 
@@ -575,8 +576,8 @@ export function HomePage() {
                     <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
                       Mode
                     </dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium">
-                      {activeProgram.mode}
+                    <dd className="mt-1.5 text-sm leading-relaxed text-[var(--ink)] font-medium">
+                      <FormatOrdinals text={activeProgram.mode} />
                     </dd>
                   </div>
 
@@ -584,8 +585,8 @@ export function HomePage() {
                     <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
                       Duration
                     </dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium tabular-nums">
-                      {activeProgram.duration}
+                    <dd className="mt-1.5 text-sm leading-relaxed text-[var(--ink)] font-medium tabular-nums">
+                      <FormatOrdinals text={activeProgram.duration} />
                     </dd>
                   </div>
 
@@ -593,8 +594,14 @@ export function HomePage() {
                     <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
                       {activeBoardsLabel}
                     </dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-[var(--ink)] font-medium">
-                      {activeBoardsOrLevels}
+                    <dd className="mt-1.5 text-sm leading-relaxed text-[var(--ink)] font-medium">
+                      <ul className="list-disc pl-4 space-y-1 marker:text-[var(--royal)]">
+                        {activeDetailItems.map((item) => (
+                          <li key={item}>
+                            <FormatOrdinals text={item} />
+                          </li>
+                        ))}
+                      </ul>
                     </dd>
                   </div>
                 </dl>
@@ -658,7 +665,7 @@ export function HomePage() {
                         {lecturer.experience}
                       </p>
                       <p className="mt-1.5 text-xs sm:text-sm text-[var(--muted)] line-clamp-3">
-                        {lecturer.bio.trim()}
+                        <FormatOrdinals text={lecturer.bio.trim()} />
                       </p>
                     </div>
                   </div>
@@ -726,7 +733,10 @@ export function HomePage() {
 
             <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
               {visibleTestimonials.map((item) => (
-                <blockquote key={`${item.name}-${item.program}`} className="card-coaching p-6 flex flex-col justify-between gap-4">
+                <blockquote
+                  key={`${item.name}-${item.program}`}
+                  className="card-coaching p-6 flex flex-col justify-between gap-4"
+                >
                   <p className="text-base leading-relaxed text-[var(--ink)]">
                     &ldquo;{item.quote}&rdquo;
                   </p>
@@ -752,7 +762,7 @@ export function HomePage() {
           <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
             {siteConfig.facts.map((fact, idx) => (
               <Reveal key={fact.id} delay={idx * 0.05}>
-                <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-[2px]">
+                <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-[2px] h-full flex flex-col justify-center">
                   <div className="font-poster text-[44px] sm:text-[56px] leading-none text-[var(--gold)]">
                     <AnimatedCounter
                       display={fact.display}
@@ -762,10 +772,12 @@ export function HomePage() {
                     />
                   </div>
                   <div className="mt-2 text-base sm:text-lg font-bold text-white leading-snug">
-                    {fact.label}
+                    <FormatOrdinals text={fact.label} />
                   </div>
                   {fact.sublabel && (
-                    <div className="mt-0.5 text-xs sm:text-sm text-white/85">{fact.sublabel}</div>
+                    <div className="mt-0.5 text-xs sm:text-sm text-white/85">
+                      <FormatOrdinals text={fact.sublabel} />
+                    </div>
                   )}
                 </div>
               </Reveal>
@@ -795,7 +807,9 @@ export function HomePage() {
                       aria-expanded={isOpen}
                       className="flex w-full min-h-[54px] items-center justify-between gap-4 px-5 py-3.5 text-left hover:bg-[var(--cream)]/60 transition-colors cursor-pointer"
                     >
-                      <span>{faq.question}</span>
+                      <span>
+                        <FormatOrdinals text={faq.question} />
+                      </span>
                       <ChevronDown
                         className={`h-5 w-5 shrink-0 text-[var(--royal)] transition-transform duration-200 ${
                           isOpen ? 'rotate-180' : ''
@@ -815,7 +829,7 @@ export function HomePage() {
                         className="overflow-hidden"
                       >
                         <p className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]">
-                          {faq.answer}
+                          <FormatOrdinals text={faq.answer} />
                         </p>
                       </motion.div>
                     )}
@@ -839,7 +853,7 @@ export function HomePage() {
                 <div className="lg:col-span-5 space-y-4">
                   <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold-text)]">
                     <Globe className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                    <span>MASTERMIND ACADEMY · Belagavi</span>
+                    <span>MASTERMIND ACADEMY · Online &amp; Offline Across India</span>
                   </p>
                   <h2 className="font-poster uppercase text-[36px] sm:text-[46px] leading-none text-[var(--ink)]">
                     Got Any Questions?

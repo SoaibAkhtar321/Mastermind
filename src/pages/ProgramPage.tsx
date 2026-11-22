@@ -9,6 +9,8 @@ import {
   Phone,
 } from 'lucide-react';
 import {
+  INTERVIEW_PROGRAM_NAME,
+  SPOKEN_ENGLISH_AUDIENCE,
   getProgramById,
   getProgramBySlug,
   getTelHref,
@@ -23,6 +25,7 @@ import { Layout } from '../components/Layout';
 import { AtAGlanceBox } from '../components/AtAGlanceBox';
 import { SmartPhoto } from '../components/SmartPhoto';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
+import { FormatOrdinals } from '../components/FormatText';
 import { EASE_OUT, Reveal, SectionHeading } from '../components/MotionPrimitives';
 
 interface ProgramPageProps {
@@ -97,7 +100,7 @@ export function ProgramPage({ programId }: ProgramPageProps) {
     }
     return {
       to: '/contact',
-      title: 'Visit Nehru Nagar Centre',
+      title: 'Visit Nehru Nagar, 2nd Cross Centre',
       subtitle: 'Directions, phone and WhatsApp enquiry',
     };
   });
@@ -122,16 +125,16 @@ export function ProgramPage({ programId }: ProgramPageProps) {
         <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 py-10 lg:py-14">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-7 space-y-4">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-                {program.shortTitle} · {program.duration}
+              <p className="inline-block rounded-md bg-[#0F2A6B]/55 px-2.5 py-0.5 sm:bg-transparent sm:p-0 text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                <FormatOrdinals text={`${program.shortTitle} · ${program.duration}`} />
               </p>
 
-              <h1 className="font-poster uppercase text-[38px] sm:text-[50px] lg:text-[58px] leading-[0.98] text-white">
-                {program.h1}
+              <h1 className="font-poster uppercase text-[36px] sm:text-[48px] lg:text-[56px] leading-[0.98] text-white">
+                <FormatOrdinals text={program.h1} />
               </h1>
 
               <p className="text-base sm:text-lg leading-relaxed text-white/95 max-w-2xl">
-                {program.summary}
+                <FormatOrdinals text={program.summary} />
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -190,8 +193,8 @@ export function ProgramPage({ programId }: ProgramPageProps) {
             </div>
             <span className="hidden sm:inline text-xs text-white/85">
               {siteConfig.timings.trim()
-                ? `Open ${siteConfig.timings.trim()} · Updated ${siteConfig.lastUpdated}`
-                : `Updated ${siteConfig.lastUpdated}`}
+                ? `Open ${siteConfig.timings.trim()} · Online & Offline Across India`
+                : 'Online & Offline Across India'}
             </span>
           </div>
         </div>
@@ -206,45 +209,85 @@ export function ProgramPage({ programId }: ProgramPageProps) {
 
           {program.batches && program.batches.length > 0 && (
             <Reveal>
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <SectionHeading
                   title="Spoken English — Four Levels"
-                  subtitle="Spoken English is for everyone: kids, housewives, freshers, job seekers, students, etc. Choose from Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery."
+                  subtitle="Online and Offline available across India for every level."
                 />
-                <div className="card-coaching overflow-x-auto">
-                  <table className="w-full min-w-[540px] text-left text-sm">
-                    <thead className="bg-[var(--navy)] text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
-                      <tr>
-                        <th className="px-4 py-3.5">Batch Level</th>
-                        <th className="px-4 py-3.5">Mode</th>
-                        <th className="px-4 py-3.5">Duration</th>
-                        <th className="px-4 py-3.5">Core Focus</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[var(--hairline)] bg-white text-[var(--muted)]">
-                      {program.batches.map((batch) => (
-                        <tr key={batch.level}>
-                          <td className="px-4 py-3.5 font-bold text-[var(--ink)]">
-                            <div>{batch.level}</div>
-                            {batch.level === 'Interview Mastery' && (
-                              <Link
-                                to="/interview-mastery-personality-development-belagavi"
-                                className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-[var(--royal)] hover:underline"
-                              >
-                                <span>View full curriculum</span>
-                                <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                              </Link>
-                            )}
-                          </td>
-                          <td className="px-4 py-3.5">{batch.mode}</td>
-                          <td className="px-4 py-3.5 tabular-nums font-bold text-[var(--royal)]">
-                            {batch.duration}
-                          </td>
-                          <td className="px-4 py-3.5 leading-relaxed">{batch.focus}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+
+                {/* Highlighted Capitalized Audience Bullet Box */}
+                <div className="mx-auto max-w-3xl rounded-2xl bg-[var(--navy)] p-5 sm:p-6 text-white">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                    Who Can Join Spoken English Classes
+                  </h3>
+                  <ul className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 list-disc pl-5 text-sm sm:text-base font-extrabold tracking-wide text-white marker:text-[var(--gold)]">
+                    {SPOKEN_ENGLISH_AUDIENCE.map((group) => (
+                      <li key={group}>{group}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 4 Level Cards with Bulleted Focus Points */}
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                  {program.batches.map((batch, idx) => {
+                    const isInterviewLevel = batch.level === INTERVIEW_PROGRAM_NAME;
+                    return (
+                      <article
+                        key={batch.level}
+                        className={`card-coaching p-6 sm:p-7 flex flex-col justify-between gap-4 ${
+                          isInterviewLevel ? 'md:col-span-2 border-l-4 border-l-[var(--royal)]' : ''
+                        }`}
+                      >
+                        <div className="space-y-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span className="inline-flex items-center rounded-md bg-[var(--gold)]/35 px-2.5 py-0.5 text-xs font-bold uppercase tracking-[0.12em] text-[var(--navy)]">
+                              Level 0{idx + 1}
+                            </span>
+                            <span className="text-xs sm:text-sm font-bold text-[var(--royal)] tabular-nums">
+                              {batch.mode} · {batch.duration}
+                            </span>
+                          </div>
+
+                          <h3 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">
+                            {batch.level}
+                          </h3>
+
+                          <p className="text-sm sm:text-base leading-relaxed text-[var(--muted)]">
+                            {batch.focus}
+                          </p>
+
+                          <div className="border-t border-[var(--hairline)] pt-3">
+                            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)] mb-2">
+                              What We Provide
+                            </p>
+                            <ul
+                              className={`list-disc pl-5 space-y-1.5 text-sm sm:text-base text-[var(--ink)] marker:text-[var(--royal)] ${
+                                isInterviewLevel
+                                  ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 space-y-0'
+                                  : ''
+                              }`}
+                            >
+                              {batch.highlights.map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        {isInterviewLevel && (
+                          <div className="pt-2 border-t border-[var(--hairline)] flex flex-wrap items-center justify-between gap-3">
+                            <Link
+                              to="/interview-mastery-personality-development-belagavi"
+                              className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--royal)] hover:underline underline-offset-4"
+                            >
+                              <span>Open full Interview Mastery with Personality Skill Development Program page</span>
+                              <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            </Link>
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
                 </div>
               </div>
             </Reveal>
@@ -253,26 +296,19 @@ export function ProgramPage({ programId }: ProgramPageProps) {
           {program.curriculum && program.curriculum.length > 0 && (
             <Reveal>
               <div className="space-y-6">
-                <SectionHeading title="What the 2-Month Program Covers" />
-                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {program.curriculum.map((topic, idx) => (
-                    <li
-                      key={topic}
-                      className="card-coaching flex items-start gap-3 p-5"
-                    >
-                      <CheckCircle2
-                        className="h-5 w-5 shrink-0 text-[var(--royal)] mt-0.5"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <span className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)] tabular-nums">
-                          Module 0{idx + 1}
-                        </span>
-                        <p className="mt-0.5 text-sm font-semibold text-[var(--ink)]">{topic}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <SectionHeading
+                  title="What We Provide in This 2-Month Program"
+                  subtitle="Practical, hands-on training for COLLEGE STUDENTS, FRESHERS and JOB SEEKERS — Online and Offline available across India."
+                />
+                <div className="card-coaching p-6 sm:p-8">
+                  <ul className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 list-disc pl-5 text-base text-[var(--ink)] font-semibold marker:text-[var(--royal)]">
+                    {program.curriculum.map((topic) => (
+                      <li key={topic} className="leading-relaxed pl-1">
+                        {topic}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </Reveal>
           )}
@@ -282,20 +318,74 @@ export function ProgramPage({ programId }: ProgramPageProps) {
               <div className="space-y-6">
                 <SectionHeading
                   title="Boards Covered for Classes 6th to 10th"
-                  subtitle="All core school subjects taught with concept clarity, syllabus completion and calm exam revision."
+                  subtitle="All school subjects taught with concept clarity, syllabus completion and calm exam revision — Online and Offline available."
                 />
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   {program.boards.map((board) => (
                     <div
                       key={board}
-                      className="card-coaching card-coaching-hover p-5 text-center"
+                      className="card-coaching card-coaching-hover p-5 space-y-2.5"
                     >
-                      <h3 className="font-poster uppercase text-3xl text-[var(--royal)]">
+                      <h3 className="font-poster uppercase text-3xl text-[var(--royal)] text-center">
                         {board}
                       </h3>
-                      <p className="mt-1.5 text-xs sm:text-sm text-[var(--muted)]">
-                        Strong basics, syllabus clarity and steady exam revision.
-                      </p>
+                      <ul className="list-disc pl-4 space-y-1 text-xs sm:text-sm text-[var(--muted)] marker:text-[var(--gold-text)]">
+                        <li>
+                          <FormatOrdinals text="All subjects for Classes 6th to 10th" />
+                        </li>
+                        <li>Strong fundamentals &amp; doubt clearing</li>
+                        <li>Timely syllabus &amp; exam revision</li>
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          )}
+
+          {program.id === 'be-bca-diploma' && (
+            <Reveal>
+              <div className="space-y-6">
+                <SectionHeading
+                  title="College Streams Covered"
+                  subtitle="Dedicated core subject coaching taught by qualified B.E graduate lecturers — Online and Offline available across India."
+                />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  {[
+                    {
+                      title: 'B.E Core Subjects',
+                      points: [
+                        'Clear engineering fundamentals',
+                        'Step-by-step problem solving',
+                        'Semester exam preparation',
+                      ],
+                    },
+                    {
+                      title: 'B.Com Core Subjects',
+                      points: [
+                        'Core commerce & accounting concepts',
+                        'Regular practice & revision',
+                        'Personal doubt resolution',
+                      ],
+                    },
+                    {
+                      title: 'Diploma Core Subjects',
+                      points: [
+                        'Practical technical clarity',
+                        'Concept-first explanations',
+                        'Calm exam readiness',
+                      ],
+                    },
+                  ].map((stream) => (
+                    <div key={stream.title} className="card-coaching p-5 space-y-2.5">
+                      <h3 className="font-poster uppercase text-2xl text-[var(--royal)]">
+                        {stream.title}
+                      </h3>
+                      <ul className="list-disc pl-4 space-y-1 text-sm text-[var(--muted)] marker:text-[var(--gold-text)]">
+                        {stream.points.map((pt) => (
+                          <li key={pt}>{pt}</li>
+                        ))}
+                      </ul>
                     </div>
                   ))}
                 </div>
@@ -330,11 +420,15 @@ export function ProgramPage({ programId }: ProgramPageProps) {
             {program.aeoSections.map((block, idx) => (
               <Reveal key={block.question} delay={idx * 0.05}>
                 <article className="rounded-2xl border border-[var(--hairline)] bg-[var(--cream)] p-6 h-full space-y-2.5">
-                  <h3 className="text-lg font-bold text-[var(--ink)]">{block.question}</h3>
+                  <h3 className="text-lg font-bold text-[var(--ink)]">
+                    <FormatOrdinals text={block.question} />
+                  </h3>
                   <p className="text-base font-medium leading-relaxed text-[var(--ink)]">
-                    {block.directAnswer}
+                    <FormatOrdinals text={block.directAnswer} />
                   </p>
-                  <p className="text-sm leading-relaxed text-[var(--muted)]">{block.detail}</p>
+                  <p className="text-sm leading-relaxed text-[var(--muted)]">
+                    <FormatOrdinals text={block.detail} />
+                  </p>
                 </article>
               </Reveal>
             ))}
@@ -388,7 +482,9 @@ export function ProgramPage({ programId }: ProgramPageProps) {
                         aria-expanded={isOpen}
                         className="flex w-full min-h-[52px] items-center justify-between gap-4 px-5 py-3 text-left cursor-pointer"
                       >
-                        <span>{faq.question}</span>
+                        <span>
+                          <FormatOrdinals text={faq.question} />
+                        </span>
                         <ChevronDown
                           className={`h-5 w-5 shrink-0 text-[var(--royal)] transition-transform duration-200 ${
                             isOpen ? 'rotate-180' : ''
@@ -407,7 +503,7 @@ export function ProgramPage({ programId }: ProgramPageProps) {
                           className="overflow-hidden"
                         >
                           <p className="border-t border-[var(--hairline)] px-5 py-4 text-sm sm:text-base leading-relaxed text-[var(--muted)]">
-                            {faq.answer}
+                            <FormatOrdinals text={faq.answer} />
                           </p>
                         </motion.div>
                       )}
@@ -427,9 +523,11 @@ export function ProgramPage({ programId }: ProgramPageProps) {
               >
                 <div>
                   <div className="text-sm font-bold text-[var(--ink)] group-hover:text-[var(--royal)]">
-                    {item.title}
+                    <FormatOrdinals text={item.title} />
                   </div>
-                  <div className="mt-0.5 text-xs text-[var(--muted)]">{item.subtitle}</div>
+                  <div className="mt-0.5 text-xs text-[var(--muted)]">
+                    <FormatOrdinals text={item.subtitle} />
+                  </div>
                 </div>
                 <ArrowRight
                   className="h-4 w-4 text-[var(--royal)] shrink-0 transition-transform group-hover:translate-x-0.5"
@@ -448,7 +546,7 @@ export function ProgramPage({ programId }: ProgramPageProps) {
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
               <div className="lg:col-span-5 space-y-3">
                 <h2 className="font-poster uppercase text-[34px] sm:text-[42px] leading-none text-[var(--ink)]">
-                  Enquire About {program.shortTitle}
+                  Enquire About <FormatOrdinals text={program.shortTitle} />
                 </h2>
                 <p className="text-base text-[var(--muted)]">
                   Fill the form and we will get in touch with you soon.

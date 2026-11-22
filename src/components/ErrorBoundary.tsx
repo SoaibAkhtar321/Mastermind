@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               Something Went Wrong
             </h1>
             <p className="text-sm sm:text-base text-[var(--muted)]">
-              Please reload the page or call our Nehru Nagar, Belagavi centre directly for
+              Please reload the page or call our Nehru Nagar, 2<sup className="relative -top-[0.42em] align-baseline text-[0.62em] leading-none lowercase font-semibold ml-[0.02em]">nd</sup> Cross, Belagavi centre directly for
               assistance.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">

@@ -13,6 +13,7 @@ import { getSafeEmail, getTelHref, siteConfig } from '../data/siteConfig';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { Layout } from '../components/Layout';
 import { Reveal } from '../components/MotionPrimitives';
+import { FormatOrdinals } from '../components/FormatText';
 
 export function PrivacyPolicyPage() {
   const safeEmail = getSafeEmail();
@@ -29,7 +30,7 @@ export function PrivacyPolicyPage() {
     path: '/privacy-policy',
     title: 'Privacy Policy & DPDP Act Notice | MASTERMIND ACADEMY',
     description:
-      'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
+      'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
     pageType: 'WebPage',
     breadcrumbs,
   });
@@ -84,9 +85,9 @@ export function PrivacyPolicyPage() {
             Privacy Policy &amp; Data Protection Notice
           </h1>
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
-            How {siteConfig.name} in Nehru Nagar, Belagavi handles personal data in accordance with
-            India&rsquo;s Digital Personal Data Protection (DPDP) Act, 2023 and applicable Indian
-            law.
+            How {siteConfig.name} in <FormatOrdinals text="Nehru Nagar, 2nd Cross, Belagavi" />{' '}
+            handles personal data in accordance with India&rsquo;s Digital Personal Data Protection
+            (DPDP) Act, 2023 and applicable Indian law.
           </p>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
             Last Updated: {siteConfig.lastUpdated}
@@ -110,7 +111,7 @@ export function PrivacyPolicyPage() {
                 </strong>{' '}
                 and the Information Technology Act, 2000 by{' '}
                 <strong className="text-[var(--ink)]">{siteConfig.name}</strong> (the &ldquo;Data
-                Fiduciary&rdquo;), located at {siteConfig.address.fullFormatted}.
+                Fiduciary&rdquo;), located at <FormatOrdinals text={siteConfig.address.fullFormatted} />.
               </p>
               <p className="text-base leading-relaxed text-[var(--muted)]">
                 It applies to students, parents, legal guardians, job seekers, and website visitors
@@ -167,8 +168,7 @@ export function PrivacyPolicyPage() {
                         Course Preference, Class/Stream &amp; Optional Message
                       </td>
                       <td className="px-4 py-3">
-                        Recommending the suitable Spoken English level, Classes 6th to 10th board
-                        batch, or B.E / B.Com / Diploma core subject batch.
+                        <FormatOrdinals text="Recommending the suitable Spoken English level, Classes 6th to 10th all subjects batch, or B.E / B.Com / Diploma core subject batch." />
                       </td>
                     </tr>
                     <tr>
@@ -226,9 +226,9 @@ export function PrivacyPolicyPage() {
                 </div>
               </div>
               <p className="text-base leading-relaxed text-[var(--muted)]">
-                Because {siteConfig.name} teaches school students (Classes 6th to 10th) and the Kids
-                Spoken English batch, we follow strict child data safeguards under Section 9 of the
-                DPDP Act, 2023:
+                Because {siteConfig.name} teaches school students (
+                <FormatOrdinals text="Classes 6th to 10th" />) and the Kids Spoken English batch, we
+                follow strict child data safeguards under Section 9 of the DPDP Act, 2023:
               </p>
               <ul className="space-y-2.5 text-sm sm:text-base text-[var(--muted)]">
                 <li className="flex items-start gap-2.5">
@@ -236,8 +236,8 @@ export function PrivacyPolicyPage() {
                   <span>
                     <strong className="text-[var(--ink)]">Verifiable Parental Consent:</strong>{' '}
                     Before enrolling or processing personal data of any learner under 18 years of
-                    age, verifiable consent from a parent or lawful guardian is required (both on
-                    our enquiry form and during centre admission).
+                    age, verifiable consent from a parent or lawful guardian is required during
+                    enquiry and admission.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -253,9 +253,8 @@ export function PrivacyPolicyPage() {
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--royal)] mt-0.5" aria-hidden="true" />
                   <span>
-                    <strong className="text-[var(--ink)]">Offline-Only Kids Batch:</strong> The
-                    Kids Spoken English batch is conducted exclusively offline at our Nehru Nagar,
-                    Belagavi centre with direct parent coordination.
+                    <strong className="text-[var(--ink)]">Parent Coordination (Online &amp; Offline):</strong>{' '}
+                    <FormatOrdinals text="Both Online (across India) and Offline (at our Nehru Nagar, 2nd Cross, Belagavi centre) classes for learners under 18 are coordinated directly with parents or legal guardians." />
                   </span>
                 </li>
               </ul>
@@ -280,13 +279,9 @@ export function PrivacyPolicyPage() {
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--royal)] mt-0.5" aria-hidden="true" />
                   <span>
-                    <strong className="text-[var(--ink)]">Essential Browser Storage:</strong> We
-                    only store a single local preference flag in your browser&rsquo;s{' '}
-                    <code className="rounded bg-[var(--cream)] px-1.5 py-0.5 text-xs text-[var(--ink)]">
-                      localStorage
-                    </code>{' '}
-                    when you dismiss the DPDP privacy notice banner so it does not repeatedly appear
-                    on every page view.
+                    <strong className="text-[var(--ink)]">Minimal Browser Storage:</strong> We do
+                    not store your personal enquiry details or tracking profiles in browser cookies
+                    or hidden databases.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -401,7 +396,8 @@ export function PrivacyPolicyPage() {
                 <p className="flex items-start gap-2.5">
                   <MapPin className="h-4 w-4 text-[var(--royal)] shrink-0 mt-1" aria-hidden="true" />
                   <span>
-                    <strong>{siteConfig.name}</strong>, {siteConfig.address.fullFormatted} (Open{' '}
+                    <strong>{siteConfig.name}</strong>,{' '}
+                    <FormatOrdinals text={siteConfig.address.fullFormatted} /> (Open{' '}
                     {siteConfig.timings})
                   </span>
                 </p>

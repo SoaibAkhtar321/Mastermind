@@ -5,6 +5,7 @@ import { getTelHref } from '../data/siteConfig';
 import { NOINDEX_ROBOTS } from '../lib/seo';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { Layout } from '../components/Layout';
+import { FormatOrdinals } from '../components/FormatText';
 
 export function NotFoundPage() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export function NotFoundPage() {
     path: '/404',
     title: 'Page Not Found | MASTERMIND ACADEMY, Belagavi',
     description:
-      'The page you looked for could not be found. Browse MASTERMIND ACADEMY courses in Nehru Nagar, Belagavi.',
+      'The page you looked for could not be found. Browse MASTERMIND ACADEMY courses at Nehru Nagar, 2nd Cross, Belagavi and online across India.',
     robots: NOINDEX_ROBOTS,
     breadcrumbs,
   });
@@ -46,7 +47,8 @@ export function NotFoundPage() {
             </h1>
             <p className="text-base text-[var(--muted)]">
               The link may have moved. Go back to your previous page, return to the MASTERMIND
-              ACADEMY home page, or call our Nehru Nagar, Belagavi centre directly.
+              ACADEMY home page, or call our{' '}
+              <FormatOrdinals text="Nehru Nagar, 2nd Cross, Belagavi" /> centre directly.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <button

@@ -27,6 +27,7 @@ import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { Layout } from '../components/Layout';
 import { SmartPhoto } from '../components/SmartPhoto';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
+import { FormatOrdinals } from '../components/FormatText';
 import { Reveal, SectionHeading } from '../components/MotionPrimitives';
 import { NotFoundPage } from './NotFoundPage';
 
@@ -36,15 +37,17 @@ const programMeta: Record<
 > = {
   'spoken-english': {
     icon: MessageSquare,
-    focusLine: '4 levels: Kids, Beginners or Intermediates, Advanced Level & Interview Mastery',
+    focusLine:
+      '4 levels: Kids, Beginners or Intermediates, Advanced Level & Interview Mastery with Personality Skill Development Program',
   },
   'school-tuition': {
     icon: BookOpen,
-    focusLine: 'All core subjects from Class 6th to 10th across CBSE, ICSE, KVS and State Board',
+    focusLine: 'All subjects from Class 6th to 10th across CBSE, ICSE, KVS and State Board',
   },
   'interview-mastery': {
     icon: Briefcase,
-    focusLine: '2-month practical mock interviews, GD, body language and grooming',
+    focusLine:
+      '2-month practical program: self-introduction, GD sessions, mock interviews, body language and grooming',
   },
   'be-bca-diploma': {
     icon: GraduationCap,
@@ -107,8 +110,8 @@ export function TeacherProfilePage() {
       ? `${lecturer.name}, ${lecturer.qualification} | Faculty · MASTERMIND ACADEMY, Belagavi`
       : 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
     description: lecturer
-      ? `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`
-      : 'Meet our qualified B.E graduate lecturers at MASTERMIND ACADEMY in Nehru Nagar, Belagavi.',
+      ? `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`
+      : 'Meet our qualified B.E graduate lecturers at MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi.',
     pageType: 'ProfilePage',
     breadcrumbs,
     schemas,
@@ -120,7 +123,7 @@ export function TeacherProfilePage() {
 
   const corePrograms = getCorePrograms();
   const otherLecturers = siteConfig.lecturers.filter((l) => l.id !== lecturer.id);
-  const directWhatsAppMessage = `Hello MASTERMIND ACADEMY, I would like to connect with ${lecturer.name} (${lecturer.qualification}) regarding classes in Nehru Nagar, Belagavi.`;
+  const directWhatsAppMessage = `Hello MASTERMIND ACADEMY, I would like to connect with ${lecturer.name} (${lecturer.qualification}) regarding classes (Online / Offline).`;
   const hasRealPhoto = Boolean(lecturer.photo?.trim());
 
   const quickFacts = [
@@ -137,8 +140,8 @@ export function TeacherProfilePage() {
       value: lecturer.focusArea,
     },
     {
-      label: 'Institute Hours',
-      value: `${siteConfig.timings} · Nehru Nagar, Belagavi`,
+      label: 'Institute Hours & Mode',
+      value: `${siteConfig.timings} · Online & Offline Across India`,
     },
   ];
 
@@ -223,7 +226,7 @@ export function TeacherProfilePage() {
             {/* Identity & Quick Actions */}
             <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-                Faculty Profile · Nehru Nagar, Belagavi
+                <FormatOrdinals text="Faculty Profile · Nehru Nagar, 2nd Cross, Belagavi" />
               </p>
 
               <h1 className="font-poster uppercase text-[42px] sm:text-[54px] lg:text-[62px] leading-[0.96] text-white">
@@ -242,7 +245,7 @@ export function TeacherProfilePage() {
               </div>
 
               <p className="mx-auto lg:mx-0 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
-                {lecturer.bio.trim()}
+                <FormatOrdinals text={lecturer.bio.trim()} />
               </p>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
@@ -282,7 +285,9 @@ export function TeacherProfilePage() {
           <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-x-4 gap-y-1 tabular-nums">
             <span className="inline-flex items-center gap-1.5 text-[var(--gold)]">
               <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              <span>{siteConfig.address.fullFormatted}</span>
+              <span>
+                <FormatOrdinals text={siteConfig.address.fullFormatted} />
+              </span>
             </span>
             <span aria-hidden="true" className="hidden sm:inline text-white/35">
               |
@@ -312,7 +317,7 @@ export function TeacherProfilePage() {
                       {fact.label}
                     </dt>
                     <dd className="mt-1 text-sm sm:text-base font-semibold leading-snug text-[var(--ink)]">
-                      {fact.value}
+                      <FormatOrdinals text={fact.value} />
                     </dd>
                   </div>
                 ))}
@@ -339,10 +344,23 @@ export function TeacherProfilePage() {
                 </div>
 
                 <p className="text-base leading-relaxed text-[var(--muted)]">
-                  {lecturer.bio.trim()
-                    ? lecturer.bio.trim()
-                    : siteConfig.about.story}
+                  <FormatOrdinals
+                    text={lecturer.bio.trim() ? lecturer.bio.trim() : siteConfig.about.story}
+                  />
                 </p>
+
+                <div className="border-t border-[var(--hairline)] pt-5">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)] mb-3">
+                    What {lecturer.name} Teaches
+                  </h3>
+                  <ul className="list-disc pl-5 space-y-2 text-sm sm:text-base font-semibold text-[var(--ink)] marker:text-[var(--royal)]">
+                    {lecturer.teachesList.map((item) => (
+                      <li key={item}>
+                        <FormatOrdinals text={item} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 <div className="border-t border-[var(--hairline)] pt-5">
                   <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)] mb-3">
@@ -424,10 +442,10 @@ export function TeacherProfilePage() {
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
                       <h3 className="text-base sm:text-lg font-bold text-[var(--ink)] group-hover:text-[var(--royal)] leading-snug">
-                        {program.shortTitle}
+                        <FormatOrdinals text={program.shortTitle} />
                       </h3>
                       <p className="text-xs sm:text-sm leading-relaxed text-[var(--muted)]">
-                        {meta.focusLine}
+                        <FormatOrdinals text={meta.focusLine} />
                       </p>
                     </div>
 
@@ -514,7 +532,7 @@ export function TeacherProfilePage() {
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
                 <div className="lg:col-span-5 space-y-4">
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold-text)]">
-                    Direct Enquiry · Nehru Nagar, Belagavi
+                    <FormatOrdinals text="Direct Enquiry · Nehru Nagar, 2nd Cross, Belagavi & Online Across India" />
                   </p>
                   <h2 className="font-poster uppercase text-[34px] sm:text-[44px] leading-none text-[var(--ink)]">
                     Ask {lecturer.name} About a Batch

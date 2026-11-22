@@ -52,7 +52,7 @@ export function useDocumentHead(meta: PageSeoMeta) {
     upsertMeta('name', 'robots', robotsDirective);
     upsertMeta('name', 'author', siteConfig.name);
     upsertMeta('name', 'geo.region', 'IN-KA');
-    upsertMeta('name', 'geo.placename', 'Nehru Nagar, Belagavi, Karnataka');
+    upsertMeta('name', 'geo.placename', 'Nehru Nagar, 2nd Cross, Belagavi, Karnataka');
 
     upsertMeta('property', 'og:title', meta.title);
     upsertMeta('property', 'og:description', meta.description);
@@ -60,7 +60,7 @@ export function useDocumentHead(meta: PageSeoMeta) {
     upsertMeta('property', 'og:type', meta.pageType === 'ProfilePage' ? 'profile' : 'website');
     upsertMeta('property', 'og:locale', 'en_IN');
     upsertMeta('property', 'og:image', ogImageUrl);
-    upsertMeta('property', 'og:image:alt', `${siteConfig.name}, Nehru Nagar, Belagavi: ${siteConfig.tagline}`);
+    upsertMeta('property', 'og:image:alt', `${siteConfig.name}, Nehru Nagar, 2nd Cross, Belagavi: ${siteConfig.tagline}`);
 
     if (canonicalUrl.startsWith('http')) {
       upsertMeta('property', 'og:url', canonicalUrl);
@@ -74,7 +74,7 @@ export function useDocumentHead(meta: PageSeoMeta) {
     upsertMeta('name', 'twitter:title', meta.title);
     upsertMeta('name', 'twitter:description', meta.description);
     upsertMeta('name', 'twitter:image', ogImageUrl);
-    upsertMeta('name', 'twitter:image:alt', `${siteConfig.name}, Nehru Nagar, Belagavi: ${siteConfig.tagline}`);
+    upsertMeta('name', 'twitter:image:alt', `${siteConfig.name}, Nehru Nagar, 2nd Cross, Belagavi: ${siteConfig.tagline}`);
 
     // Replace previous dynamic JSON-LD nodes with current route schemas
     const existing = document.head.querySelectorAll('script[data-mma-jsonld="true"]');

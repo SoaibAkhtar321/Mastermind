@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, FileText, Mail, MapPin, Phone } from 'lucide-react';
-import { getSafeEmail, getTelHref, siteConfig } from '../data/siteConfig';
+import { INTERVIEW_PROGRAM_NAME, getSafeEmail, getTelHref, siteConfig } from '../data/siteConfig';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { Layout } from '../components/Layout';
 import { Reveal } from '../components/MotionPrimitives';
+import { FormatOrdinals } from '../components/FormatText';
 
 export function TermsPage() {
   const safeEmail = getSafeEmail();
@@ -21,7 +22,7 @@ export function TermsPage() {
     path: '/terms-and-conditions',
     title: 'Terms & Conditions | MASTERMIND ACADEMY, Belagavi',
     description:
-      'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th, and B.E/B.Com/Diploma classes in Belagavi.',
+      'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th (all subjects), and B.E/B.Com/Diploma core subjects — Online across India & Offline in Nehru Nagar, 2nd Cross, Belagavi.',
     pageType: 'WebPage',
     breadcrumbs,
   });
@@ -37,15 +38,15 @@ export function TermsPage() {
     {
       title: '2. Programs & Batch Formats',
       body: [
-        `${siteConfig.name} offers three core educational tracks: (1) Spoken English Classes across four levels (Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery), (2) Classes 6th to 10th covering all core school subjects across CBSE, ICSE, KVS and State Board, and (3) Core Subjects for B.E, B.Com and Diploma college students.`,
-        `Institute hours are ${siteConfig.timings}. Online batches are offered for Spoken English Beginners or Intermediates and Advanced Level; the Kids Spoken English batch and school/college classroom sessions are conducted offline at our Nehru Nagar, Belagavi centre.`,
+        `${siteConfig.name} offers three educational tracks: (1) Spoken English Classes across four levels (Kids, Beginners or Intermediates, Advanced Level, and ${INTERVIEW_PROGRAM_NAME}), (2) Classes 6th to 10th covering all subjects across CBSE, ICSE, KVS and State Board, and (3) Core Subjects for B.E, B.Com and Diploma college students.`,
+        `Institute hours are ${siteConfig.timings}. Both Online (across India) and Offline (at our Nehru Nagar, 2nd Cross, Belagavi centre) options are available.`,
       ],
     },
     {
       title: '3. Enrolment, Fees & Batch Timings',
       body: [
         'Submitting an enquiry through WhatsApp, phone, or email does not automatically guarantee a seat in a particular batch. Admission is confirmed only after direct communication with our faculty/administration and completion of centre enrolment formalities.',
-        'Current fee structures, payment schedules, batch slots, and refund or transfer policies (if any) are communicated directly at the Nehru Nagar centre or through our official contact channels before enrolment. Please do not make payments to any unauthorised third party.',
+        'Current fee structures, payment schedules, batch slots, and refund or transfer policies (if any) are communicated directly at the Nehru Nagar, 2nd Cross centre or through our official contact channels before enrolment. Please do not make payments to any unauthorised third party.',
       ],
     },
     {
@@ -68,9 +69,9 @@ export function TermsPage() {
       ],
     },
     {
-      title: '7. Third-Party Links & External Platforms',
+      title: '7. Third-Party Links & Google Maps Integration',
       body: [
-        'This website includes links to external services such as WhatsApp and Google Maps for your convenience. Those services are operated by independent third parties under their own terms and privacy policies, and MASTERMIND ACADEMY is not responsible for their availability or external practices.',
+        'This website integrates interactive maps powered by Google Maps Platform and includes links to external services such as WhatsApp and Google Maps for your convenience. Use of the embedded map features is subject to the Google Maps/Google Earth Additional Terms of Service and the Google Privacy Policy. External platforms are operated by independent third parties under their own terms and privacy policies.',
       ],
     },
     {
@@ -105,8 +106,8 @@ export function TermsPage() {
             Terms &amp; Conditions
           </h1>
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
-            Clear terms governing the use of the {siteConfig.name} website and coaching programs in
-            Nehru Nagar, Belagavi.
+            Clear terms governing the use of the {siteConfig.name} website and coaching programs at{' '}
+            <FormatOrdinals text="Nehru Nagar, 2nd Cross, Belagavi" /> and online across India.
           </p>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
             Last Updated: {siteConfig.lastUpdated}
@@ -123,7 +124,7 @@ export function TermsPage() {
                 <h2 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">{section.title}</h2>
                 {section.body.map((paragraph) => (
                   <p key={paragraph} className="text-base leading-relaxed text-[var(--muted)]">
-                    {paragraph}
+                    <FormatOrdinals text={paragraph} />
                   </p>
                 ))}
               </article>
@@ -145,7 +146,8 @@ export function TermsPage() {
                 <p className="flex items-start gap-2.5">
                   <MapPin className="h-4 w-4 text-[var(--royal)] shrink-0 mt-1" aria-hidden="true" />
                   <span>
-                    <strong>{siteConfig.name}</strong>, {siteConfig.address.fullFormatted} (Open{' '}
+                    <strong>{siteConfig.name}</strong>,{' '}
+                    <FormatOrdinals text={siteConfig.address.fullFormatted} /> (Open{' '}
                     {siteConfig.timings})
                   </span>
                 </p>

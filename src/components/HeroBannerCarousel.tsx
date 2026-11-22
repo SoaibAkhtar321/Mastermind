@@ -6,6 +6,7 @@ import { getTelHref, siteConfig } from '../data/siteConfig';
 import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { SmartPhoto } from './SmartPhoto';
 import { EASE_OUT } from './MotionPrimitives';
+import { FormatOrdinals } from './FormatText';
 
 const AUTOPLAY_INTERVAL_MS = 5000;
 
@@ -92,7 +93,7 @@ export function HeroBannerCarousel() {
       className="bg-[var(--cream)] focus:outline-none"
     >
       {/* Full-Width Poster Banner Container — Fixed Explicit Height for Zero CLS */}
-      <div className="relative w-full h-[380px] sm:h-[420px] lg:h-[480px] overflow-hidden bg-[var(--royal)]">
+      <div className="relative w-full min-h-[410px] sm:min-h-[440px] lg:h-[500px] overflow-hidden bg-[var(--royal)]">
         {/* Deep Royal-to-Navy Directional Shading */}
         <div
           aria-hidden="true"
@@ -150,34 +151,40 @@ export function HeroBannerCarousel() {
               className="relative h-full w-full flex flex-col justify-between py-5 sm:py-7 lg:py-10 lg:grid lg:grid-cols-12 lg:items-center lg:gap-8"
             >
               {/* Left Text & CTA Zone */}
-              <div className="relative z-20 max-w-[66%] sm:max-w-[60%] lg:max-w-none lg:col-span-7 flex flex-col justify-between h-full lg:h-auto lg:justify-center gap-2.5 sm:gap-4">
+              <div className="relative z-20 max-w-[68%] sm:max-w-[62%] lg:max-w-none lg:col-span-7 flex flex-col justify-between h-full lg:h-auto lg:justify-center gap-2.5 sm:gap-4 pb-10 lg:pb-0">
                 <div className="space-y-2 sm:space-y-3">
                   <p className="inline-block rounded-md bg-[#0F2A6B]/55 px-2 py-0.5 sm:bg-transparent sm:p-0 text-[10.5px] sm:text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-[var(--gold)]">
-                    {slide.eyebrow}
+                    <FormatOrdinals text={slide.eyebrow} />
                   </p>
 
                   {activeIndex === 0 ? (
-                    <h1 className="font-poster uppercase text-[34px] min-[390px]:text-[38px] sm:text-[50px] lg:text-[66px] leading-[0.96] text-white drop-shadow-[0_2px_10px_rgba(15,42,107,0.35)]">
-                      {slide.headline}
+                    <h1 className="font-poster uppercase text-[34px] min-[390px]:text-[38px] sm:text-[50px] lg:text-[64px] leading-[0.96] text-white drop-shadow-[0_2px_10px_rgba(15,42,107,0.35)]">
+                      <FormatOrdinals text={slide.headline} />
                     </h1>
                   ) : (
-                    <h2 className="font-poster uppercase text-[34px] min-[390px]:text-[38px] sm:text-[50px] lg:text-[66px] leading-[0.96] text-white drop-shadow-[0_2px_10px_rgba(15,42,107,0.35)]">
-                      {slide.headline}
+                    <h2 className="font-poster uppercase text-[34px] min-[390px]:text-[38px] sm:text-[50px] lg:text-[64px] leading-[0.96] text-white drop-shadow-[0_2px_10px_rgba(15,42,107,0.35)]">
+                      <FormatOrdinals text={slide.headline} />
                     </h2>
                   )}
 
-                  <p className="text-[15px] sm:text-lg lg:text-xl font-medium text-white/95 leading-snug max-w-lg">
-                    {slide.subline}
+                  <p className="text-[14px] sm:text-base lg:text-lg font-medium text-white/95 leading-snug max-w-xl">
+                    <FormatOrdinals text={slide.subline} />
                   </p>
 
-                  {/* Highlight Pills */}
+                  {/* Highlight Bullets */}
                   <ul className="flex flex-wrap gap-1.5 sm:gap-2 pt-0.5">
                     {slide.pills.slice(0, 4).map((pill) => (
                       <li
                         key={pill}
-                        className="rounded-full border border-white/30 bg-[#0F2A6B]/55 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold text-white whitespace-nowrap"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-[#0F2A6B]/65 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold text-white leading-tight"
                       >
-                        {pill}
+                        <span
+                          aria-hidden="true"
+                          className="h-1.5 w-1.5 rounded-full bg-[var(--gold)] shrink-0"
+                        />
+                        <span>
+                          <FormatOrdinals text={pill} />
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -253,9 +260,13 @@ export function HeroBannerCarousel() {
               </a>
             </div>
             <span className="hidden sm:inline text-xs font-medium text-white/85">
-              {siteConfig.timings.trim()
-                ? `Open ${siteConfig.timings.trim()} · ${siteConfig.address.fullFormatted}`
-                : siteConfig.address.fullFormatted}
+              <FormatOrdinals
+                text={
+                  siteConfig.timings.trim()
+                    ? `Open ${siteConfig.timings.trim()} · ${siteConfig.address.fullFormatted}`
+                    : siteConfig.address.fullFormatted
+                }
+              />
             </span>
           </div>
         </div>

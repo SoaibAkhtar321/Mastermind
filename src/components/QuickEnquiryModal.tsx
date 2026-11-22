@@ -6,6 +6,7 @@ import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { getTelHref, siteConfig } from '../data/siteConfig';
 import { EASE_OUT } from './MotionPrimitives';
 import { WhatsAppEnquiryForm } from './WhatsAppEnquiryForm';
+import { FormatOrdinals } from './FormatText';
 
 export function QuickEnquiryModal() {
   const { isOpen, defaultProgram, closeEnquiryModal } = useEnquiryModal();
@@ -67,7 +68,8 @@ export function QuickEnquiryModal() {
             <div className="bg-[var(--navy)] border-b-2 border-[var(--gold)] px-5 py-4 sm:px-6 text-white flex items-start justify-between gap-4 shrink-0">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-                  {siteConfig.name} · Nehru Nagar, Belagavi
+                  {siteConfig.name} · <FormatOrdinals text="Nehru Nagar, 2nd Cross, Belagavi" /> ·
+                  Online &amp; Offline
                 </p>
                 <h2
                   id="quick-enquiry-title"

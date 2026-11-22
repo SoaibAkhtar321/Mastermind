@@ -1,14 +1,14 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { ArrowRight, CheckCircle2, Lock, MessageCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, MessageCircle } from 'lucide-react';
 import { getWhatsAppUrl } from '../data/siteConfig';
 import { sanitizeMultiLine, sanitizeSingleLine } from '../lib/security';
 
 export const ENQUIRY_PROGRAM_OPTIONS = [
-  'Spoken English (Kids, Offline)',
+  'Spoken English (Kids)',
   'Spoken English (Beginners or Intermediates)',
   'Spoken English (Advanced Level)',
-  'Spoken English (Interview Mastery)',
-  'Classes 6th to 10th (All Core Subjects)',
+  'Spoken English (Interview Mastery with Personality Skill Development Program)',
+  'Classes 6th to 10th (All Subjects)',
   'B.E, B.Com & Diploma (Core Subjects)',
   'General Enquiry',
 ] as const;
@@ -16,13 +16,12 @@ export const ENQUIRY_PROGRAM_OPTIONS = [
 export const ENQUIRY_ROLE_OPTIONS = ['Student', 'Parent'] as const;
 
 export const ENQUIRY_MODE_OPTIONS = [
-  'Offline (Nehru Nagar, Belagavi)',
-  'Online (Spoken English)',
-  'Not sure yet',
+  'Online (Across India)',
+  'Offline (Nehru Nagar, 2nd Cross, Belagavi)',
+  'Online and Offline (Not sure yet)',
 ] as const;
 
-const KIDS_SPOKEN_ENGLISH = 'Spoken English (Kids, Offline)';
-const OFFLINE_MODE = ENQUIRY_MODE_OPTIONS[0];
+const DEFAULT_MODE = ENQUIRY_MODE_OPTIONS[0];
 const SUBMIT_COOLDOWN_MS = 1500;
 
 interface WhatsAppEnquiryFormProps {
@@ -50,14 +49,12 @@ export function WhatsAppEnquiryForm({
     }
     return ENQUIRY_PROGRAM_OPTIONS[1];
   });
-  const [mode, setMode] = useState<string>(OFFLINE_MODE);
+  const [mode, setMode] = useState<string>(DEFAULT_MODE);
   const [message, setMessage] = useState('');
   const [whatsappConsent, setWhatsappConsent] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [error, setError] = useState('');
   const [readyUrl, setReadyUrl] = useState('');
-
-  const isKidsLockedOffline = program === KIDS_SPOKEN_ENGLISH;
 
   useEffect(() => {
     if (defaultProgram) {
@@ -67,12 +64,6 @@ export function WhatsAppEnquiryForm({
       if (matched) setProgram(matched);
     }
   }, [defaultProgram]);
-
-  useEffect(() => {
-    if (isKidsLockedOffline) {
-      setMode(OFFLINE_MODE);
-    }
-  }, [isKidsLockedOffline]);
 
   const labelClass = 'block text-sm font-semibold text-[var(--ink)]';
   const inputClass =
@@ -116,11 +107,9 @@ export function WhatsAppEnquiryForm({
     const safeProgram = (ENQUIRY_PROGRAM_OPTIONS as readonly string[]).includes(program)
       ? program
       : ENQUIRY_PROGRAM_OPTIONS[1];
-    const safeMode = isKidsLockedOffline
-      ? OFFLINE_MODE
-      : (ENQUIRY_MODE_OPTIONS as readonly string[]).includes(mode)
-        ? mode
-        : OFFLINE_MODE;
+    const safeMode = (ENQUIRY_MODE_OPTIONS as readonly string[]).includes(mode)
+      ? mode
+      : DEFAULT_MODE;
 
     lastSubmitRef.current = now;
     setError('');
@@ -240,25 +229,14 @@ export function WhatsAppEnquiryForm({
       </div>
 
       <div>
-        <div className="flex items-center justify-between gap-2">
-          <label htmlFor={`${uid}-mode`} className={labelClass}>
-            Preferred Mode
-          </label>
-          {isKidsLockedOffline && (
-            <span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--gold-text)]">
-              <Lock className="h-3 w-3 shrink-0" aria-hidden="true" />
-              <span>Offline only for Kids batch</span>
-            </span>
-          )}
-        </div>
+        <label htmlFor={`${uid}-mode`} className={labelClass}>
+          Preferred Mode (Online and Offline available)
+        </label>
         <select
           id={`${uid}-mode`}
-          value={isKidsLockedOffline ? OFFLINE_MODE : mode}
-          disabled={isKidsLockedOffline}
+          value={mode}
           onChange={(e) => setMode(e.target.value)}
-          className={`${inputClass} ${
-            isKidsLockedOffline ? 'cursor-not-allowed bg-[var(--cream-deep)] text-[var(--muted)]' : ''
-          }`}
+          className={inputClass}
         >
           {ENQUIRY_MODE_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>

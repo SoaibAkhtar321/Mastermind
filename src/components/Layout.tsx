@@ -27,6 +27,7 @@ import {
 import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { BrandLogo } from './BrandLogo';
 import { EASE_OUT } from './MotionPrimitives';
+import { FormatOrdinals } from './FormatText';
 import type { BreadcrumbItem } from '../lib/seo';
 
 interface LayoutProps {
@@ -164,7 +165,9 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
             <div className="mx-auto flex max-w-[1200px] items-center gap-4 overflow-x-auto px-4 text-[11px] font-bold uppercase tracking-[0.14em] whitespace-nowrap no-scrollbar">
               {tickerItems.map((msg, idx) => (
                 <span key={`${msg}-${idx}`} className="inline-flex items-center gap-4 shrink-0">
-                  <span>{msg}</span>
+                  <span>
+                    <FormatOrdinals text={msg} />
+                  </span>
                   {idx < tickerItems.length - 1 && (
                     <span aria-hidden="true" className="text-white/40">
                       •
@@ -183,7 +186,9 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                 >
                   {tickerItems.map((msg, idx) => (
                     <span key={`${dup}-${idx}`} className="inline-flex items-center">
-                      <span className="px-5">{msg}</span>
+                      <span className="px-5">
+                        <FormatOrdinals text={msg} />
+                      </span>
                       <span aria-hidden="true" className="text-white/45">
                         ★
                       </span>
@@ -272,7 +277,7 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                       }`}
                     >
                       <div className="text-sm font-bold text-[var(--ink)]">
-                        {program.shortTitle}
+                        <FormatOrdinals text={program.shortTitle} />
                       </div>
                       <div className="mt-0.5 text-xs text-[var(--muted)]">{program.duration}</div>
                     </Link>
@@ -358,7 +363,9 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                   to={program.slug}
                   className="flex min-h-[44px] items-center justify-between rounded-xl px-3.5 text-sm font-medium text-[var(--ink)] hover:bg-[var(--cream)]"
                 >
-                  <span>{program.shortTitle}</span>
+                  <span>
+                    <FormatOrdinals text={program.shortTitle} />
+                  </span>
                   <ChevronRight className="h-4 w-4 text-[var(--gold-text)]" aria-hidden="true" />
                 </Link>
               ))}
@@ -470,11 +477,11 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                       )}
                       {isLast ? (
                         <span aria-current="page" className="font-semibold text-[var(--ink)]">
-                          {crumb.name}
+                          <FormatOrdinals text={crumb.name} />
                         </span>
                       ) : (
                         <Link to={crumb.path} className="hover:text-[var(--royal)] transition-colors">
-                          {crumb.name}
+                          <FormatOrdinals text={crumb.name} />
                         </Link>
                       )}
                     </li>
@@ -515,7 +522,9 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
             <div className="lg:col-span-3 space-y-4">
               <BrandLogo variant="full" className="max-w-[220px] w-full p-3" />
               <p className="text-sm leading-relaxed text-white/80">
-                {siteConfig.subline}. Small, personal classes in Nehru Nagar, Belagavi.
+                <FormatOrdinals
+                  text={`${siteConfig.subline} Small, personal classes at Nehru Nagar, 2nd Cross, Belagavi — Online and Offline available across India.`}
+                />
               </p>
               <address className="not-italic space-y-2 text-sm text-white/80 pt-1">
                 <p className="flex items-start gap-2">
@@ -523,11 +532,11 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                   <span>
                     <strong className="font-semibold text-white">{siteConfig.name}</strong>
                     <br />
-                    {siteConfig.address.fullFormatted}
+                    <FormatOrdinals text={siteConfig.address.fullFormatted} />
                     {siteConfig.address.landmark.trim() ? (
                       <>
                         <br />
-                        {siteConfig.address.landmark.trim()}
+                        <FormatOrdinals text={siteConfig.address.landmark.trim()} />
                       </>
                     ) : null}
                   </span>
@@ -554,7 +563,7 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                         to={program.slug}
                         className="hover:text-[var(--gold)] transition-colors inline-block py-0.5"
                       >
-                        {program.shortTitle}
+                        <FormatOrdinals text={program.shortTitle} />
                       </Link>
                     </li>
                   ))}
@@ -704,7 +713,9 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
           {/* Bottom Copyright & NAP Strip (extra bottom clearance so bottom-right host badges never overlap footer text) */}
           <div className="mt-10 border-t border-white/15 pt-6 pb-14 md:pb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-white/70">
             <p>{siteConfig.footer.copyright}</p>
-            <p className="text-white/60">{siteConfig.address.napLine}</p>
+            <p className="text-white/60">
+              <FormatOrdinals text={siteConfig.address.napLine} />
+            </p>
           </div>
         </div>
       </footer>

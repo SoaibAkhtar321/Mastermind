@@ -8,6 +8,7 @@ import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { Layout } from '../components/Layout';
 import { BrandLogo } from '../components/BrandLogo';
 import { SmartPhoto } from '../components/SmartPhoto';
+import { FormatOrdinals } from '../components/FormatText';
 import { Reveal, SectionHeading } from '../components/MotionPrimitives';
 
 export function AboutPage() {
@@ -24,9 +25,9 @@ export function AboutPage() {
 
   useDocumentHead({
     path: '/about',
-    title: 'About MASTERMIND ACADEMY | Nehru Nagar, Belagavi',
+    title: 'About MASTERMIND ACADEMY | Nehru Nagar, 2nd Cross, Belagavi',
     description:
-      'Learn about MASTERMIND ACADEMY in Nehru Nagar, Belagavi (open 7:00 AM to 8:30 PM) — Education is food to a hungry soul. Meet our experienced B.E lecturers.',
+      'Learn about MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi (Online & Offline across India, open 7:00 AM to 8:30 PM) — Education is food to a hungry soul. Meet our experienced B.E lecturers.',
     pageType: 'AboutPage',
     breadcrumbs,
     schemas,
@@ -62,7 +63,7 @@ export function AboutPage() {
                 {siteConfig.tagline}
               </p>
               <p className="text-base sm:text-lg leading-relaxed text-white/95 max-w-2xl">
-                {siteConfig.canonicalDescription}
+                <FormatOrdinals text={siteConfig.canonicalDescription} />
               </p>
               <div className="pt-1">
                 <BrandLogo variant="full" className="max-w-[200px] p-2.5" />
@@ -147,7 +148,7 @@ export function AboutPage() {
                       </p>
                       {lecturer.bio.trim() && (
                         <p className="mt-2 text-xs leading-snug text-[var(--muted)] line-clamp-3">
-                          {lecturer.bio.trim()}
+                          <FormatOrdinals text={lecturer.bio.trim()} />
                         </p>
                       )}
                     </div>
@@ -171,7 +172,7 @@ export function AboutPage() {
                 <MapPin className="h-4 w-4 text-[var(--gold-text)] shrink-0" aria-hidden="true" />
                 <span>
                   <strong className="font-bold text-[var(--ink)]">Areas served:</strong>{' '}
-                  {siteConfig.areasServed}.
+                  <FormatOrdinals text={siteConfig.areasServed} />.
                 </span>
               </p>
               {siteConfig.timings.trim() && (
@@ -199,11 +200,10 @@ export function AboutPage() {
       <section className="band-cta py-[56px] lg:py-[72px]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 text-center space-y-5">
           <h2 className="font-poster uppercase text-[34px] sm:text-[44px] leading-none text-white">
-            Visit Our Centre in Nehru Nagar, Belagavi
+            <FormatOrdinals text="Visit Our Centre at Nehru Nagar, 2nd Cross, Belagavi" />
           </h2>
           <p className="mx-auto max-w-xl text-base text-white/90">
-            Open 7:00 AM to 8:30 PM. Speak with Laxmi or Pooja about Spoken English, Classes 6th to
-            10th all core subjects, or B.E, B.Com &amp; Diploma core subjects.
+            <FormatOrdinals text="Open 7:00 AM to 8:30 PM (Online and Offline available across India). Speak with Laxmi or Pooja about Spoken English, Classes 6th to 10th all subjects, or B.E, B.Com & Diploma core subjects." />
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
             <button

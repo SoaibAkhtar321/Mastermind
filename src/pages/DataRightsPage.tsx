@@ -98,7 +98,7 @@ export function DataRightsPage() {
 
     const subject = `DPDP Act Request: ${safeType} — ${cleanName}`;
     const bodyLines = [
-      'To: Grievance & Support Contact, MASTERMIND ACADEMY (Nehru Nagar, Belagavi)',
+      'To: Grievance & Support Contact, MASTERMIND ACADEMY (Nehru Nagar, 2nd Cross, Belagavi)',
       '',
       `Request Type: ${safeType}`,
       `Data Principal / Parent Name: ${cleanName}`,

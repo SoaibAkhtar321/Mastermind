@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
+import { FormatOrdinals } from './FormatText';
 
 export const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -51,7 +52,7 @@ export function SectionHeading({
           isDark ? 'text-white' : 'text-[var(--ink)]'
         }`}
       >
-        {title}
+        <FormatOrdinals text={title} />
       </h2>
       <div
         aria-hidden="true"
@@ -63,7 +64,7 @@ export function SectionHeading({
             isDark ? 'text-white/90' : 'text-[var(--muted)]'
           }`}
         >
-          {subtitle}
+          <FormatOrdinals text={subtitle} />
         </p>
       )}
     </div>
@@ -115,14 +116,14 @@ export function AnimatedCounter({
   if (typeof target !== 'number' || prefersReduced) {
     return (
       <span ref={ref} className="tabular-nums">
-        {display}
+        <FormatOrdinals text={display} />
       </span>
     );
   }
 
   return (
     <span ref={ref} className="tabular-nums">
-      {inView ? `${prefix}${value}${suffix}` : display}
+      {inView ? `${prefix}${value}${suffix}` : <FormatOrdinals text={display} />}
     </span>
   );
 }

@@ -15,7 +15,6 @@ import {
   getFilledSocialLinks,
   getOpenInMapsUrl,
   getSafeEmail,
-  getSafeGoogleMapsEmbedUrl,
   getTelHref,
   getWhatsAppUrl,
   siteConfig,
@@ -23,6 +22,8 @@ import {
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { Layout } from '../components/Layout';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
+import { FormatOrdinals } from '../components/FormatText';
+import { AcademyLocationMap } from '../components/AcademyLocationMap';
 import { Reveal } from '../components/MotionPrimitives';
 
 export function ContactPage() {
@@ -36,17 +37,15 @@ export function ContactPage() {
 
   useDocumentHead({
     path: '/contact',
-    title: 'Contact & Location | MASTERMIND ACADEMY, Belagavi',
+    title: 'Contact & Location | MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
     description:
-      'Visit MASTERMIND ACADEMY in Nehru Nagar, Belagavi 590010 (open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or email mastermindacademy2627@gmail.com.',
+      'Visit MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi 590010 (Online & Offline across India, open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or email mastermindacademy2627@gmail.com.',
     pageType: 'ContactPage',
     breadcrumbs,
   });
 
   const socialLinks = getFilledSocialLinks();
   const safeEmail = getSafeEmail();
-  const safeMapEmbedUrl = getSafeGoogleMapsEmbedUrl();
-  const hasEmbedMap = Boolean(safeMapEmbedUrl);
   const directionsUrl = getDirectionsUrl();
   const openMapsUrl = getOpenInMapsUrl();
 
@@ -60,24 +59,23 @@ export function ContactPage() {
         />
         <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 text-center space-y-3">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-            Nehru Nagar · Belagavi 590010 · Open {siteConfig.timings}
+            <FormatOrdinals text={`Nehru Nagar, 2nd Cross · Belagavi 590010 · Open ${siteConfig.timings}`} />
           </p>
           <h1 className="font-poster uppercase text-[40px] sm:text-[52px] leading-none text-white">
             Find MASTERMIND ACADEMY
           </h1>
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
-            Visit our centre in Nehru Nagar, Belagavi (open {siteConfig.timings}), call directly, or
-            send a WhatsApp enquiry.
+            <FormatOrdinals text={`Visit our centre at Nehru Nagar, 2nd Cross, Belagavi (open ${siteConfig.timings}) or join Online from anywhere across India.`} />
           </p>
         </div>
       </section>
 
-      {/* ADDRESS, DIRECT PHONE & OPTIONAL EMBED MAP (Hides Map Card if Embed URL is Empty) */}
+      {/* ADDRESS, SATELLITE MAP & DIRECT PHONE */}
       <section className="py-[56px] lg:py-[96px]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
-            {/* Address & Directions Card */}
-            <Reveal className={hasEmbedMap ? 'lg:col-span-6' : 'lg:col-span-7'}>
+            {/* Address, Directions & Interactive Google Maps Satellite View */}
+            <Reveal className="lg:col-span-7">
               <div className="card-coaching p-6 sm:p-8 space-y-5">
                 <div className="flex items-start gap-3">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--navy)] text-[var(--gold)]">
@@ -85,17 +83,27 @@ export function ContactPage() {
                   </span>
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">
-                      Nehru Nagar, Belagavi
+                      <FormatOrdinals text="Nehru Nagar, 2nd Cross, Belagavi" />
                     </h2>
-                    <p className="text-sm text-[var(--muted)]">{siteConfig.areasServed}</p>
+                    <p className="text-sm text-[var(--muted)]">
+                      <FormatOrdinals text={siteConfig.areasServed} />
+                    </p>
                   </div>
                 </div>
 
                 <address className="not-italic space-y-1 text-base text-[var(--muted)]">
                   <div className="font-bold text-[var(--ink)]">{siteConfig.name}</div>
-                  <div>{siteConfig.address.fullFormatted}</div>
+                  <div>
+                    <FormatOrdinals text={siteConfig.address.fullFormatted} />
+                  </div>
+                  <div className="text-xs sm:text-sm font-medium tabular-nums">
+                    GPS: {siteConfig.location.latitude}, {siteConfig.location.longitude} ·{' '}
+                    {siteConfig.location.plusCode}
+                  </div>
                   {siteConfig.address.landmark.trim() && (
-                    <div className="text-sm">Landmark: {siteConfig.address.landmark.trim()}</div>
+                    <div className="text-sm">
+                      Landmark: <FormatOrdinals text={siteConfig.address.landmark.trim()} />
+                    </div>
                   )}
                 </address>
 
@@ -120,26 +128,14 @@ export function ContactPage() {
                   </a>
                 </div>
 
-                {hasEmbedMap && (
-                  <div className="pt-2">
-                    <div className="overflow-hidden rounded-2xl border border-[var(--hairline)] aspect-[16/10] w-full bg-[var(--cream)]">
-                      <iframe
-                        title="MASTERMIND ACADEMY, Nehru Nagar, Belagavi Map"
-                        src={safeMapEmbedUrl}
-                        className="h-full w-full border-0"
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        sandbox="allow-scripts allow-same-origin allow-popups"
-                        allowFullScreen
-                      />
-                    </div>
-                  </div>
-                )}
+                <div className="pt-2">
+                  <AcademyLocationMap heightClass="h-[300px] sm:h-[340px]" />
+                </div>
               </div>
             </Reveal>
 
             {/* Direct Phone & WhatsApp Card */}
-            <Reveal delay={0.06} className={hasEmbedMap ? 'lg:col-span-6' : 'lg:col-span-5'}>
+            <Reveal delay={0.06} className="lg:col-span-5">
               <div className="card-coaching p-6 sm:p-8 space-y-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">
                   Call or WhatsApp Us

@@ -21,6 +21,7 @@ import { buildPersonSchemas } from '../lib/seo';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { Layout } from '../components/Layout';
+import { FormatOrdinals } from '../components/FormatText';
 import { Reveal, SectionHeading } from '../components/MotionPrimitives';
 
 const programMeta: Record<
@@ -29,15 +30,17 @@ const programMeta: Record<
 > = {
   'spoken-english': {
     icon: MessageSquare,
-    focusLine: '4 levels: Kids, Beginners or Intermediates, Advanced Level & Interview Mastery',
+    focusLine:
+      '4 levels: Kids, Beginners or Intermediates, Advanced Level & Interview Mastery with Personality Skill Development Program',
   },
   'school-tuition': {
     icon: BookOpen,
-    focusLine: 'All core subjects from Class 6th to 10th across CBSE, ICSE, KVS and State Board',
+    focusLine: 'All subjects from Class 6th to 10th across CBSE, ICSE, KVS and State Board',
   },
   'interview-mastery': {
     icon: Briefcase,
-    focusLine: '2-month practical mock interviews, GD, body language and grooming',
+    focusLine:
+      '2-month practical program: self-introduction, GD sessions, mock interviews, body language and grooming',
   },
   'be-bca-diploma': {
     icon: GraduationCap,
@@ -94,13 +97,13 @@ export function LecturersPage() {
 
         <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 text-center space-y-3">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
-            MASTERMIND ACADEMY · Nehru Nagar, Belagavi
+            <FormatOrdinals text="MASTERMIND ACADEMY · Nehru Nagar, 2nd Cross, Belagavi" />
           </p>
           <h1 className="font-poster uppercase text-[40px] sm:text-[54px] leading-none text-white">
             Meet Our Faculty
           </h1>
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/95">
-            {siteConfig.about.leadershipNote}
+            <FormatOrdinals text={siteConfig.about.leadershipNote} />
           </p>
         </div>
       </section>
@@ -156,7 +159,7 @@ export function LecturersPage() {
                         About {lecturer.name}
                       </h3>
                       <p className="text-sm sm:text-base leading-relaxed text-[var(--muted)]">
-                        {lecturer.bio.trim()}
+                        <FormatOrdinals text={lecturer.bio.trim()} />
                       </p>
                     </div>
                   </div>
@@ -164,9 +167,15 @@ export function LecturersPage() {
                   <div className="space-y-4">
                     <div className="border-t border-[var(--hairline)] pt-4">
                       <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)] mb-2">
-                        Primary Focus
+                        What {lecturer.name} Teaches
                       </h3>
-                      <p className="text-sm font-bold text-[var(--ink)]">{lecturer.focusArea}</p>
+                      <ul className="list-disc pl-5 space-y-1 text-sm font-semibold text-[var(--ink)] marker:text-[var(--royal)]">
+                        {lecturer.teachesList.map((item) => (
+                          <li key={item}>
+                            <FormatOrdinals text={item} />
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
                     <Link
@@ -190,7 +199,7 @@ export function LecturersPage() {
           <Reveal>
             <SectionHeading
               title="What Our Faculty Teach"
-              subtitle="Three dedicated tracks in Nehru Nagar, Belagavi (open 7:00 AM to 8:30 PM) and online for Spoken English."
+              subtitle="Three dedicated tracks at Nehru Nagar, 2nd Cross, Belagavi (open 7:00 AM to 8:30 PM) — Online and Offline available across India."
             />
           </Reveal>
 
@@ -209,10 +218,10 @@ export function LecturersPage() {
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
                       <h3 className="text-base sm:text-lg font-bold text-[var(--ink)] group-hover:text-[var(--royal)] leading-snug">
-                        {program.shortTitle}
+                        <FormatOrdinals text={program.shortTitle} />
                       </h3>
                       <p className="text-xs sm:text-sm leading-relaxed text-[var(--muted)]">
-                        {meta.focusLine}
+                        <FormatOrdinals text={meta.focusLine} />
                       </p>
                     </div>
 

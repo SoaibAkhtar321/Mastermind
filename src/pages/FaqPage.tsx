@@ -7,6 +7,7 @@ import { buildFaqSchema } from '../lib/seo';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { Layout } from '../components/Layout';
+import { FormatOrdinals } from '../components/FormatText';
 import { EASE_OUT } from '../components/MotionPrimitives';
 
 type FilterCategory = 'all' | FaqItem['category'];
@@ -15,7 +16,7 @@ const filterLabels: { id: FilterCategory; label: string }[] = [
   { id: 'all', label: 'All Questions' },
   { id: 'spoken-english', label: 'Spoken English' },
   { id: 'school-tuition', label: 'Classes 6th to 10th' },
-  { id: 'interview-mastery', label: 'Interview Mastery' },
+  { id: 'interview-mastery', label: 'Interview Mastery with Personality Skill Development Program' },
   { id: 'general', label: 'General & Timings' },
 ];
 
@@ -36,9 +37,9 @@ export function FaqPage() {
 
   useDocumentHead({
     path: '/faq',
-    title: 'FAQ | MASTERMIND ACADEMY, Nehru Nagar, Belagavi',
+    title: 'FAQ | MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
     description:
-      'Answers on Spoken English 4 levels, Classes 6th to 10th all core subjects, B.E/B.Com/Diploma core subjects, timings (7:00 AM–8:30 PM) and enrolment.',
+      'Answers on Spoken English 4 levels (including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, B.E/B.Com/Diploma core subjects, Online & Offline across India, timings (7:00 AM–8:30 PM) and enrolment.',
     pageType: 'FAQPage',
     breadcrumbs,
     schemas,
@@ -65,8 +66,7 @@ export function FaqPage() {
             Answers About Batches &amp; Enrolment
           </h1>
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
-            Clear answers on Spoken English (4 levels), Classes 6th to 10th all core subjects,
-            B.E, B.Com &amp; Diploma core subjects, and timings (7:00 AM to 8:30 PM).
+            <FormatOrdinals text="Clear answers on Spoken English (4 levels), Classes 6th to 10th all subjects, B.E, B.Com & Diploma core subjects, Online & Offline classes across India, and timings (7:00 AM to 8:30 PM)." />
           </p>
         </div>
       </section>
@@ -96,7 +96,7 @@ export function FaqPage() {
                       active ? 'text-[var(--royal)]' : 'text-[var(--muted)] hover:text-[var(--ink)]'
                     }`}
                   >
-                    {tab.label}
+                    <FormatOrdinals text={tab.label} />
                     {active && (
                       <motion.span
                         layoutId="faq-page-underline"
@@ -122,7 +122,9 @@ export function FaqPage() {
                       aria-expanded={isOpen}
                       className="flex w-full min-h-[54px] items-center justify-between gap-4 px-5 py-3.5 text-left hover:bg-[var(--cream)]/60 transition-colors cursor-pointer"
                     >
-                      <span>{faq.question}</span>
+                      <span>
+                        <FormatOrdinals text={faq.question} />
+                      </span>
                       <ChevronDown
                         className={`h-5 w-5 shrink-0 text-[var(--royal)] transition-transform duration-200 ${
                           isOpen ? 'rotate-180' : ''
@@ -142,7 +144,7 @@ export function FaqPage() {
                         className="overflow-hidden"
                       >
                         <p className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]">
-                          {faq.answer}
+                          <FormatOrdinals text={faq.answer} />
                         </p>
                       </motion.div>
                     )}

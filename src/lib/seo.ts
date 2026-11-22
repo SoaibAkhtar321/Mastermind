@@ -1,4 +1,5 @@
 import {
+  INTERVIEW_PROGRAM_NAME,
   siteConfig,
   getFilledSocialLinks,
   getProgramById,
@@ -114,6 +115,10 @@ export function buildOrganizationSchema(baseUrl?: string): Record<string, unknow
     address,
     areaServed: [
       {
+        '@type': 'Country',
+        name: 'India',
+      },
+      {
         '@type': 'City',
         name: siteConfig.address.city,
       },
@@ -124,10 +129,11 @@ export function buildOrganizationSchema(baseUrl?: string): Record<string, unknow
     ],
     knowsAbout: [
       'Spoken English Classes',
-      'Online Spoken English',
-      'Interview Preparation',
-      'Personality Development',
-      'Classes 6th to 10th All Core Subjects',
+      'Online Spoken English Across India',
+      INTERVIEW_PROGRAM_NAME,
+      'Group Discussion and Mock Interviews',
+      'Body Language and Communication Skills',
+      'Classes 6th to 10th All Subjects',
       'CBSE Board Coaching',
       'ICSE Board Coaching',
       'KVS School Tuition',
@@ -331,12 +337,7 @@ export function buildCourseSchemas(program: ProgramItem, baseUrl?: string): Reco
     });
   }
 
-  const courseMode =
-    program.id === 'school-tuition' ||
-    program.id === 'interview-mastery' ||
-    program.id === 'be-bca-diploma'
-      ? 'onsite'
-      : 'blended';
+  const courseMode = 'blended';
 
   const single: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -461,7 +462,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
   const lecturerPages: PageSeoMeta[] = siteConfig.lecturers.map((lecturer) => ({
     path: `/lecturers/${lecturer.id}`,
     title: `${lecturer.name}, ${lecturer.qualification} | Faculty · MASTERMIND ACADEMY, Belagavi`,
-    description: `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`,
+    description: `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`,
     pageType: 'ProfilePage',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -479,7 +480,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/',
       title: 'MASTERMIND ACADEMY, Belagavi | Spoken English & Tuition',
       description:
-        'MASTERMIND ACADEMY in Nehru Nagar, Belagavi (7:00 AM–8:30 PM) offers Spoken English (4 levels), Classes 6th to 10th all core subjects, and B.E, B.Com & Diploma core subjects.',
+        'MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM) — Online & Offline across India. Spoken English (4 levels including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, and B.E, B.Com & Diploma core subjects.',
       pageType: 'WebPage',
       breadcrumbs: [{ name: 'Home', path: '/' }],
       schemas: [buildFaqSchema(siteConfig.faqs), ...buildPersonSchemas(baseUrl)],
@@ -487,9 +488,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     ...programPages,
     {
       path: '/about',
-      title: 'About MASTERMIND ACADEMY | Nehru Nagar, Belagavi',
+      title: 'About MASTERMIND ACADEMY | Nehru Nagar, 2nd Cross, Belagavi',
       description:
-        'Learn about MASTERMIND ACADEMY in Nehru Nagar, Belagavi (open 7:00 AM to 8:30 PM) — Education is food to a hungry soul. Meet our experienced B.E lecturers.',
+        'Learn about MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (open 7:00 AM to 8:30 PM, Online & Offline across India) — Education is food to a hungry soul.',
       pageType: 'AboutPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -501,7 +502,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/lecturers',
       title: 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
       description:
-        'Meet our B.E graduate faculty in Belagavi: Laxmi (B.E, 10+ years of prior HR experience and teaching experience) and Pooja (B.E, 3+ years of experience in core subjects).',
+        'Meet our B.E graduate faculty in Nehru Nagar, 2nd Cross, Belagavi: Laxmi (B.E, 10+ years of prior HR experience & teaching experience) and Pooja (B.E, 3+ years of experience in core subjects).',
       pageType: 'CollectionPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -512,9 +513,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     ...lecturerPages,
     {
       path: '/faq',
-      title: 'FAQ | MASTERMIND ACADEMY, Nehru Nagar, Belagavi',
+      title: 'FAQ | MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
       description:
-        'Answers on Spoken English 4 levels, Classes 6th to 10th all core subjects, B.E/B.Com/Diploma core subjects, timings (7:00 AM–8:30 PM) and enrolment.',
+        'Answers on Spoken English 4 levels (including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, B.E/B.Com/Diploma core subjects, Online & Offline across India, and timings (7:00 AM–8:30 PM).',
       pageType: 'FAQPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -526,7 +527,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/contact',
       title: 'Contact & Location | MASTERMIND ACADEMY, Belagavi',
       description:
-        'Visit MASTERMIND ACADEMY in Nehru Nagar, Belagavi 590010 (open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or email mastermindacademy2627@gmail.com.',
+        'Visit MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi 590010 (open 7:00 AM to 8:30 PM) or join Online from across India. Call 90194 16236 / 81239 50627 or email mastermindacademy2627@gmail.com.',
       pageType: 'ContactPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -538,7 +539,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/privacy-policy',
       title: 'Privacy Policy & DPDP Act Notice | MASTERMIND ACADEMY',
       description:
-        'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
+        'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
       pageType: 'WebPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -550,7 +551,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
       path: '/terms-and-conditions',
       title: 'Terms & Conditions | MASTERMIND ACADEMY, Belagavi',
       description:
-        'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th, and B.E/B.Com/Diploma classes in Belagavi.',
+        'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th (all subjects), and B.E/B.Com/Diploma core subjects — Online across India & Offline in Nehru Nagar, 2nd Cross, Belagavi.',
       pageType: 'WebPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -577,7 +578,7 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
 export function generateRobotsTxt(baseUrl?: string): string {
   const cleanBase = (baseUrl ?? resolveBaseUrl()).trim().replace(/\/+$/, '');
   const lines = [
-    '# Robots.txt for MASTERMIND ACADEMY, Nehru Nagar, Belagavi',
+    '# Robots.txt for MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
     '# Welcoming search engines and AI answer engine crawlers',
     '',
     'User-agent: *',
@@ -670,19 +671,19 @@ export function generateLlmsTxt(baseUrl?: string): string {
     `Lecturers: ${siteConfig.lecturers.map((l) => `${l.name} (${l.qualification}, ${l.experience})`).join('; ')}`,
     '',
     '## Key Pages',
-    `- [Home](${link('/')}): Overview of MASTERMIND ACADEMY in Nehru Nagar, Belagavi (Open ${siteConfig.timings})`,
-    `- [Spoken English Classes](${link('/spoken-english-classes-belagavi')}): Spoken English is for everyone: kids, housewives, freshers, job seekers, students, etc. Four levels: Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery`,
-    `- [Interview Mastery & Personality Development](${link('/interview-mastery-personality-development-belagavi')}): 2-month practical level covering mock interviews, GD, body language and grooming`,
-    `- [Classes 6th to 10th — All Core Subjects](${link('/school-tuition-classes-6-to-10-belagavi')}): All core subjects across CBSE, ICSE, KVS and State Board`,
-    `- [B.E, B.Com & Diploma Core Subjects](${link('/be-bca-diploma-classes-belagavi')}): Core subject coaching for B.E, B.Com and Diploma college students`,
+    `- [Home](${link('/')}): Overview of MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi — Online and Offline available across India (Open ${siteConfig.timings})`,
+    `- [Spoken English Classes](${link('/spoken-english-classes-belagavi')}): Spoken English is for everyone — KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS, STUDENTS. Four levels: Kids, Beginners or Intermediates, Advanced Level, and ${INTERVIEW_PROGRAM_NAME}. Online and Offline available across India`,
+    `- [${INTERVIEW_PROGRAM_NAME}](${link('/interview-mastery-personality-development-belagavi')}): 2-month practical program covering self-introduction, HR & common interview Q&A, Group Discussion (GD) sessions, mock interviews, body language, voice modulation, grooming, and confidence building. Online and Offline available`,
+    `- [Classes 6th to 10th — All Subjects](${link('/school-tuition-classes-6-to-10-belagavi')}): All subjects across CBSE, ICSE, KVS and State Board. Online and Offline available`,
+    `- [B.E, B.Com & Diploma Core Subjects](${link('/be-bca-diploma-classes-belagavi')}): Core subject coaching for B.E, B.Com and Diploma college students. Online and Offline available`,
     `- [About Us](${link('/about')}): Teaching approach (Learn, Practice, Excel) and institute background`,
     `- [Faculty & Lecturers](${link('/lecturers')}): Laxmi (B.E, 10+ years of prior HR experience & teaching experience) and Pooja (B.E, 3+ years of experience in core subjects)`,
     ...siteConfig.lecturers.map(
       (lecturer) =>
         `- [${lecturer.name}, ${lecturer.qualification}](${link(`/lecturers/${lecturer.id}`)}): Dedicated faculty profile for ${lecturer.name} (${lecturer.qualification}) — ${lecturer.experience}`
     ),
-    `- [FAQ](${link('/faq')}): Direct answers on Spoken English, Classes 6th to 10th, B.E/B.Com/Diploma, timings and enrolment`,
-    `- [Contact & Location](${link('/contact')}): Nehru Nagar, Belagavi 590010 directions, timings (7:00 AM to 8:30 PM), phone, help & support email, and WhatsApp enquiry`,
+    `- [FAQ](${link('/faq')}): Direct answers on Spoken English, ${INTERVIEW_PROGRAM_NAME}, Classes 6th to 10th all subjects, B.E/B.Com/Diploma core subjects, Online & Offline availability across India, timings and enrolment`,
+    `- [Contact & Location](${link('/contact')}): Nehru Nagar, 2nd Cross, Belagavi 590010 directions (${siteConfig.location.googleMapsDirectionsUrl}), timings (7:00 AM to 8:30 PM), phone, help & support email, and WhatsApp enquiry`,
     `- [Privacy Policy & DPDP Act Notice](${link('/privacy-policy')}): Digital Personal Data Protection (DPDP) Act, 2023 notice, children's data safeguards, and grievance contact`,
     `- [Terms & Conditions](${link('/terms-and-conditions')}): Website usage and institute enrolment terms`,
     `- [DPDP Data Rights & Grievance Redressal](${link('/data-rights')}): Consent withdrawal, access, correction, erasure, nomination, and grievance portal`,
