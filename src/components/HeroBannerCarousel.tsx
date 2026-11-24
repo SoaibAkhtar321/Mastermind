@@ -167,7 +167,10 @@ export function HeroBannerCarousel() {
                     </h2>
                   )}
 
-                  <p className="text-[14px] sm:text-base lg:text-lg font-medium text-white/95 leading-snug max-w-xl">
+                  <p
+                    data-aeo-summary={activeIndex === 0 ? 'true' : undefined}
+                    className="text-[14px] sm:text-base lg:text-lg font-medium text-white/95 leading-snug max-w-xl"
+                  >
                     <FormatOrdinals text={slide.subline} />
                   </p>
 

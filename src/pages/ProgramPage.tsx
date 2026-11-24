@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
   CheckCircle2,
@@ -26,16 +25,24 @@ import { AtAGlanceBox } from '../components/AtAGlanceBox';
 import { SmartPhoto } from '../components/SmartPhoto';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
 import { FormatOrdinals } from '../components/FormatText';
-import { EASE_OUT, Reveal, SectionHeading } from '../components/MotionPrimitives';
+import { Reveal, SectionHeading } from '../components/MotionPrimitives';
 
 interface ProgramPageProps {
   programId: ProgramItem['id'];
 }
 
 const programPhotos: Record<ProgramItem['id'], { src: string; alt: string }> = {
+  'competitive-exam-english': {
+    src: siteConfig.mediaSlots.competitiveExamVisual,
+    alt: 'Competitive exam aspirants practising English grammar and timed mock tests in a bright classroom',
+  },
   'spoken-english': {
     src: siteConfig.mediaSlots.spokenEnglishVisual,
     alt: 'Learners practising spoken English conversation together in a bright study room',
+  },
+  'be-bca-diploma': {
+    src: siteConfig.mediaSlots.beBcaDiplomaVisual,
+    alt: 'College learners collaborating over technical notebooks and a laptop',
   },
   'school-tuition': {
     src: siteConfig.mediaSlots.schoolTuitionVisual,
@@ -45,17 +52,12 @@ const programPhotos: Record<ProgramItem['id'], { src: string; alt: string }> = {
     src: siteConfig.mediaSlots.interviewMasteryVisual,
     alt: 'Young college graduate speaking clearly during a mock interview session',
   },
-  'be-bca-diploma': {
-    src: siteConfig.mediaSlots.beBcaDiplomaVisual,
-    alt: 'College learners collaborating over technical notebooks and a laptop',
-  },
 };
 
 export function ProgramPage({ programId }: ProgramPageProps) {
   const program = getProgramById(programId);
   const photo = programPhotos[program.id];
   const { openEnquiryModal } = useEnquiryModal();
-  const prefersReduced = useReducedMotion();
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
 
   const breadcrumbs = useMemo(
@@ -133,7 +135,10 @@ export function ProgramPage({ programId }: ProgramPageProps) {
                 <FormatOrdinals text={program.h1} />
               </h1>
 
-              <p className="text-base sm:text-lg leading-relaxed text-white/95 max-w-2xl">
+              <p
+                data-aeo-summary="true"
+                className="text-base sm:text-lg leading-relaxed text-white/95 max-w-2xl"
+              >
                 <FormatOrdinals text={program.summary} />
               </p>
 
@@ -293,12 +298,99 @@ export function ProgramPage({ programId }: ProgramPageProps) {
             </Reveal>
           )}
 
+          {program.id === 'competitive-exam-english' && (
+            <Reveal>
+              <div className="space-y-8">
+                <SectionHeading
+                  title="Grammar & Language Skills for Competitive Exams"
+                  subtitle="MASTERMIND ACADEMY · LEARN • PRACTISE • ACHIEVE — Comprehensive English grammar training for COMPETITIVE EXAM ASPIRANTS."
+                />
+
+                {/* Highlighted Audience & Mode Callout */}
+                <div className="mx-auto max-w-3xl rounded-2xl bg-[var(--navy)] p-5 sm:p-6 text-white grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                      Who This Course Is For
+                    </h3>
+                    <ul className="mt-2.5 list-disc pl-5 space-y-1.5 text-sm sm:text-base font-extrabold tracking-wide text-white marker:text-[var(--gold)]">
+                      <li>COMPETITIVE EXAM ASPIRANTS</li>
+                      <li>JOB SEEKERS &amp; GRADUATES</li>
+                    </ul>
+                  </div>
+                  <div className="sm:border-l sm:border-white/15 sm:pl-6">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                      Mode &amp; Availability
+                    </h3>
+                    <p className="mt-2.5 text-sm sm:text-base font-bold text-white">
+                      Online &amp; Offline Available
+                    </p>
+                    <p className="mt-1 text-xs sm:text-sm text-white/80">
+                      <FormatOrdinals text="Offline at Nehru Nagar, 2nd Cross, Belagavi (7:00 AM to 8:30 PM) & live Online across India." />
+                    </p>
+                  </div>
+                </div>
+
+                {/* 3 Core Pillars */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  {[
+                    {
+                      title: 'Complete Grammar Concepts',
+                      points: [
+                        'Parts of speech, tenses, voice & narration',
+                        'Subject-verb agreement & sentence structure',
+                        'Clarity from foundational rules to exam exceptions',
+                      ],
+                    },
+                    {
+                      title: 'Exam-Oriented Practice',
+                      points: [
+                        'Error spotting & sentence improvement drills',
+                        'Fill-in-the-blanks, cloze tests & comprehension',
+                        'Focused practice aligned with real exam patterns',
+                      ],
+                    },
+                    {
+                      title: 'Mock Tests & Assessments',
+                      points: [
+                        'Regular timed assessments & accuracy tracking',
+                        'Detailed paper discussion & error analysis',
+                        'Personal feedback to boost speed and confidence',
+                      ],
+                    },
+                  ].map((pillar, idx) => (
+                    <div key={pillar.title} className="card-coaching p-5 sm:p-6 space-y-3">
+                      <span className="inline-flex items-center rounded-md bg-[var(--gold)]/35 px-2.5 py-0.5 text-xs font-bold uppercase tracking-[0.12em] text-[var(--navy)]">
+                        Pillar 0{idx + 1}
+                      </span>
+                      <h3 className="font-poster uppercase text-2xl text-[var(--royal)] leading-tight">
+                        {pillar.title}
+                      </h3>
+                      <ul className="list-disc pl-4 space-y-1.5 text-sm text-[var(--muted)] marker:text-[var(--gold-text)]">
+                        {pillar.points.map((pt) => (
+                          <li key={pt}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          )}
+
           {program.curriculum && program.curriculum.length > 0 && (
             <Reveal>
               <div className="space-y-6">
                 <SectionHeading
-                  title="What We Provide in This 2-Month Program"
-                  subtitle="Practical, hands-on training for COLLEGE STUDENTS, FRESHERS and JOB SEEKERS — Online and Offline available across India."
+                  title={
+                    program.id === 'competitive-exam-english'
+                      ? 'What We Cover in Competitive Exam English'
+                      : 'What We Provide in This 2-Month Program'
+                  }
+                  subtitle={
+                    program.id === 'competitive-exam-english'
+                      ? 'Structured English grammar and language skills training for COMPETITIVE EXAM ASPIRANTS — Online & Offline available.'
+                      : 'Practical, hands-on training for COLLEGE STUDENTS, FRESHERS and JOB SEEKERS — Online and Offline available across India.'
+                  }
                 />
                 <div className="card-coaching p-6 sm:p-8">
                   <ul className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 list-disc pl-5 text-base text-[var(--ink)] font-semibold marker:text-[var(--royal)]">
@@ -423,7 +515,10 @@ export function ProgramPage({ programId }: ProgramPageProps) {
                   <h3 className="text-lg font-bold text-[var(--ink)]">
                     <FormatOrdinals text={block.question} />
                   </h3>
-                  <p className="text-base font-medium leading-relaxed text-[var(--ink)]">
+                  <p
+                    data-aeo-answer="true"
+                    className="text-base font-medium leading-relaxed text-[var(--ink)]"
+                  >
                     <FormatOrdinals text={block.directAnswer} />
                   </p>
                   <p className="text-sm leading-relaxed text-[var(--muted)]">
@@ -493,21 +588,21 @@ export function ProgramPage({ programId }: ProgramPageProps) {
                         />
                       </button>
                     </h3>
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          initial={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2, ease: EASE_OUT }}
-                          className="overflow-hidden"
+                    <div
+                      aria-hidden={!isOpen}
+                      className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out ${
+                        isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <p
+                          data-aeo-answer="true"
+                          className="border-t border-[var(--hairline)] px-5 py-4 text-sm sm:text-base leading-relaxed text-[var(--muted)]"
                         >
-                          <p className="border-t border-[var(--hairline)] px-5 py-4 text-sm sm:text-base leading-relaxed text-[var(--muted)]">
-                            <FormatOrdinals text={faq.answer} />
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                          <FormatOrdinals text={faq.answer} />
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 );
               })}

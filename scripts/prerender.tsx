@@ -7,6 +7,7 @@ import { AppRoutes } from '../src/AppRoutes';
 import {
   DEFAULT_INDEX_ROBOTS,
   NOINDEX_ROBOTS,
+  SOCIAL_SHARE_IMAGE_PATH,
   buildBreadcrumbSchema,
   buildOrganizationSchema,
   buildWebPageSchema,
@@ -37,7 +38,7 @@ function escapeAttr(value: string): string {
 
 function injectHeadAndHtml(template: string, route: PageSeoMeta, appHtml: string): string {
   const canonicalUrl = resolveFullUrl(route.path);
-  const ogImageUrl = resolveFullUrl('/og-image.svg');
+  const ogImageUrl = resolveFullUrl(SOCIAL_SHARE_IMAGE_PATH);
   const robotsDirective = route.robots || DEFAULT_INDEX_ROBOTS;
   const ogType = route.pageType === 'ProfilePage' ? 'profile' : 'website';
 
@@ -59,6 +60,9 @@ function injectHeadAndHtml(template: string, route: PageSeoMeta, appHtml: string
   const extraHead = [
     route.robots !== NOINDEX_ROBOTS
       ? `    <link rel="alternate" hreflang="en-IN" href="${escapeAttr(canonicalUrl)}" />`
+      : '',
+    route.robots !== NOINDEX_ROBOTS
+      ? `    <link rel="alternate" hreflang="x-default" href="${escapeAttr(canonicalUrl)}" />`
       : '',
     route.robots !== NOINDEX_ROBOTS && canonicalUrl.startsWith('http')
       ? `    <link rel="canonical" href="${escapeAttr(canonicalUrl)}" />`

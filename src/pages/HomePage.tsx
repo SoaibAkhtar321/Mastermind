@@ -6,6 +6,7 @@ import {
   Award,
   BookOpen,
   Briefcase,
+  CheckCircle2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -19,6 +20,7 @@ import {
   Smile,
 } from 'lucide-react';
 import {
+  COMPETITIVE_EXAM_HIGHLIGHTS,
   INTERVIEW_PROGRAM_NAME,
   SPOKEN_ENGLISH_AUDIENCE,
   getDirectionsUrl,
@@ -29,7 +31,7 @@ import {
   siteConfig,
   type ProgramItem,
 } from '../data/siteConfig';
-import { buildFaqSchema, buildPersonSchemas } from '../lib/seo';
+import { buildCourseListSchema, buildFaqSchema, buildPersonSchemas } from '../lib/seo';
 import { useDocumentHead } from '../hooks/useDocumentHead';
 import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { Layout } from '../components/Layout';
@@ -46,9 +48,10 @@ import {
 } from '../components/MotionPrimitives';
 
 const posterOrder: ProgramItem['id'][] = [
+  'competitive-exam-english',
   'spoken-english',
-  'school-tuition',
   'be-bca-diploma',
+  'school-tuition',
 ];
 
 const posterCardStyles: Record<
@@ -66,6 +69,19 @@ const posterCardStyles: Record<
     alt: string;
   }
 > = {
+  'competitive-exam-english': {
+    bgClass: 'bg-[var(--cta)]',
+    titleClass: 'text-white',
+    subClass: 'text-[var(--gold)]',
+    curveFill: '#E9BF5A',
+    btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
+    posterTitle: 'COMPETITIVE EXAM ENGLISH',
+    posterSub: 'Grammar & Language Skills · Online & Offline',
+    caption:
+      'Complete Grammar Concepts, Exam-Oriented Practice & Mock Tests for COMPETITIVE EXAM ASPIRANTS',
+    photo: siteConfig.mediaSlots.competitiveExamVisual,
+    alt: 'Competitive exam aspirants practising English grammar and timed mock tests in a bright classroom',
+  },
   'spoken-english': {
     bgClass: 'bg-[var(--royal)]',
     titleClass: 'text-white',
@@ -78,6 +94,18 @@ const posterCardStyles: Record<
       'Kids, Beginners/Intermediates, Advanced & Interview Mastery with Personality Skill Development Program',
     photo: siteConfig.mediaSlots.spokenEnglishVisual,
     alt: 'Learners practising spoken English conversation in a bright study room',
+  },
+  'be-bca-diploma': {
+    bgClass: 'bg-[var(--navy)]',
+    titleClass: 'text-white',
+    subClass: 'text-[var(--gold)]',
+    curveFill: '#E9BF5A',
+    btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
+    posterTitle: 'B.E, B.COM & DIPLOMA',
+    posterSub: 'Core Subjects · Online & Offline',
+    caption: 'Core subject coaching by qualified B.E graduate lecturers',
+    photo: siteConfig.mediaSlots.beBcaDiplomaVisual,
+    alt: 'College learners collaborating over technical notebooks and a laptop',
   },
   'school-tuition': {
     bgClass: 'bg-[var(--gold)]',
@@ -103,46 +131,35 @@ const posterCardStyles: Record<
     photo: siteConfig.mediaSlots.interviewMasteryVisual,
     alt: 'Graduate practising clear answers during a mock interview session',
   },
-  'be-bca-diploma': {
-    bgClass: 'bg-[var(--navy)]',
-    titleClass: 'text-white',
-    subClass: 'text-[var(--gold)]',
-    curveFill: '#E9BF5A',
-    btnClass: 'bg-[var(--gold)] text-[var(--ink)]',
-    posterTitle: 'B.E, B.COM & DIPLOMA',
-    posterSub: 'Core Subjects · Online & Offline',
-    caption: 'Core subject coaching by qualified B.E graduate lecturers',
-    photo: siteConfig.mediaSlots.beBcaDiplomaVisual,
-    alt: 'College learners collaborating over technical notebooks and a laptop',
-  },
 };
 
 const levelIcons = [Smile, BookOpen, Award, Briefcase];
 
 const glanceTabOrder: { id: ProgramItem['id']; label: string }[] = [
+  { id: 'competitive-exam-english', label: 'Competitive Exam English' },
   { id: 'spoken-english', label: 'Spoken English' },
-  { id: 'school-tuition', label: 'Classes 6th to 10th' },
   { id: 'be-bca-diploma', label: 'B.E, B.Com & Diploma' },
+  { id: 'school-tuition', label: 'Classes 6th to 10th' },
 ];
 
 export function HomePage() {
   const { openEnquiryModal } = useEnquiryModal();
   const prefersReduced = useReducedMotion();
-  const [activeTabId, setActiveTabId] = useState<ProgramItem['id']>('spoken-english');
+  const [activeTabId, setActiveTabId] = useState<ProgramItem['id']>('competitive-exam-english');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [testimonialOffset, setTestimonialOffset] = useState(0);
 
   const breadcrumbs = useMemo(() => [{ name: 'Home', path: '/' }], []);
   const schemas = useMemo(
-    () => [buildFaqSchema(siteConfig.faqs), ...buildPersonSchemas()],
+    () => [buildCourseListSchema(), buildFaqSchema(siteConfig.faqs), ...buildPersonSchemas()],
     []
   );
 
   useDocumentHead({
     path: '/',
-    title: 'MASTERMIND ACADEMY, Belagavi | Spoken English & Tuition Across India',
+    title: 'MASTERMIND ACADEMY Belagavi | Competitive & Spoken English',
     description:
-      'MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi (Online & Offline across India, 7:00 AM–8:30 PM) offers Spoken English (4 levels including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, and B.E, B.Com & Diploma core subjects.',
+      'Join MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi or Online across India for Competitive Exam English, Spoken English, B.E/B.Com/Diploma & 6th–10th.',
     pageType: 'WebPage',
     breadcrumbs,
     schemas,
@@ -163,14 +180,16 @@ export function HomePage() {
     : activeProgram.batches?.length
       ? activeProgram.batches.map((b) => b.level)
       : activeProgram.curriculum?.length
-        ? activeProgram.curriculum
+        ? activeProgram.curriculum.slice(0, 4)
         : ['B.E Core Subjects', 'B.Com Core Subjects', 'Diploma Core Subjects'];
 
   const activeBoardsLabel = activeProgram.boards?.length
     ? 'Subjects & Boards'
     : activeProgram.batches?.length
       ? 'Four Levels'
-      : 'Core Tracks';
+      : activeProgram.id === 'competitive-exam-english'
+        ? 'Course Highlights'
+        : 'Core Tracks';
 
   const safeEmail = getSafeEmail();
   const testimonials = siteConfig.testimonials;
@@ -198,23 +217,16 @@ export function HomePage() {
             <SectionHeading title="Our Courses" />
           </Reveal>
 
-          {/* 3 Core Offerings: 2-Row Balanced Grid on Mobile (2 + 1 full-width), 3-Column Row on Desktop */}
-          <div className="mt-8 lg:mt-12 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:gap-6">
+          {/* 4 Core Offerings in Exact Priority Order: 2x2 Balanced Grid on Mobile/Tablet, 4-Column Row on Desktop */}
+          <div className="mt-8 lg:mt-12 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
             {orderedPrograms.map((program, idx) => {
               const style = posterCardStyles[program.id];
-              const isThirdOnMobile = idx === 2;
               return (
-                <Reveal
-                  key={program.id}
-                  delay={idx * 0.05}
-                  className={isThirdOnMobile ? 'col-span-2 md:col-span-1' : ''}
-                >
+                <Reveal key={program.id} delay={idx * 0.05}>
                   <div className="flex flex-col h-full">
                     <Link
                       to={program.slug}
-                      className={`poster-card group relative block w-full overflow-hidden ${
-                        isThirdOnMobile ? 'aspect-[16/10] md:aspect-[4/5]' : 'aspect-[4/5]'
-                      } ${style.bgClass}`}
+                      className={`poster-card group relative block w-full overflow-hidden aspect-[4/5] ${style.bgClass}`}
                     >
                       {/* Soft Decorative Curved Shape Behind Photo */}
                       <svg
@@ -231,13 +243,9 @@ export function HomePage() {
                       </svg>
 
                       {/* Top-Left Big Condensed Title & Small Sub-line */}
-                      <div
-                        className={`relative z-10 p-3 sm:p-5 ${
-                          isThirdOnMobile ? 'max-w-[56%] md:max-w-none' : ''
-                        }`}
-                      >
+                      <div className="relative z-10 p-3 sm:p-4 lg:p-5">
                         <h3
-                          className={`font-poster uppercase text-[22px] min-[390px]:text-[25px] sm:text-[32px] leading-[0.98] ${style.titleClass}`}
+                          className={`font-poster uppercase text-[21px] min-[390px]:text-[24px] sm:text-[28px] lg:text-[26px] xl:text-[30px] leading-[0.98] ${style.titleClass}`}
                         >
                           <FormatOrdinals text={style.posterTitle} />
                         </h3>
@@ -249,11 +257,7 @@ export function HomePage() {
                       </div>
 
                       {/* Bottom-Right Photo Slot */}
-                      <div
-                        className={`pointer-events-none absolute right-2 bottom-2 sm:right-3.5 sm:bottom-3.5 z-10 aspect-[4/3] overflow-hidden rounded-xl border-2 border-white shadow-md bg-[var(--sand-placeholder)] transition-transform duration-300 group-hover:scale-[1.03] ${
-                          isThirdOnMobile ? 'w-[44%] md:w-[68%]' : 'w-[64%] sm:w-[68%]'
-                        }`}
-                      >
+                      <div className="pointer-events-none absolute right-2 bottom-2 sm:right-3 sm:bottom-3 z-10 aspect-[4/3] w-[64%] sm:w-[68%] overflow-hidden rounded-xl border-2 border-white shadow-md bg-[var(--sand-placeholder)] transition-transform duration-300 group-hover:scale-[1.03]">
                         <SmartPhoto
                           src={style.photo}
                           alt={style.alt}
@@ -266,7 +270,7 @@ export function HomePage() {
 
                       {/* "Learn More" Button — Always Visible on Mobile, Hover-Reveal on Desktop */}
                       <span
-                        className={`absolute left-2.5 bottom-2.5 sm:left-4 sm:bottom-4 z-20 inline-flex items-center gap-1 rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 text-[10.5px] sm:text-xs font-bold shadow-sm transition-all duration-200 opacity-100 lg:opacity-0 lg:translate-y-1.5 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-focus-visible:opacity-100 lg:group-focus-visible:translate-y-0 ${style.btnClass}`}
+                        className={`absolute left-2.5 bottom-2.5 sm:left-3.5 sm:bottom-3.5 z-20 inline-flex items-center gap-1 rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 text-[10.5px] sm:text-xs font-bold shadow-sm transition-all duration-200 opacity-100 lg:opacity-0 lg:translate-y-1.5 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-focus-visible:opacity-100 lg:group-focus-visible:translate-y-0 ${style.btnClass}`}
                       >
                         <span>Learn More</span>
                         <ArrowRight className="h-3 w-3 shrink-0" aria-hidden="true" />
@@ -282,6 +286,112 @@ export function HomePage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          4B) FEATURED #1 COURSE — COMPETITIVE EXAM ENGLISH (Navy & Gold Banner)
+      ===================================================================== */}
+      <section className="py-[56px] lg:py-[72px] pt-0 lg:pt-0">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-[20px] bg-[var(--navy)] text-white p-6 sm:p-8 lg:p-10 shadow-[0_16px_34px_-16px_rgba(16,28,58,0.35)] border-2 border-[var(--gold)]">
+              <div className="grid grid-cols-1 gap-7 lg:grid-cols-12 lg:items-center">
+                {/* Left Content */}
+                <div className="lg:col-span-7 space-y-5">
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold)]">
+                      MASTERMIND ACADEMY · LEARN • PRACTISE • ACHIEVE
+                    </p>
+                    <h2 className="font-poster uppercase text-[36px] sm:text-[48px] leading-[0.96] text-white">
+                      Competitive Exam English
+                    </h2>
+                    <p className="text-base sm:text-lg font-bold text-[var(--gold)]">
+                      Grammar &amp; Language Skills
+                    </p>
+                    <p
+                      data-aeo-summary="true"
+                      className="text-sm sm:text-base leading-relaxed text-white/90 max-w-2xl"
+                    >
+                      <FormatOrdinals text="Comprehensive English grammar training for competitive examinations — now taught at our Nehru Nagar, 2nd Cross, Belagavi centre and live online across India." />
+                    </p>
+                  </div>
+
+                  {/* Three Core Highlights as Bullets */}
+                  <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                    {COMPETITIVE_EXAM_HIGHLIGHTS.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 rounded-xl border border-white/15 bg-white/10 p-3.5 text-sm font-bold text-white"
+                      >
+                        <CheckCircle2
+                          className="h-4 w-4 shrink-0 text-[var(--gold)] mt-0.5"
+                          aria-hidden="true"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Mode & Audience Row */}
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 rounded-2xl border border-[var(--gold)]/35 bg-[#091B45] p-4">
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                        Mode
+                      </p>
+                      <p className="mt-1 text-sm sm:text-base font-bold text-white">
+                        Online &amp; Offline
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
+                        For
+                      </p>
+                      <ul className="mt-1 list-disc pl-5 text-sm sm:text-base font-extrabold tracking-wide text-white marker:text-[var(--gold)]">
+                        <li>COMPETITIVE EXAM ASPIRANTS</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* CTAs */}
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openEnquiryModal('Competitive Exam English (Grammar & Language Skills)')
+                      }
+                      className="btn-cta inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-2.5 text-sm sm:text-base font-bold cursor-pointer whitespace-nowrap"
+                    >
+                      <span>Enquire Now</span>
+                      <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    </button>
+
+                    <Link
+                      to="/competitive-exam-english-belagavi"
+                      className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-bold text-[var(--gold)] hover:underline underline-offset-4"
+                    >
+                      <span>Explore Competitive Exam Course</span>
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Right Photo */}
+                <div className="lg:col-span-5">
+                  <div className="mx-auto max-w-[400px] lg:max-w-none overflow-hidden rounded-2xl border-4 border-white shadow-lg">
+                    <SmartPhoto
+                      src={siteConfig.mediaSlots.competitiveExamVisual}
+                      alt="Competitive exam aspirants practising English grammar and timed tests in a bright classroom"
+                      width={960}
+                      height={720}
+                      aspectClass="aspect-[4/3]"
+                      placeholderLabel="Competitive Exam English"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -628,6 +738,67 @@ export function HomePage() {
               </motion.div>
             </AnimatePresence>
           </div>
+
+          {/* Semantic Course Comparison Table for Quick Scanning, Google Featured Snippets & AEO/GEO */}
+          <div className="mx-auto mt-8 max-w-5xl">
+            <div data-aeo-summary="true" className="card-coaching overflow-hidden">
+              <div className="border-b border-[var(--hairline)] bg-[var(--cream)]/70 px-5 py-3.5 sm:px-6">
+                <h3 className="text-sm sm:text-base font-bold text-[var(--ink)]">
+                  All Courses at MASTERMIND ACADEMY — Quick Comparison
+                </h3>
+                <p className="mt-0.5 text-xs text-[var(--muted)]">
+                  <FormatOrdinals text="Offline at Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM) & live Online across India." />
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px] border-collapse text-left text-xs sm:text-sm">
+                  <caption className="sr-only">
+                    Comparison of priority coaching programs offered by MASTERMIND ACADEMY in Nehru
+                    Nagar, 2nd Cross, Belagavi and online across India.
+                  </caption>
+                  <thead>
+                    <tr className="border-b border-[var(--hairline)] bg-white text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--royal)]">
+                      <th scope="col" className="px-4 py-3 sm:px-5">
+                        Course
+                      </th>
+                      <th scope="col" className="px-4 py-3 sm:px-5">
+                        Who It Is For
+                      </th>
+                      <th scope="col" className="px-4 py-3 sm:px-5">
+                        Mode
+                      </th>
+                      <th scope="col" className="px-4 py-3 sm:px-5">
+                        Duration
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--hairline)] bg-white">
+                    {orderedPrograms.map((program) => (
+                      <tr key={program.id} className="hover:bg-[var(--cream)]/40 transition-colors">
+                        <th scope="row" className="px-4 py-3 sm:px-5 font-bold text-[var(--ink)]">
+                          <Link
+                            to={program.slug}
+                            className="text-[var(--navy)] hover:text-[var(--royal)] hover:underline underline-offset-2"
+                          >
+                            <FormatOrdinals text={program.title} />
+                          </Link>
+                        </th>
+                        <td className="px-4 py-3 sm:px-5 text-[var(--muted)] font-medium">
+                          <FormatOrdinals text={program.whoItIsForList.join(' · ')} />
+                        </td>
+                        <td className="px-4 py-3 sm:px-5 font-semibold text-[var(--ink)] whitespace-nowrap">
+                          Online &amp; Offline
+                        </td>
+                        <td className="px-4 py-3 sm:px-5 text-[var(--muted)] tabular-nums">
+                          <FormatOrdinals text={program.duration} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -819,21 +990,21 @@ export function HomePage() {
                     </button>
                   </h3>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        transition={{ duration: 0.22, ease: EASE_OUT }}
-                        className="overflow-hidden"
+                  <div
+                    aria-hidden={!isOpen}
+                    className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p
+                        data-aeo-answer="true"
+                        className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]"
                       >
-                        <p className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]">
-                          <FormatOrdinals text={faq.answer} />
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <FormatOrdinals text={faq.answer} />
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

@@ -25,9 +25,9 @@ export function AboutPage() {
 
   useDocumentHead({
     path: '/about',
-    title: 'About MASTERMIND ACADEMY | Nehru Nagar, 2nd Cross, Belagavi',
+    title: 'About MASTERMIND ACADEMY | Nehru Nagar, Belagavi',
     description:
-      'Learn about MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi (Online & Offline across India, open 7:00 AM to 8:30 PM) — Education is food to a hungry soul. Meet our experienced B.E lecturers.',
+      'Discover MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM). Learn, Practice & Excel with experienced B.E lecturers Online & Offline.',
     pageType: 'AboutPage',
     breadcrumbs,
     schemas,
@@ -62,7 +62,10 @@ export function AboutPage() {
               <p className="text-sm sm:text-base font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
                 {siteConfig.tagline}
               </p>
-              <p className="text-base sm:text-lg leading-relaxed text-white/95 max-w-2xl">
+              <p
+                data-aeo-summary="true"
+                className="text-base sm:text-lg leading-relaxed text-white/95 max-w-2xl"
+              >
                 <FormatOrdinals text={siteConfig.canonicalDescription} />
               </p>
               <div className="pt-1">
@@ -203,7 +206,7 @@ export function AboutPage() {
             <FormatOrdinals text="Visit Our Centre at Nehru Nagar, 2nd Cross, Belagavi" />
           </h2>
           <p className="mx-auto max-w-xl text-base text-white/90">
-            <FormatOrdinals text="Open 7:00 AM to 8:30 PM (Online and Offline available across India). Speak with Laxmi or Pooja about Spoken English, Classes 6th to 10th all subjects, or B.E, B.Com & Diploma core subjects." />
+            <FormatOrdinals text="Open 7:00 AM to 8:30 PM (Online and Offline available across India). Speak with Laxmi or Pooja about Competitive Exam English, Spoken English, B.E, B.Com & Diploma core subjects, or Classes 6th to 10th all subjects." />
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
             <button

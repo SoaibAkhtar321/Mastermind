@@ -4,12 +4,13 @@ import { getWhatsAppUrl } from '../data/siteConfig';
 import { sanitizeMultiLine, sanitizeSingleLine } from '../lib/security';
 
 export const ENQUIRY_PROGRAM_OPTIONS = [
+  'Competitive Exam English (Grammar & Language Skills)',
   'Spoken English (Kids)',
   'Spoken English (Beginners or Intermediates)',
   'Spoken English (Advanced Level)',
   'Spoken English (Interview Mastery with Personality Skill Development Program)',
-  'Classes 6th to 10th (All Subjects)',
   'B.E, B.Com & Diploma (Core Subjects)',
+  'Classes 6th to 10th (All Subjects)',
   'General Enquiry',
 ] as const;
 
@@ -47,7 +48,7 @@ export function WhatsAppEnquiryForm({
       );
       if (matched) return matched;
     }
-    return ENQUIRY_PROGRAM_OPTIONS[1];
+    return ENQUIRY_PROGRAM_OPTIONS[0];
   });
   const [mode, setMode] = useState<string>(DEFAULT_MODE);
   const [message, setMessage] = useState('');
@@ -106,7 +107,7 @@ export function WhatsAppEnquiryForm({
       : ENQUIRY_ROLE_OPTIONS[0];
     const safeProgram = (ENQUIRY_PROGRAM_OPTIONS as readonly string[]).includes(program)
       ? program
-      : ENQUIRY_PROGRAM_OPTIONS[1];
+      : ENQUIRY_PROGRAM_OPTIONS[0];
     const safeMode = (ENQUIRY_MODE_OPTIONS as readonly string[]).includes(mode)
       ? mode
       : DEFAULT_MODE;

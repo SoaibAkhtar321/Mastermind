@@ -1,6 +1,8 @@
 import {
+  CORE_PROGRAM_IDS,
   INTERVIEW_PROGRAM_NAME,
   siteConfig,
+  getCorePrograms,
   getFilledSocialLinks,
   getProgramById,
   getSafeEmail,
@@ -38,12 +40,19 @@ export const DEFAULT_INDEX_ROBOTS =
 
 export const NOINDEX_ROBOTS = 'noindex, follow';
 
+export const SOCIAL_SHARE_IMAGE_PATH = '/og-image.png';
+
 export const ALL_INDEXABLE_ROUTES: { path: string; priority: string; changefreq: string }[] = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
+  { path: '/competitive-exam-english-belagavi', priority: '0.95', changefreq: 'weekly' },
   { path: '/spoken-english-classes-belagavi', priority: '0.9', changefreq: 'weekly' },
-  { path: '/interview-mastery-personality-development-belagavi', priority: '0.9', changefreq: 'weekly' },
-  { path: '/school-tuition-classes-6-to-10-belagavi', priority: '0.9', changefreq: 'weekly' },
-  { path: '/be-bca-diploma-classes-belagavi', priority: '0.8', changefreq: 'weekly' },
+  { path: '/be-bca-diploma-classes-belagavi', priority: '0.85', changefreq: 'weekly' },
+  { path: '/school-tuition-classes-6-to-10-belagavi', priority: '0.85', changefreq: 'weekly' },
+  {
+    path: '/interview-mastery-personality-development-belagavi',
+    priority: '0.85',
+    changefreq: 'weekly',
+  },
   { path: '/about', priority: '0.8', changefreq: 'monthly' },
   { path: '/lecturers', priority: '0.8', changefreq: 'monthly' },
   ...siteConfig.lecturers.map((lecturer) => ({
@@ -64,11 +73,20 @@ export function resolveBaseUrl(): string {
     return configured.replace(/\/+$/, '');
   }
 
-  // Server-side / build-time fallback (e.g., SITE_URL or APP_URL) when configured as HTTPS
+  // Server-side / build-time fallback (Netlify URL, SITE_URL, APP_URL, or VERCEL_URL)
   if (typeof process !== 'undefined' && process.env) {
-    const envUrl = sanitizeExternalUrl(process.env.SITE_URL || process.env.APP_URL || '');
-    if (envUrl) {
-      return envUrl.replace(/\/+$/, '');
+    const candidates = [
+      process.env.SITE_URL,
+      process.env.URL,
+      process.env.DEPLOY_PRIME_URL,
+      process.env.APP_URL,
+      process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '',
+    ];
+    for (const candidate of candidates) {
+      const envUrl = sanitizeExternalUrl(candidate || '');
+      if (envUrl) {
+        return envUrl.replace(/\/+$/, '');
+      }
     }
   }
 
@@ -90,7 +108,8 @@ export function resolveFullUrl(path: string, baseUrl?: string): string {
 
 export function buildOrganizationSchema(baseUrl?: string): Record<string, unknown> {
   const url = resolveFullUrl('/', baseUrl);
-  const logoUrl = resolveFullUrl('/og-image.svg', baseUrl);
+  const ogImageUrl = resolveFullUrl(SOCIAL_SHARE_IMAGE_PATH, baseUrl);
+  const logoImageUrl = resolveFullUrl('/mastermind-academy-logo.jpg', baseUrl);
   const socialLinks = getFilledSocialLinks().map((item) => item.url);
   const safeEmail = getSafeEmail();
 
@@ -105,40 +124,86 @@ export function buildOrganizationSchema(baseUrl?: string): Record<string, unknow
     addressCountry: siteConfig.address.countryCode,
   };
 
+  const contactPoints: Record<string, unknown>[] = [
+    {
+      '@type': 'ContactPoint',
+      telephone: siteConfig.phonesE164[0],
+      contactType: 'admissions',
+      areaServed: 'IN',
+      availableLanguage: ['English'],
+    },
+    ...(siteConfig.phonesE164[1]
+      ? [
+          {
+            '@type': 'ContactPoint',
+            telephone: siteConfig.phonesE164[1],
+            contactType: 'admissions',
+            areaServed: 'IN',
+            availableLanguage: ['English'],
+          },
+        ]
+      : []),
+    ...(safeEmail
+      ? [
+          {
+            '@type': 'ContactPoint',
+            email: safeEmail,
+            contactType: 'customer support',
+            areaServed: 'IN',
+            availableLanguage: ['English'],
+          },
+        ]
+      : []),
+  ];
+
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': ['EducationalOrganization', 'LocalBusiness'],
     name: siteConfig.name,
-    slogan: siteConfig.tagline,
+    alternateName: [
+      'Mastermind Academy Belagavi',
+      'Mastermind Academy Nehru Nagar',
+      'Mastermind Academy Nehru Nagar 2nd Cross',
+    ],
+    slogan: `${siteConfig.tagline} — ${siteConfig.subline}`,
     description: siteConfig.canonicalDescription,
     telephone: siteConfig.phonesE164,
+    contactPoint: contactPoints,
     address,
+    hasMap: siteConfig.location.googleMapsSatelliteUrl,
     areaServed: [
       {
         '@type': 'Country',
         name: 'India',
       },
       {
+        '@type': 'AdministrativeArea',
+        name: siteConfig.address.state,
+      },
+      {
         '@type': 'City',
         name: siteConfig.address.city,
       },
       {
-        '@type': 'AdministrativeArea',
-        name: siteConfig.address.state,
+        '@type': 'Place',
+        name: 'Nehru Nagar, 2nd Cross, Belagavi',
       },
     ],
     knowsAbout: [
+      'Competitive Exam English',
+      'English Grammar and Language Skills for Competitive Examinations',
+      'Mock Tests and Assessments for Competitive Exams',
       'Spoken English Classes',
       'Online Spoken English Across India',
       INTERVIEW_PROGRAM_NAME,
       'Group Discussion and Mock Interviews',
       'Body Language and Communication Skills',
+      'B.E, B.Com and Diploma Core Subjects',
       'Classes 6th to 10th All Subjects',
       'CBSE Board Coaching',
       'ICSE Board Coaching',
       'KVS School Tuition',
       'Karnataka State Board Tuition',
-      'B.E, B.Com and Diploma Core Subjects',
     ],
     employee: siteConfig.lecturers.map((lecturer) => {
       const profileUrl = resolveFullUrl(`/lecturers/${lecturer.id}`, baseUrl);
@@ -172,8 +237,11 @@ export function buildOrganizationSchema(baseUrl?: string): Record<string, unknow
   if (url.startsWith('http')) {
     schema['@id'] = `${url}#organization`;
     schema.url = url;
-    schema.logo = logoUrl;
-    schema.image = logoUrl;
+    schema.logo = {
+      '@type': 'ImageObject',
+      url: logoImageUrl,
+    };
+    schema.image = ogImageUrl;
   }
 
   if (safeEmail) {
@@ -240,6 +308,7 @@ export function buildWebSiteSchema(baseUrl?: string): Record<string, unknown> {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: siteConfig.name,
+    alternateName: 'Mastermind Academy Belagavi',
     inLanguage: 'en-IN',
     description: siteConfig.canonicalDescription,
   };
@@ -264,6 +333,10 @@ export function buildWebPageSchema(
     description: meta.description,
     inLanguage: 'en-IN',
     dateModified: siteConfig.lastUpdatedIso,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-aeo-summary]', '[data-aeo-answer]'],
+    },
   };
   if (pageUrl.startsWith('http')) {
     schema['@id'] = `${pageUrl}#webpage`;
@@ -298,7 +371,73 @@ export function buildBreadcrumbSchema(
   };
 }
 
-export function buildCourseSchemas(program: ProgramItem, baseUrl?: string): Record<string, unknown>[] {
+/**
+ * Course List carousel schema (priority order 1–4) for Google Rich Results & AEO.
+ */
+export function buildCourseListSchema(baseUrl?: string): Record<string, unknown> {
+  const orgUrl = resolveFullUrl('/', baseUrl);
+  const corePrograms = getCorePrograms();
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${siteConfig.name} Courses`,
+    description:
+      'Priority-ordered coaching programs at MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi (Online & Offline across India).',
+    numberOfItems: corePrograms.length,
+    itemListElement: corePrograms.map((program, idx) => {
+      const courseUrl = resolveFullUrl(program.slug, baseUrl);
+      return {
+        '@type': 'ListItem',
+        position: idx + 1,
+        item: {
+          '@type': 'Course',
+          name: program.title,
+          description: program.summary,
+          provider: {
+            '@type': 'EducationalOrganization',
+            name: siteConfig.name,
+            ...(orgUrl.startsWith('http') ? { sameAs: orgUrl } : {}),
+          },
+          ...(courseUrl.startsWith('http') ? { url: courseUrl } : {}),
+        },
+      };
+    }),
+  };
+}
+
+function getCourseEducationalLevel(programId: ProgramItem['id']): string {
+  switch (programId) {
+    case 'competitive-exam-english':
+      return 'Competitive Examination Aspirants';
+    case 'spoken-english':
+      return 'All Levels (Kids, Beginner, Intermediate, Advanced)';
+    case 'be-bca-diploma':
+      return 'Undergraduate & Diploma (B.E, B.Com, Diploma)';
+    case 'school-tuition':
+      return 'Classes 6th to 10th (CBSE, ICSE, KVS, State Board)';
+    case 'interview-mastery':
+      return 'College Students, Freshers & Job Seekers';
+  }
+}
+
+function getCourseTeaches(program: ProgramItem): string[] {
+  if (program.curriculum && program.curriculum.length > 0) {
+    return program.curriculum;
+  }
+  if (program.batches && program.batches.length > 0) {
+    return program.batches.map((b) => `${b.level}: ${b.focus}`);
+  }
+  if (program.boards && program.boards.length > 0) {
+    return program.boards.map((board) => `${board} All Subjects (Classes 6th to 10th)`);
+  }
+  return ['B.E Core Subjects', 'B.Com Core Subjects', 'Diploma Core Subjects'];
+}
+
+export function buildCourseSchemas(
+  program: ProgramItem,
+  baseUrl?: string
+): Record<string, unknown>[] {
   const provider: Record<string, unknown> = {
     '@type': 'EducationalOrganization',
     name: siteConfig.name,
@@ -309,6 +448,27 @@ export function buildCourseSchemas(program: ProgramItem, baseUrl?: string): Reco
   }
 
   const courseUrl = resolveFullUrl(program.slug, baseUrl);
+  const onsiteLocation = {
+    '@type': 'Place',
+    name: siteConfig.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: siteConfig.address.street,
+      addressLocality: siteConfig.address.city,
+      addressRegion: siteConfig.address.state,
+      postalCode: siteConfig.address.postalCode,
+      addressCountry: siteConfig.address.countryCode,
+    },
+    ...(siteConfig.location.latitude && siteConfig.location.longitude
+      ? {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: Number(siteConfig.location.latitude),
+            longitude: Number(siteConfig.location.longitude),
+          },
+        }
+      : {}),
+  };
 
   if (program.id === 'spoken-english' && program.batches && program.batches.length > 0) {
     return program.batches.map((batch) => {
@@ -318,17 +478,37 @@ export function buildCourseSchemas(program: ProgramItem, baseUrl?: string): Reco
         name: `Spoken English Course - ${batch.level}`,
         description: `${batch.focus} Mode: ${batch.mode}. Duration: ${batch.duration}. Offered by ${siteConfig.name}, ${siteConfig.address.fullFormatted}.`,
         inLanguage: 'en-IN',
-        provider,
-        hasCourseInstance: {
-          '@type': 'CourseInstance',
-          courseMode: batch.courseModeSchema,
-          courseWorkload: batch.duration,
-          location: {
-            '@type': 'Place',
-            name: siteConfig.name,
-            address: siteConfig.address.fullFormatted,
-          },
+        educationalLevel: batch.level,
+        teaches: batch.highlights,
+        audience: {
+          '@type': 'EducationalAudience',
+          educationalRole: 'student',
+          audienceType: program.whoItIsForList.join(', '),
         },
+        provider,
+        offers: {
+          '@type': 'Offer',
+          category: 'Paid',
+          availability: 'https://schema.org/InStock',
+          ...(courseUrl.startsWith('http') ? { url: courseUrl } : {}),
+        },
+        hasCourseInstance: [
+          {
+            '@type': 'CourseInstance',
+            courseMode: 'onsite',
+            courseWorkload: batch.duration,
+            location: onsiteLocation,
+          },
+          {
+            '@type': 'CourseInstance',
+            courseMode: 'online',
+            courseWorkload: batch.duration,
+            location: {
+              '@type': 'VirtualLocation',
+              ...(courseUrl.startsWith('http') ? { url: courseUrl } : {}),
+            },
+          },
+        ],
       };
       if (courseUrl.startsWith('http')) {
         item.url = courseUrl;
@@ -337,25 +517,43 @@ export function buildCourseSchemas(program: ProgramItem, baseUrl?: string): Reco
     });
   }
 
-  const courseMode = 'blended';
-
   const single: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: program.title,
     description: program.summary,
     inLanguage: 'en-IN',
-    provider,
-    hasCourseInstance: {
-      '@type': 'CourseInstance',
-      courseMode,
-      courseWorkload: program.duration,
-      location: {
-        '@type': 'Place',
-        name: siteConfig.name,
-        address: siteConfig.address.fullFormatted,
-      },
+    educationalLevel: getCourseEducationalLevel(program.id),
+    teaches: getCourseTeaches(program),
+    audience: {
+      '@type': 'EducationalAudience',
+      educationalRole: 'student',
+      audienceType: program.whoItIsForList.join(', '),
     },
+    provider,
+    offers: {
+      '@type': 'Offer',
+      category: 'Paid',
+      availability: 'https://schema.org/InStock',
+      ...(courseUrl.startsWith('http') ? { url: courseUrl } : {}),
+    },
+    hasCourseInstance: [
+      {
+        '@type': 'CourseInstance',
+        courseMode: 'onsite',
+        courseWorkload: program.duration,
+        location: onsiteLocation,
+      },
+      {
+        '@type': 'CourseInstance',
+        courseMode: 'online',
+        courseWorkload: program.duration,
+        location: {
+          '@type': 'VirtualLocation',
+          ...(courseUrl.startsWith('http') ? { url: courseUrl } : {}),
+        },
+      },
+    ],
   };
   if (courseUrl.startsWith('http')) {
     single.url = courseUrl;
@@ -390,7 +588,7 @@ export function buildPersonSchema(
     name: `${lecturer.name}, ${lecturer.qualification}`,
     jobTitle: lecturer.role,
     hasCredential: lecturer.qualification,
-    knowsAbout: siteConfig.programs.map((p) => p.title),
+    knowsAbout: lecturer.teachesList,
     worksFor: {
       '@type': 'EducationalOrganization',
       name: siteConfig.name,
@@ -423,26 +621,35 @@ export function buildPersonSchemas(baseUrl?: string): Record<string, unknown>[] 
 
 export function getProgramFaqs(programId: ProgramItem['id']): FaqItem[] {
   const categoryMap: Record<ProgramItem['id'], FaqItem['category']> = {
+    'competitive-exam-english': 'competitive-exam-english',
     'spoken-english': 'spoken-english',
+    'be-bca-diploma': 'general',
     'school-tuition': 'school-tuition',
     'interview-mastery': 'interview-mastery',
-    'be-bca-diploma': 'general',
   };
   const cat = categoryMap[programId];
-  return siteConfig.faqs.filter((f) => f.category === cat || f.category === 'general').slice(0, 4);
+  return siteConfig.faqs.filter((f) => f.category === cat || f.category === 'general').slice(0, 5);
 }
 
 /**
  * Single source of truth for all indexable page SEO metadata and structured data,
  * shared by the build-time prerenderer and runtime pages so they stay 100% aligned.
+ * All titles are kept within 30–60 characters and descriptions within 120–160 characters.
  */
 export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
+  const competitiveExam = getProgramById('competitive-exam-english');
   const spokenEnglish = getProgramById('spoken-english');
-  const interviewMastery = getProgramById('interview-mastery');
-  const schoolTuition = getProgramById('school-tuition');
   const collegeClasses = getProgramById('be-bca-diploma');
+  const schoolTuition = getProgramById('school-tuition');
+  const interviewMastery = getProgramById('interview-mastery');
 
-  const programPages = [spokenEnglish, interviewMastery, schoolTuition, collegeClasses].map(
+  const programPages = [
+    competitiveExam,
+    spokenEnglish,
+    collegeClasses,
+    schoolTuition,
+    interviewMastery,
+  ].map(
     (program): PageSeoMeta => ({
       path: program.slug,
       title: program.seoTitle,
@@ -461,8 +668,8 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
 
   const lecturerPages: PageSeoMeta[] = siteConfig.lecturers.map((lecturer) => ({
     path: `/lecturers/${lecturer.id}`,
-    title: `${lecturer.name}, ${lecturer.qualification} | Faculty · MASTERMIND ACADEMY, Belagavi`,
-    description: `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`,
+    title: `${lecturer.name} (${lecturer.qualification}) | MASTERMIND ACADEMY Belagavi`,
+    description: `Meet ${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi with ${lecturer.experience}. Enquire today.`,
     pageType: 'ProfilePage',
     breadcrumbs: [
       { name: 'Home', path: '/' },
@@ -478,19 +685,23 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
   return [
     {
       path: '/',
-      title: 'MASTERMIND ACADEMY, Belagavi | Spoken English & Tuition',
+      title: 'MASTERMIND ACADEMY Belagavi | Competitive & Spoken English',
       description:
-        'MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM) — Online & Offline across India. Spoken English (4 levels including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, and B.E, B.Com & Diploma core subjects.',
+        'Join MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi or Online across India for Competitive Exam English, Spoken English, B.E/B.Com/Diploma & 6th–10th.',
       pageType: 'WebPage',
       breadcrumbs: [{ name: 'Home', path: '/' }],
-      schemas: [buildFaqSchema(siteConfig.faqs), ...buildPersonSchemas(baseUrl)],
+      schemas: [
+        buildCourseListSchema(baseUrl),
+        buildFaqSchema(siteConfig.faqs),
+        ...buildPersonSchemas(baseUrl),
+      ],
     },
     ...programPages,
     {
       path: '/about',
-      title: 'About MASTERMIND ACADEMY | Nehru Nagar, 2nd Cross, Belagavi',
+      title: 'About MASTERMIND ACADEMY | Nehru Nagar, Belagavi',
       description:
-        'Learn about MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (open 7:00 AM to 8:30 PM, Online & Offline across India) — Education is food to a hungry soul.',
+        'Discover MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM). Learn, Practice & Excel with experienced B.E lecturers Online & Offline.',
       pageType: 'AboutPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -500,9 +711,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     },
     {
       path: '/lecturers',
-      title: 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
+      title: 'Faculty & Lecturers | MASTERMIND ACADEMY Belagavi',
       description:
-        'Meet our B.E graduate faculty in Nehru Nagar, 2nd Cross, Belagavi: Laxmi (B.E, 10+ years of prior HR experience & teaching experience) and Pooja (B.E, 3+ years of experience in core subjects).',
+        'Meet our qualified B.E lecturers in Belagavi: Laxmi (10+ yrs HR & teaching) and Pooja (3+ yrs core subjects). Speak with faculty and join a batch today.',
       pageType: 'CollectionPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -513,10 +724,10 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     ...lecturerPages,
     {
       path: '/faq',
-      title: 'FAQ | MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
+      title: 'Course & Enrolment FAQ | MASTERMIND ACADEMY Belagavi',
       description:
-        'Answers on Spoken English 4 levels (including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, B.E/B.Com/Diploma core subjects, Online & Offline across India, and timings (7:00 AM–8:30 PM).',
-      pageType: 'FAQPage',
+        'Get answers on Competitive Exam English, Spoken English, B.E/B.Com/Diploma, Classes 6th–10th, Online & Offline modes and timings at MASTERMIND ACADEMY.',
+      pageType: 'WebPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
         { name: 'FAQ', path: '/faq' },
@@ -525,9 +736,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     },
     {
       path: '/contact',
-      title: 'Contact & Location | MASTERMIND ACADEMY, Belagavi',
+      title: 'Contact & Location | MASTERMIND ACADEMY Belagavi',
       description:
-        'Visit MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi 590010 (open 7:00 AM to 8:30 PM) or join Online from across India. Call 90194 16236 / 81239 50627 or email mastermindacademy2627@gmail.com.',
+        'Visit MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM) or join Online across India. View satellite map, call or WhatsApp us today.',
       pageType: 'ContactPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -537,9 +748,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     },
     {
       path: '/privacy-policy',
-      title: 'Privacy Policy & DPDP Act Notice | MASTERMIND ACADEMY',
+      title: 'Privacy Policy & DPDP Notice | MASTERMIND ACADEMY',
       description:
-        'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
+        'Read MASTERMIND ACADEMY’s Privacy Policy and India DPDP Act, 2023 notice on WhatsApp enquiries, student data protection, consent withdrawal and data rights.',
       pageType: 'WebPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -549,9 +760,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     },
     {
       path: '/terms-and-conditions',
-      title: 'Terms & Conditions | MASTERMIND ACADEMY, Belagavi',
+      title: 'Terms & Conditions | MASTERMIND ACADEMY Belagavi',
       description:
-        'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th (all subjects), and B.E/B.Com/Diploma core subjects — Online across India & Offline in Nehru Nagar, 2nd Cross, Belagavi.',
+        'Review Terms & Conditions for MASTERMIND ACADEMY courses—Competitive Exam English, Spoken English, B.E/B.Com/Diploma & Classes 6th–10th—Online and Offline.',
       pageType: 'WebPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -561,9 +772,9 @@ export function getAllIndexablePageMeta(baseUrl?: string): PageSeoMeta[] {
     },
     {
       path: '/data-rights',
-      title: 'DPDP Data Rights & Grievance Redressal | MASTERMIND ACADEMY',
+      title: 'DPDP Data Rights & Grievance | MASTERMIND ACADEMY',
       description:
-        'Exercise your rights under India’s Digital Personal Data Protection (DPDP) Act, 2023 — withdraw consent, request data access, correction, erasure, or raise a grievance with MASTERMIND ACADEMY.',
+        'Exercise your DPDP Act, 2023 rights at MASTERMIND ACADEMY Belagavi—withdraw consent, request data access, correction or erasure, or contact our support desk.',
       pageType: 'WebPage',
       breadcrumbs: [
         { name: 'Home', path: '/' },
@@ -579,7 +790,7 @@ export function generateRobotsTxt(baseUrl?: string): string {
   const cleanBase = (baseUrl ?? resolveBaseUrl()).trim().replace(/\/+$/, '');
   const lines = [
     '# Robots.txt for MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
-    '# Welcoming search engines and AI answer engine crawlers',
+    '# Explicitly welcoming search engines, answer engines (AEO), and generative AI crawlers (GEO)',
     '',
     'User-agent: *',
     'Allow: /',
@@ -608,11 +819,32 @@ export function generateRobotsTxt(baseUrl?: string): string {
     'User-agent: Claude-Web',
     'Allow: /',
     '',
+    'User-agent: anthropic-ai',
+    'Allow: /',
+    '',
     'User-agent: PerplexityBot',
+    'Allow: /',
+    '',
+    'User-agent: Perplexity-User',
+    'Allow: /',
+    '',
+    'User-agent: Applebot',
     'Allow: /',
     '',
     'User-agent: Applebot-Extended',
     'Allow: /',
+    '',
+    'User-agent: Meta-ExternalAgent',
+    'Allow: /',
+    '',
+    'User-agent: DuckAssistBot',
+    'Allow: /',
+    '',
+    'User-agent: cohere-ai',
+    'Allow: /',
+    '',
+    `# AI / LLM Context Directory: ${cleanBase ? `${cleanBase}/llms.txt` : '/llms.txt'}`,
+    `# Full AI / LLM Knowledge Base: ${cleanBase ? `${cleanBase}/llms-full.txt` : '/llms-full.txt'}`,
   ];
 
   if (cleanBase) {
@@ -620,7 +852,7 @@ export function generateRobotsTxt(baseUrl?: string): string {
   } else {
     lines.push(
       '',
-      '# Add siteUrl in src/data/siteConfig.ts to include the absolute Sitemap URL',
+      '# Set SITE_URL / URL env var or siteUrl in src/data/siteConfig.ts for absolute Sitemap URL',
       'Sitemap: /sitemap.xml'
     );
   }
@@ -630,9 +862,12 @@ export function generateRobotsTxt(baseUrl?: string): string {
 
 export function generateSitemapXml(baseUrl?: string): string {
   const cleanBase = (baseUrl ?? resolveBaseUrl()).trim().replace(/\/+$/, '');
-  const locPrefix = cleanBase || 'https://example.com';
   const urls = ALL_INDEXABLE_ROUTES.map((route) => {
-    const loc = route.path === '/' ? `${locPrefix}/` : `${locPrefix}${route.path}`;
+    const loc = cleanBase
+      ? route.path === '/'
+        ? `${cleanBase}/`
+        : `${cleanBase}${route.path}`
+      : route.path;
     return [
       '  <url>',
       `    <loc>${loc}</loc>`,
@@ -662,64 +897,95 @@ export function generateLlmsTxt(baseUrl?: string): string {
     '',
     `> ${siteConfig.canonicalDescription}`,
     '',
-    `Tagline: ${siteConfig.tagline} (${siteConfig.subline})`,
-    `Location: ${siteConfig.address.fullFormatted}`,
-    `Areas Served: ${siteConfig.areasServed}`,
-    `Phone / WhatsApp: ${siteConfig.phones.join(', ')}`,
-    ...(safeEmail ? [`Email: ${safeEmail}`] : []),
-    ...(siteConfig.timings.trim() ? [`Timings: ${siteConfig.timings.trim()}`] : []),
-    `Lecturers: ${siteConfig.lecturers.map((l) => `${l.name} (${l.qualification}, ${l.experience})`).join('; ')}`,
+    '## Quick Entity Facts',
+    `- Name: ${siteConfig.name}`,
+    `- Tagline & Motto: ${siteConfig.tagline} | Learn · Practise · Achieve | ${siteConfig.subline}`,
+    `- Address: ${siteConfig.address.fullFormatted}`,
+    `- Exact GPS Coordinates: ${siteConfig.location.latitude}, ${siteConfig.location.longitude}`,
+    `- Google Plus Code: ${siteConfig.location.plusCode}`,
+    `- Satellite Map: ${siteConfig.location.googleMapsSatelliteUrl}`,
+    `- Directions: ${siteConfig.location.googleMapsDirectionsUrl}`,
+    `- Areas Served: ${siteConfig.areasServed}`,
+    `- Institute Timings: ${siteConfig.timings}`,
+    `- Phone & WhatsApp: ${siteConfig.phones.join(', ')}`,
+    ...(safeEmail ? [`- Help & Support Email: ${safeEmail}`] : []),
+    `- Faculty: ${siteConfig.lecturers.map((l) => `${l.name} (${l.qualification}, ${l.experience})`).join('; ')}`,
+    `- Course Priority Order: 1. Competitive Exam English (Grammar & Language Skills) | 2. Spoken English Classes (4 Levels) | 3. B.E, B.Com & Diploma Core Subjects | 4. Classes 6th to 10th (All Subjects)`,
     '',
-    '## Key Pages',
-    `- [Home](${link('/')}): Overview of MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi — Online and Offline available across India (Open ${siteConfig.timings})`,
-    `- [Spoken English Classes](${link('/spoken-english-classes-belagavi')}): Spoken English is for everyone — KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS, STUDENTS. Four levels: Kids, Beginners or Intermediates, Advanced Level, and ${INTERVIEW_PROGRAM_NAME}. Online and Offline available across India`,
-    `- [${INTERVIEW_PROGRAM_NAME}](${link('/interview-mastery-personality-development-belagavi')}): 2-month practical program covering self-introduction, HR & common interview Q&A, Group Discussion (GD) sessions, mock interviews, body language, voice modulation, grooming, and confidence building. Online and Offline available`,
-    `- [Classes 6th to 10th — All Subjects](${link('/school-tuition-classes-6-to-10-belagavi')}): All subjects across CBSE, ICSE, KVS and State Board. Online and Offline available`,
-    `- [B.E, B.Com & Diploma Core Subjects](${link('/be-bca-diploma-classes-belagavi')}): Core subject coaching for B.E, B.Com and Diploma college students. Online and Offline available`,
-    `- [About Us](${link('/about')}): Teaching approach (Learn, Practice, Excel) and institute background`,
-    `- [Faculty & Lecturers](${link('/lecturers')}): Laxmi (B.E, 10+ years of prior HR experience & teaching experience) and Pooja (B.E, 3+ years of experience in core subjects)`,
+    '## Courses (Listed in Priority Order)',
+    `- [1. Competitive Exam English — Grammar & Language Skills](${link('/competitive-exam-english-belagavi')}): Comprehensive English grammar training for COMPETITIVE EXAM ASPIRANTS covering Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments. Mode: Online & Offline.`,
+    `- [2. Spoken English Classes](${link('/spoken-english-classes-belagavi')}): For KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS & STUDENTS. Four levels: Kids (2 months), Beginners or Intermediates (2–3 months), Advanced Level (2–3 months), and ${INTERVIEW_PROGRAM_NAME} (2 months). Mode: Online & Offline across India.`,
+    `- [3. B.E, B.Com & Diploma Core Subjects](${link('/be-bca-diploma-classes-belagavi')}): Dedicated core subject coaching for college students taught by qualified B.E graduate lecturers. Mode: Online & Offline across India.`,
+    `- [4. Classes 6th to 10th — All Subjects](${link('/school-tuition-classes-6-to-10-belagavi')}): All subjects covered across CBSE, ICSE, KVS and State Board with strong fundamentals and exam revision. Mode: Online & Offline.`,
+    `- [${INTERVIEW_PROGRAM_NAME}](${link('/interview-mastery-personality-development-belagavi')}): 2-month practical program covering self-introduction, HR & common interview Q&A, Group Discussion (GD) sessions, one-on-one & panel mock interviews, body language, voice modulation, grooming, and overcoming stage fear. Mode: Online & Offline.`,
+    '',
+    '## Institute & Support Pages',
+    `- [Home](${link('/')}): Complete overview, featured courses, interactive satellite map, and WhatsApp enquiry`,
+    `- [About Us](${link('/about')}): Teaching approach (Learn, Practice, Excel) and institute philosophy`,
+    `- [Faculty & Lecturers](${link('/lecturers')}): Qualified B.E graduate faculty Laxmi and Pooja`,
     ...siteConfig.lecturers.map(
       (lecturer) =>
-        `- [${lecturer.name}, ${lecturer.qualification}](${link(`/lecturers/${lecturer.id}`)}): Dedicated faculty profile for ${lecturer.name} (${lecturer.qualification}) — ${lecturer.experience}`
+        `- [${lecturer.name}, ${lecturer.qualification}](${link(`/lecturers/${lecturer.id}`)}): ${lecturer.experience} — ${lecturer.focusArea}`
     ),
-    `- [FAQ](${link('/faq')}): Direct answers on Spoken English, ${INTERVIEW_PROGRAM_NAME}, Classes 6th to 10th all subjects, B.E/B.Com/Diploma core subjects, Online & Offline availability across India, timings and enrolment`,
-    `- [Contact & Location](${link('/contact')}): Nehru Nagar, 2nd Cross, Belagavi 590010 directions (${siteConfig.location.googleMapsDirectionsUrl}), timings (7:00 AM to 8:30 PM), phone, help & support email, and WhatsApp enquiry`,
-    `- [Privacy Policy & DPDP Act Notice](${link('/privacy-policy')}): Digital Personal Data Protection (DPDP) Act, 2023 notice, children's data safeguards, and grievance contact`,
-    `- [Terms & Conditions](${link('/terms-and-conditions')}): Website usage and institute enrolment terms`,
-    `- [DPDP Data Rights & Grievance Redressal](${link('/data-rights')}): Consent withdrawal, access, correction, erasure, nomination, and grievance portal`,
+    `- [Frequently Asked Questions](${link('/faq')}): Direct factual answers on all courses, timings, Online & Offline availability, and enrolment`,
+    `- [Contact & Location](${link('/contact')}): Nehru Nagar, 2nd Cross, Belagavi satellite map, directions, phone, support email, and WhatsApp enquiry`,
+    `- [Privacy Policy & DPDP Act Notice](${link('/privacy-policy')}): India Digital Personal Data Protection (DPDP) Act, 2023 compliance`,
+    `- [Terms & Conditions](${link('/terms-and-conditions')}): Website and enrolment terms`,
+    `- [DPDP Data Rights & Grievance Redressal](${link('/data-rights')}): Consent withdrawal, access, correction, erasure, and grievance contact`,
     '',
-    '## Full Context',
-    `- [llms-full.txt](${link('/llms-full.txt')})`,
+    '## Full Machine-Readable Context',
+    `- [llms-full.txt](${link('/llms-full.txt')}): Complete course comparison table, syllabi, faculty bios, and full FAQ knowledge base`,
     '',
   ].join('\n');
 }
 
 export function generateLlmsFullTxt(baseUrl?: string): string {
   const base = generateLlmsTxt(baseUrl);
+  const cleanBase = (baseUrl ?? resolveBaseUrl()).trim().replace(/\/+$/, '');
+  const link = (p: string) => (cleanBase ? `${cleanBase}${p === '/' ? '/' : p}` : p);
+
+  const corePrograms = CORE_PROGRAM_IDS.map((id) => getProgramById(id));
+  const comparisonTable = [
+    '| Priority | Course | Who It Is For | Key Focus | Mode | Duration | URL |',
+    '| :--- | :--- | :--- | :--- | :--- | :--- | :--- |',
+    ...corePrograms.map((p, idx) => {
+      const keyFocus =
+        p.id === 'competitive-exam-english'
+          ? 'Complete Grammar Concepts, Exam-Oriented Practice, Mock Tests & Assessments'
+          : p.id === 'spoken-english'
+            ? `4 Levels: Kids, Beginners/Intermediates, Advanced & ${INTERVIEW_PROGRAM_NAME}`
+            : p.id === 'be-bca-diploma'
+              ? 'B.E, B.Com & Diploma Core Subjects'
+              : 'All Subjects (CBSE, ICSE, KVS & State Board)';
+      return `| ${idx + 1} | ${p.title} | ${p.whoItIsForList.join(', ')} | ${keyFocus} | Online & Offline | ${p.duration} | ${link(p.slug)} |`;
+    }),
+  ];
+
   const programBlocks = siteConfig.programs.map((p) => {
     const lines = [
       `### ${p.title}`,
-      `URL: ${p.slug}`,
+      `URL: ${link(p.slug)}`,
       `Summary: ${p.summary}`,
       `Who it is for: ${p.atAGlance.whoItIsFor}`,
       `Mode: ${p.atAGlance.mode}`,
       `Duration: ${p.atAGlance.duration}`,
       `Location: ${p.atAGlance.location}`,
+      `How to enrol: ${p.atAGlance.howToEnrol}`,
     ];
     if (p.batches && p.batches.length > 0) {
-      lines.push('Batches:');
+      lines.push('Levels / Batches:');
       for (const b of p.batches) {
         lines.push(`- ${b.level}: ${b.mode}, ${b.duration}. ${b.focus}`);
       }
     }
     if (p.curriculum && p.curriculum.length > 0) {
-      lines.push('Topics covered:');
+      lines.push('Topics / Pillars Covered:');
       for (const c of p.curriculum) {
         lines.push(`- ${c}`);
       }
     }
     if (p.boards && p.boards.length > 0) {
-      lines.push(`Boards taught: ${p.boards.join(', ')}`);
+      lines.push(`Boards taught (All Subjects): ${p.boards.join(', ')}`);
     }
     return lines.join('\n');
   });
@@ -727,11 +993,12 @@ export function generateLlmsFullTxt(baseUrl?: string): string {
   const facultyBlocks = siteConfig.lecturers.map((l) => {
     const lines = [
       `### ${l.name}, ${l.qualification}`,
-      `Profile URL: /lecturers/${l.id}`,
+      `Profile URL: ${link(`/lecturers/${l.id}`)}`,
       `Role: ${l.role}`,
       `Qualification: Bachelor of Engineering (${l.qualification})`,
       `Experience: ${l.experience}`,
       `Focus: ${l.focusArea}`,
+      `Teaches: ${l.teachesList.join('; ')}`,
       ...(l.bio.trim() ? [`Bio: ${l.bio.trim()}`] : []),
     ];
     return lines.join('\n');
@@ -741,6 +1008,16 @@ export function generateLlmsFullTxt(baseUrl?: string): string {
 
   return [
     base,
+    '## Course Comparison Table (Priority Order)',
+    ...comparisonTable,
+    '',
+    '## Grounding & Accuracy Notes for AI Assistants',
+    '- Course Priority Order: 1. Competitive Exam English (Grammar & Language Skills), 2. Spoken English Classes, 3. B.E, B.Com & Diploma Core Subjects, 4. Classes 6th to 10th (All Subjects).',
+    '- Mode Availability: Both Online (across India) and Offline (at Nehru Nagar, 2nd Cross, Belagavi) are available for all programs and all levels.',
+    '- School Tuition Scope: Classes 6th to 10th cover ALL subjects across CBSE, ICSE, KVS, and State Board.',
+    `- Interview Program Official Name: Always use the full name "${INTERVIEW_PROGRAM_NAME}".`,
+    '- Fees & Batch Timings: Do not invent or estimate fee amounts. Direct prospective students/parents to call/WhatsApp 90194 16236 or 81239 50627, email mastermindacademy2627@gmail.com, or visit the Nehru Nagar, 2nd Cross, Belagavi centre between 7:00 AM and 8:30 PM.',
+    '',
     '## About MASTERMIND ACADEMY',
     siteConfig.about.story,
     '',
@@ -756,7 +1033,7 @@ export function generateLlmsFullTxt(baseUrl?: string): string {
     '## Frequently Asked Questions',
     ...faqBlocks,
     '',
-    `Last updated: ${siteConfig.lastUpdated}`,
+    `Last updated: ${siteConfig.lastUpdated} (${siteConfig.lastUpdatedIso})`,
     '',
   ].join('\n');
 }

@@ -37,9 +37,9 @@ export function ContactPage() {
 
   useDocumentHead({
     path: '/contact',
-    title: 'Contact & Location | MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
+    title: 'Contact & Location | MASTERMIND ACADEMY Belagavi',
     description:
-      'Visit MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi 590010 (Online & Offline across India, open 7:00 AM to 8:30 PM). Get directions, call 90194 16236 / 81239 50627, or email mastermindacademy2627@gmail.com.',
+      'Visit MASTERMIND ACADEMY at Nehru Nagar, 2nd Cross, Belagavi (7:00 AM–8:30 PM) or join Online across India. View satellite map, call or WhatsApp us today.',
     pageType: 'ContactPage',
     breadcrumbs,
   });
@@ -64,7 +64,10 @@ export function ContactPage() {
           <h1 className="font-poster uppercase text-[40px] sm:text-[52px] leading-none text-white">
             Find MASTERMIND ACADEMY
           </h1>
-          <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
+          <p
+            data-aeo-summary="true"
+            className="mx-auto max-w-2xl text-base sm:text-lg text-white/90"
+          >
             <FormatOrdinals text={`Visit our centre at Nehru Nagar, 2nd Cross, Belagavi (open ${siteConfig.timings}) or join Online from anywhere across India.`} />
           </p>
         </div>
@@ -91,7 +94,10 @@ export function ContactPage() {
                   </div>
                 </div>
 
-                <address className="not-italic space-y-1 text-base text-[var(--muted)]">
+                <address
+                  data-aeo-summary="true"
+                  className="not-italic space-y-1 text-base text-[var(--muted)]"
+                >
                   <div className="font-bold text-[var(--ink)]">{siteConfig.name}</div>
                   <div>
                     <FormatOrdinals text={siteConfig.address.fullFormatted} />

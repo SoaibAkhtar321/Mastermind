@@ -28,9 +28,9 @@ export function PrivacyPolicyPage() {
 
   useDocumentHead({
     path: '/privacy-policy',
-    title: 'Privacy Policy & DPDP Act Notice | MASTERMIND ACADEMY',
+    title: 'Privacy Policy & DPDP Notice | MASTERMIND ACADEMY',
     description:
-      'Privacy Policy and Digital Personal Data Protection (DPDP) Act, 2023 notice for MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi. Learn how enquiry data is handled and how to exercise your rights.',
+      'Read MASTERMIND ACADEMY’s Privacy Policy and India DPDP Act, 2023 notice on WhatsApp enquiries, student data protection, consent withdrawal and data rights.',
     pageType: 'WebPage',
     breadcrumbs,
   });

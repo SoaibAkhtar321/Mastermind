@@ -20,9 +20,9 @@ export function TermsPage() {
 
   useDocumentHead({
     path: '/terms-and-conditions',
-    title: 'Terms & Conditions | MASTERMIND ACADEMY, Belagavi',
+    title: 'Terms & Conditions | MASTERMIND ACADEMY Belagavi',
     description:
-      'Terms and Conditions for using the MASTERMIND ACADEMY website and enrolling in Spoken English, Classes 6th to 10th (all subjects), and B.E/B.Com/Diploma core subjects — Online across India & Offline in Nehru Nagar, 2nd Cross, Belagavi.',
+      'Review Terms & Conditions for MASTERMIND ACADEMY courses—Competitive Exam English, Spoken English, B.E/B.Com/Diploma & Classes 6th–10th—Online and Offline.',
     pageType: 'WebPage',
     breadcrumbs,
   });
@@ -38,7 +38,7 @@ export function TermsPage() {
     {
       title: '2. Programs & Batch Formats',
       body: [
-        `${siteConfig.name} offers three educational tracks: (1) Spoken English Classes across four levels (Kids, Beginners or Intermediates, Advanced Level, and ${INTERVIEW_PROGRAM_NAME}), (2) Classes 6th to 10th covering all subjects across CBSE, ICSE, KVS and State Board, and (3) Core Subjects for B.E, B.Com and Diploma college students.`,
+        `${siteConfig.name} offers four educational tracks: (1) Competitive Exam English (Grammar & Language Skills — Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments), (2) Spoken English Classes across four levels (Kids, Beginners or Intermediates, Advanced Level, and ${INTERVIEW_PROGRAM_NAME}), (3) Core Subjects for B.E, B.Com and Diploma college students, and (4) Classes 6th to 10th covering all subjects across CBSE, ICSE, KVS and State Board.`,
         `Institute hours are ${siteConfig.timings}. Both Online (across India) and Offline (at our Nehru Nagar, 2nd Cross, Belagavi centre) options are available.`,
       ],
     },

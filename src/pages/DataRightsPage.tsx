@@ -52,9 +52,9 @@ export function DataRightsPage() {
 
   useDocumentHead({
     path: '/data-rights',
-    title: 'DPDP Data Rights & Grievance Redressal | MASTERMIND ACADEMY',
+    title: 'DPDP Data Rights & Grievance | MASTERMIND ACADEMY',
     description:
-      'Exercise your rights under India’s Digital Personal Data Protection (DPDP) Act, 2023 — withdraw consent, request data access, correction, erasure, or raise a grievance with MASTERMIND ACADEMY.',
+      'Exercise your DPDP Act, 2023 rights at MASTERMIND ACADEMY Belagavi—withdraw consent, request data access, correction or erasure, or contact our support desk.',
     pageType: 'WebPage',
     breadcrumbs,
   });

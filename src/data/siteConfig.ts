@@ -44,7 +44,12 @@ export interface ProgramBatch {
 }
 
 export interface ProgramItem {
-  id: 'school-tuition' | 'spoken-english' | 'interview-mastery' | 'be-bca-diploma';
+  id:
+    | 'competitive-exam-english'
+    | 'spoken-english'
+    | 'be-bca-diploma'
+    | 'school-tuition'
+    | 'interview-mastery';
   slug: string;
   shortTitle: string;
   title: string;
@@ -119,7 +124,12 @@ export interface Lecturer {
 export interface FaqItem {
   question: string;
   answer: string;
-  category: 'spoken-english' | 'school-tuition' | 'interview-mastery' | 'general';
+  category:
+    | 'competitive-exam-english'
+    | 'spoken-english'
+    | 'school-tuition'
+    | 'interview-mastery'
+    | 'general';
 }
 
 export interface Testimonial {
@@ -141,6 +151,12 @@ export interface FeeRow {
   duration: string;
   fee: string;
 }
+
+export const COMPETITIVE_EXAM_HIGHLIGHTS = [
+  'Complete Grammar Concepts',
+  'Exam-Oriented Practice',
+  'Mock Tests & Assessments',
+] as const;
 
 export const INTERVIEW_PROGRAM_NAME =
   'Interview Mastery with Personality Skill Development Program';
@@ -169,9 +185,9 @@ export const siteConfig = {
   tagline: 'Learn · Practice · Excel',
   subline: 'Education is food to a hungry soul.',
   canonicalDescription:
-    'MASTERMIND ACADEMY is a coaching institute in Nehru Nagar, 2nd Cross, Belagavi, Karnataka (open 7:00 AM to 8:30 PM), offering Online and Offline classes across India across three dedicated programs: Spoken English classes (Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery with Personality Skill Development Program), all subjects for Classes 6th to 10th (CBSE, ICSE, KVS and State Board), and core subjects for B.E, B.Com and Diploma students.',
+    'MASTERMIND ACADEMY is a coaching institute in Nehru Nagar, 2nd Cross, Belagavi, Karnataka (open 7:00 AM to 8:30 PM), offering Online and Offline classes across Belagavi and India across four dedicated programs: Competitive Exam English (Grammar & Language Skills for competitive examinations), Spoken English classes (Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery with Personality Skill Development Program), core subjects for B.E, B.Com and Diploma students, and all subjects for Classes 6th to 10th (CBSE, ICSE, KVS and State Board).',
   lastUpdated: 'November 2026',
-  lastUpdatedIso: '2026-11-22',
+  lastUpdatedIso: '2026-11-23',
 
   // Recoloured official logo on clean white background + original file fallback
   brand: {
@@ -182,12 +198,13 @@ export const siteConfig = {
 
   // Top 32px Navy & Gold scrolling ticker (add "Admissions Open" here only when ready)
   tickerMessages: [
+    'NOW TEACHING: COMPETITIVE EXAM ENGLISH · GRAMMAR & LANGUAGE SKILLS (ONLINE & OFFLINE)',
     'SPOKEN ENGLISH · ONLINE AND OFFLINE AVAILABLE ACROSS INDIA',
+    'CORE SUBJECTS FOR B.E, B.COM & DIPLOMA',
     'CLASSES 6TH TO 10TH · ALL SUBJECTS (CBSE, ICSE, KVS, STATE BOARD)',
     'INTERVIEW MASTERY WITH PERSONALITY SKILL DEVELOPMENT PROGRAM',
-    'CORE SUBJECTS FOR B.E, B.COM & DIPLOMA',
     'NEHRU NAGAR, 2ND CROSS, BELAGAVI · OPEN 7:00 AM TO 8:30 PM',
-    'EDUCATION IS FOOD TO A HUNGRY SOUL',
+    'LEARN · PRACTISE · ACHIEVE · EDUCATION IS FOOD TO A HUNGRY SOUL',
     'CALL 90194 16236',
   ] as string[],
 
@@ -198,6 +215,7 @@ export const siteConfig = {
     heroMain: '/images/hero-main.webp',
     heroSecondaryOne: '/images/spoken-english.webp',
     heroSecondaryTwo: '/images/interview-mastery.webp',
+    competitiveExamVisual: '/images/study-space.webp',
     spokenEnglishVisual: '/images/spoken-english.webp',
     interviewMasteryVisual: '/images/interview-mastery.webp',
     schoolTuitionVisual: '/images/school-tuition.webp',
@@ -207,8 +225,29 @@ export const siteConfig = {
     studySpaceVisual: '/images/study-space.webp',
   },
 
-  // 3 HTML/CSS Poster Banner Slides for the Home Hero Carousel (3 Core Programs)
+  // 4 HTML/CSS Poster Banner Slides for the Home Hero Carousel (Priority Order: 1. Competitive Exam English, 2. Spoken English, 3. B.E/B.Com/Diploma, 4. Classes 6th to 10th)
   bannerSlides: [
+    {
+      id: 'slide-competitive-exam-english',
+      programId: 'competitive-exam-english',
+      eyebrow: 'NEW · COMPETITIVE EXAMS COACHING · NEHRU NAGAR, 2ND CROSS, BELAGAVI',
+      headline: 'COMPETITIVE EXAM ENGLISH',
+      subline:
+        'Grammar & Language Skills — Comprehensive English grammar training for COMPETITIVE EXAM ASPIRANTS. Online & Offline available.',
+      pills: [
+        'Complete Grammar Concepts',
+        'Exam-Oriented Practice',
+        'Mock Tests & Assessments',
+        'Mode: Online & Offline',
+      ],
+      ctaLabel: 'Enquire Now',
+      ctaHref: '/competitive-exam-english-belagavi',
+      enquiryProgram: 'Competitive Exam English (Grammar & Language Skills)',
+      image: '/images/study-space.webp',
+      imageAlt:
+        'Competitive exam aspirants practising English grammar and timed assessments in a bright classroom',
+      transparentCutout: false,
+    },
     {
       id: 'slide-spoken-english',
       programId: 'spoken-english',
@@ -230,20 +269,6 @@ export const siteConfig = {
       transparentCutout: false,
     },
     {
-      id: 'slide-school-tuition',
-      programId: 'school-tuition',
-      eyebrow: 'SCHOOL TUITION · ALL SUBJECTS · ONLINE & OFFLINE',
-      headline: 'CLASSES 6TH TO 10TH',
-      subline: 'All subjects covered for CBSE, ICSE, KVS and State Board students.',
-      pills: ['All Subjects', 'CBSE & ICSE', 'KVS & State Board'],
-      ctaLabel: 'Explore Tuition',
-      ctaHref: '/school-tuition-classes-6-to-10-belagavi',
-      enquiryProgram: 'Classes 6th to 10th (All Subjects)',
-      image: '/images/school-tuition.webp',
-      imageAlt: 'School learners writing notes and studying textbooks at a wooden desk',
-      transparentCutout: false,
-    },
-    {
       id: 'slide-college-classes',
       programId: 'be-bca-diploma',
       eyebrow: 'COLLEGE COACHING · CORE SUBJECTS · ONLINE & OFFLINE',
@@ -257,15 +282,30 @@ export const siteConfig = {
       imageAlt: 'College learners collaborating over technical notebooks and a laptop',
       transparentCutout: false,
     },
+    {
+      id: 'slide-school-tuition',
+      programId: 'school-tuition',
+      eyebrow: 'SCHOOL TUITION · ALL SUBJECTS · ONLINE & OFFLINE',
+      headline: 'CLASSES 6TH TO 10TH',
+      subline: 'All subjects covered for CBSE, ICSE, KVS and State Board students.',
+      pills: ['All Subjects', 'CBSE & ICSE', 'KVS & State Board'],
+      ctaLabel: 'Explore Tuition',
+      ctaHref: '/school-tuition-classes-6-to-10-belagavi',
+      enquiryProgram: 'Classes 6th to 10th (All Subjects)',
+      image: '/images/school-tuition.webp',
+      imageAlt: 'School learners writing notes and studying textbooks at a wooden desk',
+      transparentCutout: false,
+    },
   ] as BannerSlide[],
 
   // Real verifiable facts for the red Facts Band
   facts: [
     {
-      id: 'classes',
-      display: '6th–10th',
-      label: 'All Subjects',
-      sublabel: 'CBSE, ICSE, KVS, State',
+      id: 'tracks',
+      display: '4',
+      countTarget: 4,
+      label: 'Focused Courses',
+      sublabel: 'Competitive Exam English, Spoken English, B.E/B.Com/Diploma & Classes 6th–10th',
     },
     {
       id: 'levels',
@@ -275,11 +315,10 @@ export const siteConfig = {
       sublabel: 'Including Interview Mastery with Personality Skill Development Program',
     },
     {
-      id: 'streams',
-      display: '3',
-      countTarget: 3,
-      label: 'College Streams',
-      sublabel: 'B.E, B.Com & Diploma Core Subjects',
+      id: 'classes',
+      display: '6th–10th',
+      label: 'All Subjects',
+      sublabel: 'CBSE, ICSE, KVS & State Board',
     },
     {
       id: 'modes',
@@ -340,21 +379,21 @@ export const siteConfig = {
   },
 
   hero: {
-    headline: 'Confidence in English. Strength in studies. Readiness for the interview room.',
+    headline: 'Confidence in English. Strength in studies. Readiness for competitive exams and interviews.',
     subcopy:
-      'At MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (Online and Offline available across India), we offer Spoken English classes (4 levels including Interview Mastery with Personality Skill Development Program), all subjects for Classes 6th to 10th, and core subjects for B.E, B.Com and Diploma students.',
+      'At MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi (Online and Offline available across India), we offer Competitive Exam English (Grammar & Language Skills), Spoken English classes (4 levels including Interview Mastery with Personality Skill Development Program), core subjects for B.E, B.Com and Diploma students, and all subjects for Classes 6th to 10th.',
     highlights: [
+      'Competitive Exam English — Grammar & Language Skills (Complete Grammar Concepts, Exam-Oriented Practice, Mock Tests & Assessments)',
       'Spoken English (Kids, Beginners or Intermediates, Advanced Level & Interview Mastery with Personality Skill Development Program)',
-      'Classes 6th to 10th — All Subjects (CBSE, ICSE, KVS, State Board)',
       'Core subjects for B.E, B.Com and Diploma students',
+      'Classes 6th to 10th — All Subjects (CBSE, ICSE, KVS, State Board)',
       'Online and Offline available across India · Open 7:00 AM to 8:30 PM',
-      'Taught by qualified B.E graduate lecturers (Laxmi & Pooja)',
     ],
   },
 
   about: {
     story:
-      'MASTERMIND ACADEMY is a learning centre in Nehru Nagar, 2nd Cross, Belagavi, open from 7:00 AM to 8:30 PM with Online and Offline options available across India. Built around one simple idea — students learn best when they practise, not just listen — our classes are small and personal. Every student gets attention, every doubt gets answered, and every session gives them a chance to speak, write and think for themselves. Whether a child needs guidance across all school subjects or a graduate is preparing through our Interview Mastery with Personality Skill Development Program, we work at their pace until they feel ready.',
+      'MASTERMIND ACADEMY is a learning centre in Nehru Nagar, 2nd Cross, Belagavi, open from 7:00 AM to 8:30 PM with Online and Offline options available across India. Built around one simple idea — students learn best when they practise, not just listen — our classes are small and personal. Every student gets attention, every doubt gets answered, and every session gives them a chance to speak, write and think for themselves. Whether an aspirant is preparing English grammar for competitive exams, building Spoken English fluency, mastering B.E, B.Com or Diploma core subjects, or studying all subjects from Class 6th to 10th, we work at their pace until they feel ready.',
     approach: [
       {
         step: '01',
@@ -364,12 +403,12 @@ export const siteConfig = {
       {
         step: '02',
         title: 'Practice',
-        description: 'Regular speaking, writing and revision, so nothing stays theoretical.',
+        description: 'Regular speaking, writing, mock tests and revision, so nothing stays theoretical.',
       },
       {
         step: '03',
         title: 'Excel',
-        description: 'The confidence to perform in exams, interviews and everyday life.',
+        description: 'The confidence to perform in competitive exams, academics, interviews and everyday life.',
       },
     ],
     leadershipNote:
@@ -383,9 +422,9 @@ export const siteConfig = {
         'Learn from Laxmi (B.E, 10+ years of prior HR experience and teaching experience) and Pooja (B.E, 3+ years of experience in core subjects) who explain concepts in simple language and answer every doubt patiently.',
     },
     {
-      title: 'Three focused academic & communication tracks',
+      title: 'Four focused competitive, communication & academic tracks',
       detail:
-        'Spoken English classes across 4 levels (including Interview Mastery with Personality Skill Development Program), all subjects from Class 6th to 10th (CBSE, ICSE, KVS, State Board), and core subjects for B.E, B.Com and Diploma students.',
+        'Competitive Exam English (Grammar & Language Skills), Spoken English classes across 4 levels (including Interview Mastery with Personality Skill Development Program), core subjects for B.E, B.Com and Diploma students, and all subjects from Class 6th to 10th (CBSE, ICSE, KVS, State Board).',
     },
     {
       title: 'Online and Offline available across India',
@@ -393,9 +432,9 @@ export const siteConfig = {
         'Attend classroom sessions at Nehru Nagar, 2nd Cross, Belagavi (open 7:00 AM to 8:30 PM), or join interactive online classes from anywhere across India.',
     },
     {
-      title: 'Short, goal-based Spoken English courses of 2 to 3 months',
+      title: 'Exam-oriented grammar training & mock assessments',
       detail:
-        'Focused 2 to 3 month courses help KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS and STUDENTS build steady speaking fluency and interview readiness without dragging through theory.',
+        'Comprehensive English grammar training for COMPETITIVE EXAM ASPIRANTS combining Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments.',
     },
     {
       title: 'Focus on speaking practice and concept clarity',
@@ -411,23 +450,84 @@ export const siteConfig = {
 
   homeAtAGlance: {
     whoItIsFor:
-      'KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS, STUDENTS (Spoken English), School students (Classes 6th to 10th — All Subjects), and College students (B.E, B.Com, Diploma Core Subjects)',
+      'COMPETITIVE EXAM ASPIRANTS, Spoken English learners (KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS, STUDENTS), College students (B.E, B.Com, Diploma Core Subjects), and School students (Classes 6th to 10th — All Subjects)',
     mode: 'Online and Offline available (Nehru Nagar, 2nd Cross, Belagavi & Across India)',
     duration:
-      '2 to 3 months for Spoken English (4 levels); ongoing academic support for Classes 6th to 10th and B.E, B.Com & Diploma core subjects',
+      'Structured exam-oriented batches for Competitive Exam English; 2 to 3 months for Spoken English (4 levels); ongoing academic support for B.E, B.Com & Diploma and Classes 6th to 10th',
     location: 'Nehru Nagar, 2nd Cross, Belagavi, Karnataka 590010 & Online across India',
     howToEnrol: 'Call 90194 16236 or 81239 50627, send a WhatsApp enquiry, or visit the centre',
   },
 
   programs: [
     {
+      id: 'competitive-exam-english',
+      slug: '/competitive-exam-english-belagavi',
+      shortTitle: 'Competitive Exam English',
+      title: 'Competitive Exam English — Grammar & Language Skills',
+      seoTitle: 'Competitive Exam English Coaching | MASTERMIND ACADEMY',
+      seoDescription:
+        'Master Competitive Exam English grammar with complete concepts, exam practice & mock tests at MASTERMIND ACADEMY Belagavi. Online & Offline. Enquire now.',
+      h1: 'Competitive Exam English — Grammar & Language Skills',
+      summary:
+        'Comprehensive English grammar training for competitive examinations for COMPETITIVE EXAM ASPIRANTS in Belagavi and across India — covering Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments (Mode: Online & Offline).',
+      whoItIsFor: 'COMPETITIVE EXAM ASPIRANTS',
+      whoItIsForList: [
+        'COMPETITIVE EXAM ASPIRANTS',
+        'JOB SEEKERS & GRADUATES',
+        'LOCAL & ALL-INDIA EXAM CANDIDATES',
+      ],
+      mode: 'Online & Offline available (Nehru Nagar, 2nd Cross, Belagavi & Across India)',
+      duration: 'Structured exam-oriented batch with mock tests & assessments',
+      curriculum: [
+        'Complete Grammar Concepts',
+        'Exam-Oriented Practice',
+        'Mock Tests & Assessments',
+        'Error spotting, sentence improvement & fill-in-the-blanks drills',
+        'Vocabulary building, usage accuracy & reading comprehension',
+        'Time-bound test strategy & personal doubt clearing',
+      ],
+      whatsappMessage:
+        'Hello MASTERMIND ACADEMY, I would like details about the Competitive Exam English (Grammar & Language Skills) course — Online / Offline.',
+      atAGlance: {
+        whoItIsFor: 'COMPETITIVE EXAM ASPIRANTS',
+        whoItIsForList: ['COMPETITIVE EXAM ASPIRANTS'],
+        mode: 'Online & Offline available',
+        duration: 'Complete Grammar Concepts, Exam-Oriented Practice & Mock Tests',
+        location: 'Nehru Nagar, 2nd Cross, Belagavi, Karnataka 590010 & Online across India',
+        howToEnrol: 'Call 90194 16236 / 81239 50627 or send a WhatsApp enquiry',
+      },
+      aeoSections: [
+        {
+          question:
+            'What is covered in the Competitive Exam English course at MASTERMIND ACADEMY?',
+          directAnswer:
+            'Competitive Exam English — Grammar & Language Skills at MASTERMIND ACADEMY offers comprehensive English grammar training for competitive examinations built on three pillars: Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments, available in both Online & Offline modes.',
+          detail:
+            'Designed for COMPETITIVE EXAM ASPIRANTS in Belagavi and across India, our focused classes follow the Learn · Practise · Achieve approach with clear explanations, regular exam-style drills, and individual performance feedback.',
+        },
+        {
+          question:
+            'Who can join Competitive Exam English coaching in Belagavi and online?',
+          directAnswer:
+            'This course is built for COMPETITIVE EXAM ASPIRANTS preparing for local, state, and national competitive examinations who want complete mastery of English grammar and language skills.',
+          detail:
+            'Local aspirants in Nehru Nagar, 2nd Cross and across Belagavi can attend Offline classroom batches (open 7:00 AM to 8:30 PM), while students across India can join live Online classes.',
+        },
+      ],
+      relatedSlugs: [
+        '/spoken-english-classes-belagavi',
+        '/be-bca-diploma-classes-belagavi',
+        '/school-tuition-classes-6-to-10-belagavi',
+      ],
+    },
+    {
       id: 'spoken-english',
       slug: '/spoken-english-classes-belagavi',
       shortTitle: 'Spoken English Classes',
       title: 'Spoken English Classes (Online and Offline)',
-      seoTitle: 'Spoken English Classes in Belagavi & Online Across India | MASTERMIND ACADEMY',
+      seoTitle: 'Spoken English Classes in Belagavi | MASTERMIND ACADEMY',
       seoDescription:
-        'Online and Offline Spoken English classes across India for KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS & STUDENTS. 4 levels including Interview Mastery with Personality Skill Development Program.',
+        'Join Online & Offline Spoken English classes across India for Kids, Housewives, Freshers & Job Seekers. 4 levels including Interview Mastery. Enrol today.',
       h1: 'Spoken English Classes — Online and Offline Across India',
       summary:
         'Spoken English is for everyone: KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS and STUDENTS. Four structured levels — Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery with Personality Skill Development Program — with Online and Offline available.',
@@ -519,60 +619,55 @@ export const siteConfig = {
         },
       ],
       relatedSlugs: [
+        '/competitive-exam-english-belagavi',
         '/interview-mastery-personality-development-belagavi',
-        '/school-tuition-classes-6-to-10-belagavi',
-        '/contact',
+        '/be-bca-diploma-classes-belagavi',
       ],
     },
     {
-      id: 'interview-mastery',
-      slug: '/interview-mastery-personality-development-belagavi',
-      shortTitle: INTERVIEW_PROGRAM_NAME,
-      title: INTERVIEW_PROGRAM_NAME,
-      seoTitle:
-        'Interview Mastery with Personality Skill Development Program | MASTERMIND ACADEMY',
+      id: 'be-bca-diploma',
+      slug: '/be-bca-diploma-classes-belagavi',
+      shortTitle: 'B.E, B.Com & Diploma (Core Subjects)',
+      title: 'Core Subjects for B.E, B.Com and Diploma Students',
+      seoTitle: 'B.E, B.Com & Diploma Core Coaching | MASTERMIND ACADEMY',
       seoDescription:
-        'Practical 2-month Interview Mastery with Personality Skill Development Program (Online & Offline across India) covering self-introduction, GD sessions, mock interviews, body language and grooming.',
-      h1: 'Interview Mastery with Personality Skill Development Program',
+        'Dedicated core subject coaching for B.E, B.Com & Diploma students by B.E lecturers at MASTERMIND ACADEMY Belagavi. Online & Offline available. Call today.',
+      h1: 'Core Subjects for B.E, B.Com and Diploma Students',
       summary:
-        'A practical 2-month program (Online and Offline available across India) for COLLEGE STUDENTS, FRESHERS and JOB SEEKERS covering self-introduction, Group Discussion (GD) sessions, mock interviews, body language, communication skills and grooming.',
-      whoItIsFor: 'COLLEGE STUDENTS, FRESHERS and JOB SEEKERS',
-      whoItIsForList: ['COLLEGE STUDENTS', 'FRESHERS', 'JOB SEEKERS'],
-      mode: 'Online and Offline available (Nehru Nagar, 2nd Cross, Belagavi & Across India)',
-      duration: '2 months',
-      curriculum: [...INTERVIEW_PROGRAM_TOPICS],
+        'Dedicated core subject coaching for college students pursuing B.E, B.Com and Diploma courses, taught by qualified B.E graduate lecturers — Online and Offline available.',
+      whoItIsFor: 'COLLEGE STUDENTS pursuing B.E, B.Com and Diploma courses',
+      whoItIsForList: [
+        'B.E (ENGINEERING) STUDENTS',
+        'B.COM STUDENTS',
+        'DIPLOMA STUDENTS',
+      ],
+      mode: 'Online and Offline available (Nehru Nagar, 2nd Cross, Belagavi & Across India · Open 7:00 AM to 8:30 PM)',
+      duration: 'Semester-aligned core subject coaching',
+      subjects: [], // Hidden in UI until individual subject list is confirmed
       whatsappMessage:
-        'Hello MASTERMIND ACADEMY, I would like to enquire about the 2-month Interview Mastery with Personality Skill Development Program (Online / Offline).',
+        'Hello MASTERMIND ACADEMY, I would like to ask about core subject classes for B.E / B.Com / Diploma students (Online / Offline).',
       atAGlance: {
-        whoItIsFor: 'COLLEGE STUDENTS, FRESHERS, JOB SEEKERS',
-        whoItIsForList: ['COLLEGE STUDENTS', 'FRESHERS', 'JOB SEEKERS'],
-        mode: 'Online and Offline available',
-        duration: '2 months',
+        whoItIsFor: 'B.E, B.Com and Diploma COLLEGE STUDENTS',
+        whoItIsForList: ['B.E STUDENTS', 'B.COM STUDENTS', 'DIPLOMA STUDENTS'],
+        mode: 'Online and Offline available (7:00 AM to 8:30 PM)',
+        duration: 'Ongoing core subject academic coaching',
         location: 'Nehru Nagar, 2nd Cross, Belagavi, Karnataka 590010 & Online across India',
-        howToEnrol: 'Call 90194 16236 / 81239 50627 or WhatsApp us for batch details',
+        howToEnrol: 'Call 90194 16236 / 81239 50627 or WhatsApp us with your course and semester',
       },
       aeoSections: [
         {
           question:
-            'What does the Interview Mastery with Personality Skill Development Program cover?',
+            'Does MASTERMIND ACADEMY teach core subjects for B.E, B.Com and Diploma students?',
           directAnswer:
-            'The 2-month Interview Mastery with Personality Skill Development Program at MASTERMIND ACADEMY (Online and Offline available across India) provides self-introduction coaching, answering common and HR interview questions, Group Discussion (GD) sessions, one-on-one and panel mock interviews, body language, posture, voice modulation, eye contact, presentation skills, and professional grooming.',
+            'Yes, MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi offers dedicated coaching in core subjects for B.E, B.Com and Diploma students — with Online and Offline options available across India. Taught by qualified B.E graduate lecturers, including Pooja (B.E) with 3+ years of experience in core subjects, sessions focus on clear fundamentals, problem solving and exam readiness.',
           detail:
-            'We work at each learner’s pace so FRESHERS, COLLEGE STUDENTS and JOB SEEKERS who feel nervous about an interview can practise speaking clearly and calmly until they feel ready.',
-        },
-        {
-          question:
-            'Who teaches the Interview Mastery with Personality Skill Development Program?',
-          directAnswer:
-            'The program is guided by Laxmi (B.E), who has 10+ years of prior HR experience along with teaching experience, helping learners understand real interview expectations, Group Discussion dynamics, confident body language and clear answers.',
-          detail:
-            'Sessions emphasise practical speaking, live GD rounds and realistic mock interviews rather than only listening to theory.',
+            'Call or message us on WhatsApp with your stream (B.E, B.Com or Diploma) and semester to check current subject batches and timings between 7:00 AM and 8:30 PM.',
         },
       ],
       relatedSlugs: [
+        '/competitive-exam-english-belagavi',
         '/spoken-english-classes-belagavi',
-        '/be-bca-diploma-classes-belagavi',
-        '/contact',
+        '/school-tuition-classes-6-to-10-belagavi',
       ],
     },
     {
@@ -580,9 +675,9 @@ export const siteConfig = {
       slug: '/school-tuition-classes-6-to-10-belagavi',
       shortTitle: 'Classes 6th to 10th (All Subjects)',
       title: 'Classes 6th to 10th — All Subjects (CBSE, ICSE, KVS, State Board)',
-      seoTitle: 'Classes 6th to 10th Tuition (All Subjects) | MASTERMIND ACADEMY',
+      seoTitle: 'Classes 6th to 10th Tuition Belagavi | MASTERMIND ACADEMY',
       seoDescription:
-        'All subjects tuition for Classes 6th to 10th across CBSE, ICSE, KVS and State Board at MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi (Online & Offline available). Open 7:00 AM to 8:30 PM.',
+        'All subjects tuition for Classes 6th to 10th across CBSE, ICSE, KVS & State Board at MASTERMIND ACADEMY Belagavi. Online & Offline available. Enquire now.',
       h1: 'Classes 6th to 10th — All Subjects (CBSE, ICSE, KVS & State Board)',
       summary:
         'Complete coaching for all subjects from Class 6th to 10th across CBSE, ICSE, KVS and State Board — with Online and Offline options available. We help students build strong basics, finish their syllabus on time and prepare calmly for exams.',
@@ -626,55 +721,59 @@ export const siteConfig = {
         },
       ],
       relatedSlugs: [
+        '/competitive-exam-english-belagavi',
         '/spoken-english-classes-belagavi',
         '/be-bca-diploma-classes-belagavi',
-        '/lecturers',
       ],
     },
     {
-      id: 'be-bca-diploma',
-      slug: '/be-bca-diploma-classes-belagavi',
-      shortTitle: 'B.E, B.Com & Diploma (Core Subjects)',
-      title: 'Core Subjects for B.E, B.Com and Diploma Students',
-      seoTitle: 'B.E, B.Com & Diploma Core Subjects | MASTERMIND ACADEMY',
+      id: 'interview-mastery',
+      slug: '/interview-mastery-personality-development-belagavi',
+      shortTitle: INTERVIEW_PROGRAM_NAME,
+      title: INTERVIEW_PROGRAM_NAME,
+      seoTitle: 'Interview Mastery & Personality Skills | MASTERMIND ACADEMY',
       seoDescription:
-        'Core subject coaching for B.E, B.Com and Diploma students (Online & Offline available across India) at MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi. Open 7:00 AM to 8:30 PM.',
-      h1: 'Core Subjects for B.E, B.Com and Diploma Students',
+        '2-month Interview Mastery with Personality Skill Development Program: self-intro, GD sessions, mock interviews & body language. Online & Offline. Join now.',
+      h1: 'Interview Mastery with Personality Skill Development Program',
       summary:
-        'Dedicated core subject coaching for college students pursuing B.E, B.Com and Diploma courses, taught by qualified B.E graduate lecturers — Online and Offline available.',
-      whoItIsFor: 'COLLEGE STUDENTS pursuing B.E, B.Com and Diploma courses',
-      whoItIsForList: [
-        'B.E (ENGINEERING) STUDENTS',
-        'B.COM STUDENTS',
-        'DIPLOMA STUDENTS',
-      ],
-      mode: 'Online and Offline available (Nehru Nagar, 2nd Cross, Belagavi & Across India · Open 7:00 AM to 8:30 PM)',
-      duration: 'Semester-aligned core subject coaching',
-      subjects: [], // Hidden in UI until individual subject list is confirmed
+        'A practical 2-month program (Online and Offline available across India) for COLLEGE STUDENTS, FRESHERS and JOB SEEKERS covering self-introduction, Group Discussion (GD) sessions, mock interviews, body language, communication skills and grooming.',
+      whoItIsFor: 'COLLEGE STUDENTS, FRESHERS and JOB SEEKERS',
+      whoItIsForList: ['COLLEGE STUDENTS', 'FRESHERS', 'JOB SEEKERS'],
+      mode: 'Online and Offline available (Nehru Nagar, 2nd Cross, Belagavi & Across India)',
+      duration: '2 months',
+      curriculum: [...INTERVIEW_PROGRAM_TOPICS],
       whatsappMessage:
-        'Hello MASTERMIND ACADEMY, I would like to ask about core subject classes for B.E / B.Com / Diploma students (Online / Offline).',
+        'Hello MASTERMIND ACADEMY, I would like to enquire about the 2-month Interview Mastery with Personality Skill Development Program (Online / Offline).',
       atAGlance: {
-        whoItIsFor: 'B.E, B.Com and Diploma COLLEGE STUDENTS',
-        whoItIsForList: ['B.E STUDENTS', 'B.COM STUDENTS', 'DIPLOMA STUDENTS'],
-        mode: 'Online and Offline available (7:00 AM to 8:30 PM)',
-        duration: 'Ongoing core subject academic coaching',
+        whoItIsFor: 'COLLEGE STUDENTS, FRESHERS, JOB SEEKERS',
+        whoItIsForList: ['COLLEGE STUDENTS', 'FRESHERS', 'JOB SEEKERS'],
+        mode: 'Online and Offline available',
+        duration: '2 months',
         location: 'Nehru Nagar, 2nd Cross, Belagavi, Karnataka 590010 & Online across India',
-        howToEnrol: 'Call 90194 16236 / 81239 50627 or WhatsApp us with your course and semester',
+        howToEnrol: 'Call 90194 16236 / 81239 50627 or WhatsApp us for batch details',
       },
       aeoSections: [
         {
           question:
-            'Does MASTERMIND ACADEMY teach core subjects for B.E, B.Com and Diploma students?',
+            'What does the Interview Mastery with Personality Skill Development Program cover?',
           directAnswer:
-            'Yes, MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi offers dedicated coaching in core subjects for B.E, B.Com and Diploma students — with Online and Offline options available across India. Taught by qualified B.E graduate lecturers, including Pooja (B.E) with 3+ years of experience in core subjects, sessions focus on clear fundamentals, problem solving and exam readiness.',
+            'The 2-month Interview Mastery with Personality Skill Development Program at MASTERMIND ACADEMY (Online and Offline available across India) provides self-introduction coaching, answering common and HR interview questions, Group Discussion (GD) sessions, one-on-one and panel mock interviews, body language, posture, voice modulation, eye contact, presentation skills, and professional grooming.',
           detail:
-            'Call or message us on WhatsApp with your stream (B.E, B.Com or Diploma) and semester to check current subject batches and timings between 7:00 AM and 8:30 PM.',
+            'We work at each learner’s pace so FRESHERS, COLLEGE STUDENTS and JOB SEEKERS who feel nervous about an interview can practise speaking clearly and calmly until they feel ready.',
+        },
+        {
+          question:
+            'Who teaches the Interview Mastery with Personality Skill Development Program?',
+          directAnswer:
+            'The program is guided by Laxmi (B.E), who has 10+ years of prior HR experience along with teaching experience, helping learners understand real interview expectations, Group Discussion dynamics, confident body language and clear answers.',
+          detail:
+            'Sessions emphasise practical speaking, live GD rounds and realistic mock interviews rather than only listening to theory.',
         },
       ],
       relatedSlugs: [
+        '/competitive-exam-english-belagavi',
         '/spoken-english-classes-belagavi',
-        '/school-tuition-classes-6-to-10-belagavi',
-        '/contact',
+        '/be-bca-diploma-classes-belagavi',
       ],
     },
   ] as ProgramItem[],
@@ -687,14 +786,14 @@ export const siteConfig = {
       role: 'Lecturer, MASTERMIND ACADEMY',
       experience: '10+ years of prior HR experience & teaching experience',
       focusArea:
-        'Spoken English (All 4 Levels) & Interview Mastery with Personality Skill Development Program',
+        'Competitive Exam English (Grammar & Language Skills), Spoken English (All 4 Levels) & Interview Mastery with Personality Skill Development Program',
       teachesList: [
+        'Competitive Exam English — Grammar & Language Skills (Complete Grammar Concepts, Exam-Oriented Practice, Mock Tests & Assessments)',
         'Spoken English — Kids, Beginners or Intermediates & Advanced Level',
         INTERVIEW_PROGRAM_NAME,
-        'Self-introduction, Group Discussion (GD) sessions & mock interviews',
-        'Body language, communication clarity & workplace confidence',
+        'Self-introduction, Group Discussion (GD) sessions, mock interviews & body language',
       ],
-      bio: 'Laxmi (B.E) has 10+ years of prior professional experience working in HR, along with hands-on experience in teaching. At MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi, she combines her HR background and teaching experience to guide KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS and STUDENTS across all four Spoken English levels — including the Interview Mastery with Personality Skill Development Program, communication clarity and personal confidence.',
+      bio: 'Laxmi (B.E) has 10+ years of prior professional experience working in HR, along with hands-on experience in teaching. At MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi, she combines her HR background and teaching experience to train COMPETITIVE EXAM ASPIRANTS in English Grammar & Language Skills and guide KIDS, HOUSEWIVES, FRESHERS, JOB SEEKERS and STUDENTS across all four Spoken English levels — including the Interview Mastery with Personality Skill Development Program.',
       photo: '', // Optional real portrait path when available
     },
     {
@@ -703,19 +802,31 @@ export const siteConfig = {
       qualification: 'B.E',
       role: 'Lecturer, MASTERMIND ACADEMY',
       experience: '3+ years of experience in core subjects',
-      focusArea: 'Classes 6th to 10th (All Subjects) & B.E, B.Com, Diploma Core Subjects',
+      focusArea: 'B.E, B.Com & Diploma Core Subjects & Classes 6th to 10th (All Subjects)',
       teachesList: [
-        'Classes 6th to 10th — All Subjects (CBSE, ICSE, KVS & State Board)',
         'B.E Core Subjects',
         'B.Com Core Subjects',
         'Diploma Core Subjects',
+        'Classes 6th to 10th — All Subjects (CBSE, ICSE, KVS & State Board)',
       ],
-      bio: 'Pooja (B.E) brings 3+ years of experience in core subjects to MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi. She teaches all subjects for Classes 6th to 10th (CBSE, ICSE, KVS and State Board) as well as core subjects for B.E, B.Com and Diploma students with clear explanations, regular revision and personal attention.',
+      bio: 'Pooja (B.E) brings 3+ years of experience in core subjects to MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi. She teaches core subjects for B.E, B.Com and Diploma students as well as all subjects for Classes 6th to 10th (CBSE, ICSE, KVS and State Board) with clear explanations, regular revision and personal attention.',
       photo: '', // Optional real portrait path when available
     },
   ] as Lecturer[],
 
   faqs: [
+    {
+      question: 'Do you offer Competitive Exam English coaching in Belagavi?',
+      answer:
+        'Yes. MASTERMIND ACADEMY now teaches Competitive Exam English — Grammar & Language Skills for COMPETITIVE EXAM ASPIRANTS in Belagavi (Offline at Nehru Nagar, 2nd Cross) and Online across India. The course delivers comprehensive English grammar training covering Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments.',
+      category: 'competitive-exam-english',
+    },
+    {
+      question: 'What is included in the Competitive Exam English (Grammar & Language Skills) course?',
+      answer:
+        'Our Competitive Exam English course focuses on Complete Grammar Concepts, Exam-Oriented Practice, and Mock Tests & Assessments — available in both Online & Offline modes for COMPETITIVE EXAM ASPIRANTS.',
+      category: 'competitive-exam-english',
+    },
     {
       question: 'Who can join the Spoken English course?',
       answer:
@@ -727,6 +838,18 @@ export const siteConfig = {
       answer:
         'Yes. Both Online and Offline options are available. Students from anywhere across India can join live online classes, or attend offline classroom sessions at our Nehru Nagar, 2nd Cross, Belagavi centre.',
       category: 'spoken-english',
+    },
+    {
+      question: 'What courses are taught at MASTERMIND ACADEMY?',
+      answer:
+        'MASTERMIND ACADEMY teaches four core courses (Online & Offline): (1) Competitive Exam English — Grammar & Language Skills (Complete Grammar Concepts, Exam-Oriented Practice, Mock Tests & Assessments), (2) Spoken English across 4 levels including Interview Mastery with Personality Skill Development Program, (3) B.E, B.Com & Diploma Core Subjects, and (4) Classes 6th to 10th All Subjects (CBSE, ICSE, KVS & State Board).',
+      category: 'general',
+    },
+    {
+      question: 'Where is MASTERMIND ACADEMY located in Belagavi?',
+      answer:
+        'MASTERMIND ACADEMY is located at Nehru Nagar, 2nd Cross, Belagavi, Karnataka 590010 (GPS: 15.879063, 74.514022 · Plus Code: VGH7+JJC Belagavi, Karnataka). The centre is open 7:00 AM to 8:30 PM for offline classes, and live online classes are available across India.',
+      category: 'general',
     },
     {
       question: 'What are the institute timings at MASTERMIND ACADEMY?',
@@ -741,16 +864,16 @@ export const siteConfig = {
       category: 'spoken-english',
     },
     {
-      question: 'Do you teach all subjects and school boards for Classes 6th to 10th?',
-      answer:
-        'Yes. We cover all subjects for Classes 6th to 10th across CBSE, ICSE, KVS and State Board at MASTERMIND ACADEMY (Online and Offline available).',
-      category: 'school-tuition',
-    },
-    {
       question: 'Do you offer core subject coaching for college students?',
       answer:
         'Yes. MASTERMIND ACADEMY offers dedicated coaching in core subjects for B.E, B.Com and Diploma students (Online and Offline available).',
       category: 'general',
+    },
+    {
+      question: 'Do you teach all subjects and school boards for Classes 6th to 10th?',
+      answer:
+        'Yes. We cover all subjects for Classes 6th to 10th across CBSE, ICSE, KVS and State Board at MASTERMIND ACADEMY (Online and Offline available).',
+      category: 'school-tuition',
     },
     {
       question:
@@ -865,9 +988,10 @@ export function getFilledSocialLinks(): { id: string; label: string; url: string
 }
 
 export const CORE_PROGRAM_IDS: ProgramItem['id'][] = [
+  'competitive-exam-english',
   'spoken-english',
-  'school-tuition',
   'be-bca-diploma',
+  'school-tuition',
 ];
 
 export function getCorePrograms(): ProgramItem[] {

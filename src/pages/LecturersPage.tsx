@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
+  Award,
   BookOpen,
   Briefcase,
   CheckCircle2,
@@ -28,10 +29,19 @@ const programMeta: Record<
   ProgramItem['id'],
   { icon: typeof BookOpen; focusLine: string }
 > = {
+  'competitive-exam-english': {
+    icon: Award,
+    focusLine:
+      'Complete Grammar Concepts, Exam-Oriented Practice & Mock Tests for COMPETITIVE EXAM ASPIRANTS',
+  },
   'spoken-english': {
     icon: MessageSquare,
     focusLine:
       '4 levels: Kids, Beginners or Intermediates, Advanced Level & Interview Mastery with Personality Skill Development Program',
+  },
+  'be-bca-diploma': {
+    icon: GraduationCap,
+    focusLine: 'Core subjects for B.E, B.Com and Diploma college students',
   },
   'school-tuition': {
     icon: BookOpen,
@@ -41,10 +51,6 @@ const programMeta: Record<
     icon: Briefcase,
     focusLine:
       '2-month practical program: self-introduction, GD sessions, mock interviews, body language and grooming',
-  },
-  'be-bca-diploma': {
-    icon: GraduationCap,
-    focusLine: 'Core subjects for B.E, B.Com and Diploma college students',
   },
 };
 
@@ -70,9 +76,9 @@ export function LecturersPage() {
 
   useDocumentHead({
     path: '/lecturers',
-    title: 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
+    title: 'Faculty & Lecturers | MASTERMIND ACADEMY Belagavi',
     description:
-      'Meet our B.E graduate faculty in Belagavi: Laxmi (B.E, 10+ years of prior HR experience and teaching experience) and Pooja (B.E, 3+ years of experience in core subjects).',
+      'Meet our qualified B.E lecturers in Belagavi: Laxmi (10+ yrs HR & teaching) and Pooja (3+ yrs core subjects). Speak with faculty and join a batch today.',
     pageType: 'CollectionPage',
     breadcrumbs,
     schemas,
@@ -102,7 +108,10 @@ export function LecturersPage() {
           <h1 className="font-poster uppercase text-[40px] sm:text-[54px] leading-none text-white">
             Meet Our Faculty
           </h1>
-          <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/95">
+          <p
+            data-aeo-summary="true"
+            className="mx-auto max-w-2xl text-base sm:text-lg text-white/95"
+          >
             <FormatOrdinals text={siteConfig.about.leadershipNote} />
           </p>
         </div>
@@ -193,17 +202,17 @@ export function LecturersPage() {
         </div>
       </section>
 
-      {/* SECTION 2: WHAT OUR FACULTY TEACH (3 Core Offerings) */}
+      {/* SECTION 2: WHAT OUR FACULTY TEACH (4 Core Offerings) */}
       <section className="bg-white py-[56px] lg:py-[96px] border-y border-[var(--hairline)]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 space-y-10">
           <Reveal>
             <SectionHeading
               title="What Our Faculty Teach"
-              subtitle="Three dedicated tracks at Nehru Nagar, 2nd Cross, Belagavi (open 7:00 AM to 8:30 PM) — Online and Offline available across India."
+              subtitle="Four dedicated tracks at Nehru Nagar, 2nd Cross, Belagavi (open 7:00 AM to 8:30 PM) — Online and Offline available across India."
             />
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
             {corePrograms.map((program, idx) => {
               const meta = programMeta[program.id];
               const Icon = meta.icon;

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { ArrowRight, ChevronDown, MessageCircle, Phone } from 'lucide-react';
 import { getTelHref, getWhatsAppUrl, siteConfig, type FaqItem } from '../data/siteConfig';
 import { buildFaqSchema } from '../lib/seo';
@@ -14,6 +14,7 @@ type FilterCategory = 'all' | FaqItem['category'];
 
 const filterLabels: { id: FilterCategory; label: string }[] = [
   { id: 'all', label: 'All Questions' },
+  { id: 'competitive-exam-english', label: 'Competitive Exam English' },
   { id: 'spoken-english', label: 'Spoken English' },
   { id: 'school-tuition', label: 'Classes 6th to 10th' },
   { id: 'interview-mastery', label: 'Interview Mastery with Personality Skill Development Program' },
@@ -23,7 +24,6 @@ const filterLabels: { id: FilterCategory; label: string }[] = [
 export function FaqPage() {
   const [filter, setFilter] = useState<FilterCategory>('all');
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const prefersReduced = useReducedMotion();
   const { openEnquiryModal } = useEnquiryModal();
 
   const breadcrumbs = useMemo(
@@ -37,10 +37,10 @@ export function FaqPage() {
 
   useDocumentHead({
     path: '/faq',
-    title: 'FAQ | MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi',
+    title: 'Course & Enrolment FAQ | MASTERMIND ACADEMY Belagavi',
     description:
-      'Answers on Spoken English 4 levels (including Interview Mastery with Personality Skill Development Program), Classes 6th to 10th all subjects, B.E/B.Com/Diploma core subjects, Online & Offline across India, timings (7:00 AM–8:30 PM) and enrolment.',
-    pageType: 'FAQPage',
+      'Get answers on Competitive Exam English, Spoken English, B.E/B.Com/Diploma, Classes 6th–10th, Online & Offline modes and timings at MASTERMIND ACADEMY.',
+    pageType: 'WebPage',
     breadcrumbs,
     schemas,
   });
@@ -65,8 +65,11 @@ export function FaqPage() {
           <h1 className="font-poster uppercase text-[40px] sm:text-[52px] leading-none text-white">
             Answers About Batches &amp; Enrolment
           </h1>
-          <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
-            <FormatOrdinals text="Clear answers on Spoken English (4 levels), Classes 6th to 10th all subjects, B.E, B.Com & Diploma core subjects, Online & Offline classes across India, and timings (7:00 AM to 8:30 PM)." />
+          <p
+            data-aeo-summary="true"
+            className="mx-auto max-w-2xl text-base sm:text-lg text-white/90"
+          >
+            <FormatOrdinals text="Clear answers on Competitive Exam English, Spoken English (4 levels), B.E, B.Com & Diploma core subjects, Classes 6th to 10th all subjects, Online & Offline classes across India, and timings (7:00 AM to 8:30 PM)." />
           </p>
         </div>
       </section>
@@ -134,21 +137,21 @@ export function FaqPage() {
                     </button>
                   </h2>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        transition={{ duration: 0.22, ease: EASE_OUT }}
-                        className="overflow-hidden"
+                  <div
+                    aria-hidden={!isOpen}
+                    className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p
+                        data-aeo-answer="true"
+                        className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]"
                       >
-                        <p className="border-t border-[var(--hairline)] px-5 py-4 text-base leading-relaxed text-[var(--muted)]">
-                          <FormatOrdinals text={faq.answer} />
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <FormatOrdinals text={faq.answer} />
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

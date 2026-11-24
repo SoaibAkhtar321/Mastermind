@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowRight,
+  Award,
   BookOpen,
   Briefcase,
   CheckCircle2,
@@ -35,10 +36,19 @@ const programMeta: Record<
   ProgramItem['id'],
   { icon: typeof BookOpen; focusLine: string }
 > = {
+  'competitive-exam-english': {
+    icon: Award,
+    focusLine:
+      'Complete Grammar Concepts, Exam-Oriented Practice & Mock Tests for COMPETITIVE EXAM ASPIRANTS',
+  },
   'spoken-english': {
     icon: MessageSquare,
     focusLine:
       '4 levels: Kids, Beginners or Intermediates, Advanced Level & Interview Mastery with Personality Skill Development Program',
+  },
+  'be-bca-diploma': {
+    icon: GraduationCap,
+    focusLine: 'Core subjects for B.E, B.Com and Diploma college students',
   },
   'school-tuition': {
     icon: BookOpen,
@@ -48,10 +58,6 @@ const programMeta: Record<
     icon: Briefcase,
     focusLine:
       '2-month practical program: self-introduction, GD sessions, mock interviews, body language and grooming',
-  },
-  'be-bca-diploma': {
-    icon: GraduationCap,
-    focusLine: 'Core subjects for B.E, B.Com and Diploma college students',
   },
 };
 
@@ -107,11 +113,11 @@ export function TeacherProfilePage() {
   useDocumentHead({
     path: lecturer ? `/lecturers/${lecturer.id}` : '/lecturers',
     title: lecturer
-      ? `${lecturer.name}, ${lecturer.qualification} | Faculty · MASTERMIND ACADEMY, Belagavi`
-      : 'Faculty & Lecturers | MASTERMIND ACADEMY, Belagavi',
+      ? `${lecturer.name} (${lecturer.qualification}) | MASTERMIND ACADEMY Belagavi`
+      : 'Faculty & Lecturers | MASTERMIND ACADEMY Belagavi',
     description: lecturer
-      ? `${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi — ${lecturer.experience}. Focus: ${lecturer.focusArea}.`
-      : 'Meet our qualified B.E graduate lecturers at MASTERMIND ACADEMY in Nehru Nagar, 2nd Cross, Belagavi.',
+      ? `Meet ${lecturer.name} (${lecturer.qualification}), Lecturer at MASTERMIND ACADEMY, Nehru Nagar, 2nd Cross, Belagavi with ${lecturer.experience}. Enquire today.`
+      : 'Meet our qualified B.E lecturers in Belagavi: Laxmi (10+ yrs HR & teaching) and Pooja (3+ yrs core subjects). Speak with faculty and join a batch today.',
     pageType: 'ProfilePage',
     breadcrumbs,
     schemas,
@@ -244,7 +250,10 @@ export function TeacherProfilePage() {
                 </span>
               </div>
 
-              <p className="mx-auto lg:mx-0 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90">
+              <p
+                data-aeo-summary="true"
+                className="mx-auto lg:mx-0 max-w-2xl text-sm sm:text-base leading-relaxed text-white/90"
+              >
                 <FormatOrdinals text={lecturer.bio.trim()} />
               </p>
 
@@ -417,17 +426,17 @@ export function TeacherProfilePage() {
         </div>
       </section>
 
-      {/* COURSES OFFERED AT MASTERMIND ACADEMY (3 Core Tracks) */}
+      {/* COURSES OFFERED AT MASTERMIND ACADEMY (4 Core Tracks) */}
       <section className="bg-white py-[56px] lg:py-[96px] border-y border-[var(--hairline)]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 space-y-10">
           <Reveal>
             <SectionHeading
               title="Programs at MASTERMIND ACADEMY"
-              subtitle="Explore our three core offerings below to check levels, subjects, boards and enrolment details."
+              subtitle="Explore our four core offerings below to check grammar training, levels, subjects, boards and enrolment details."
             />
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
             {corePrograms.map((program, idx) => {
               const meta = programMeta[program.id];
               const Icon = meta.icon;

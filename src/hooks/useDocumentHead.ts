@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import {
   DEFAULT_INDEX_ROBOTS,
+  SOCIAL_SHARE_IMAGE_PATH,
   buildBreadcrumbSchema,
   buildOrganizationSchema,
   buildWebPageSchema,
@@ -24,7 +25,9 @@ function upsertMeta(attrName: 'name' | 'property', attrValue: string, content: s
 function upsertLink(rel: string, href: string, extraAttrs?: Record<string, string>) {
   const selector = extraAttrs?.hreflang
     ? `link[rel="${rel}"][hreflang="${extraAttrs.hreflang}"]`
-    : `link[rel="${rel}"]`;
+    : extraAttrs?.title
+      ? `link[rel="${rel}"][title="${extraAttrs.title}"]`
+      : `link[rel="${rel}"]`;
   let el = document.head.querySelector(selector) as HTMLLinkElement | null;
   if (!el) {
     el = document.createElement('link');
@@ -45,14 +48,18 @@ export function useDocumentHead(meta: PageSeoMeta) {
 
     document.title = meta.title;
     const canonicalUrl = resolveFullUrl(meta.path);
-    const ogImageUrl = resolveFullUrl('/og-image.svg');
+    const ogImageUrl = resolveFullUrl(SOCIAL_SHARE_IMAGE_PATH);
     const robotsDirective = meta.robots || DEFAULT_INDEX_ROBOTS;
+    const geoPosition = `${siteConfig.location.latitude};${siteConfig.location.longitude}`;
+    const icbm = `${siteConfig.location.latitude}, ${siteConfig.location.longitude}`;
 
     upsertMeta('name', 'description', meta.description);
     upsertMeta('name', 'robots', robotsDirective);
     upsertMeta('name', 'author', siteConfig.name);
     upsertMeta('name', 'geo.region', 'IN-KA');
     upsertMeta('name', 'geo.placename', 'Nehru Nagar, 2nd Cross, Belagavi, Karnataka');
+    upsertMeta('name', 'geo.position', geoPosition);
+    upsertMeta('name', 'ICBM', icbm);
 
     upsertMeta('property', 'og:title', meta.title);
     upsertMeta('property', 'og:description', meta.description);
@@ -60,21 +67,34 @@ export function useDocumentHead(meta: PageSeoMeta) {
     upsertMeta('property', 'og:type', meta.pageType === 'ProfilePage' ? 'profile' : 'website');
     upsertMeta('property', 'og:locale', 'en_IN');
     upsertMeta('property', 'og:image', ogImageUrl);
-    upsertMeta('property', 'og:image:alt', `${siteConfig.name}, Nehru Nagar, 2nd Cross, Belagavi: ${siteConfig.tagline}`);
+    upsertMeta('property', 'og:image:type', 'image/png');
+    upsertMeta('property', 'og:image:width', '1200');
+    upsertMeta('property', 'og:image:height', '630');
+    upsertMeta(
+      'property',
+      'og:image:alt',
+      `${siteConfig.name}, Nehru Nagar, 2nd Cross, Belagavi: ${siteConfig.tagline}`
+    );
 
     if (canonicalUrl.startsWith('http')) {
       upsertMeta('property', 'og:url', canonicalUrl);
       upsertLink('canonical', canonicalUrl);
       upsertLink('alternate', canonicalUrl, { hreflang: 'en-IN' });
+      upsertLink('alternate', canonicalUrl, { hreflang: 'x-default' });
     } else {
       upsertLink('alternate', meta.path, { hreflang: 'en-IN' });
+      upsertLink('alternate', meta.path, { hreflang: 'x-default' });
     }
 
     upsertMeta('name', 'twitter:card', 'summary_large_image');
     upsertMeta('name', 'twitter:title', meta.title);
     upsertMeta('name', 'twitter:description', meta.description);
     upsertMeta('name', 'twitter:image', ogImageUrl);
-    upsertMeta('name', 'twitter:image:alt', `${siteConfig.name}, Nehru Nagar, 2nd Cross, Belagavi: ${siteConfig.tagline}`);
+    upsertMeta(
+      'name',
+      'twitter:image:alt',
+      `${siteConfig.name}, Nehru Nagar, 2nd Cross, Belagavi: ${siteConfig.tagline}`
+    );
 
     // Replace previous dynamic JSON-LD nodes with current route schemas
     const existing = document.head.querySelectorAll('script[data-mma-jsonld="true"]');
@@ -95,5 +115,13 @@ export function useDocumentHead(meta: PageSeoMeta) {
       script.textContent = safeJsonLdStringify(schema);
       document.head.appendChild(script);
     }
-  }, [meta.path, meta.title, meta.description, meta.robots, meta.pageType, meta.breadcrumbs, meta.schemas]);
+  }, [
+    meta.path,
+    meta.title,
+    meta.description,
+    meta.robots,
+    meta.pageType,
+    meta.breadcrumbs,
+    meta.schemas,
+  ]);
 }

@@ -22,20 +22,24 @@ export function AppRoutes() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route
+            path="/competitive-exam-english-belagavi"
+            element={<ProgramPage programId="competitive-exam-english" />}
+          />
+          <Route
             path="/spoken-english-classes-belagavi"
             element={<ProgramPage programId="spoken-english" />}
           />
           <Route
-            path="/interview-mastery-personality-development-belagavi"
-            element={<ProgramPage programId="interview-mastery" />}
+            path="/be-bca-diploma-classes-belagavi"
+            element={<ProgramPage programId="be-bca-diploma" />}
           />
           <Route
             path="/school-tuition-classes-6-to-10-belagavi"
             element={<ProgramPage programId="school-tuition" />}
           />
           <Route
-            path="/be-bca-diploma-classes-belagavi"
-            element={<ProgramPage programId="be-bca-diploma" />}
+            path="/interview-mastery-personality-development-belagavi"
+            element={<ProgramPage programId="interview-mastery" />}
           />
           <Route path="/lecturers" element={<LecturersPage />} />
           <Route path="/lecturers/:id" element={<TeacherProfilePage />} />

@@ -24,7 +24,7 @@ export function AtAGlanceBox({ title = 'At a glance', data }: AtAGlanceBoxProps)
   ];
 
   return (
-    <section aria-label={title} className="card-coaching p-6 sm:p-7">
+    <section aria-label={title} data-aeo-summary="true" className="card-coaching p-6 sm:p-7">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--hairline)] pb-4">
         <h2 className="text-xl sm:text-2xl font-bold text-[var(--ink)]">
           <FormatOrdinals text={title} />
