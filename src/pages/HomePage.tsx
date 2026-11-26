@@ -40,6 +40,7 @@ import { SmartPhoto } from '../components/SmartPhoto';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
 import { FormatOrdinals } from '../components/FormatText';
 import { AcademyLocationMap } from '../components/AcademyLocationMap';
+import { SocialLinks } from '../components/SocialLinks';
 import {
   AnimatedCounter,
   EASE_OUT,
@@ -1059,6 +1060,13 @@ export function HomePage() {
                         </a>
                       </div>
                     )}
+
+                    <div className="pt-3 border-t border-[var(--hairline)] space-y-2">
+                      <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--gold-text)]">
+                        Follow Us
+                      </span>
+                      <SocialLinks variant="light" />
+                    </div>
                   </div>
                 </div>
 

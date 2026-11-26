@@ -891,6 +891,7 @@ export function generateLlmsTxt(baseUrl?: string): string {
   const cleanBase = (baseUrl ?? resolveBaseUrl()).trim().replace(/\/+$/, '');
   const link = (p: string) => (cleanBase ? `${cleanBase}${p === '/' ? '/' : p}` : p);
   const safeEmail = getSafeEmail();
+  const socialLinks = getFilledSocialLinks();
 
   return [
     `# ${siteConfig.name}`,
@@ -909,6 +910,7 @@ export function generateLlmsTxt(baseUrl?: string): string {
     `- Institute Timings: ${siteConfig.timings}`,
     `- Phone & WhatsApp: ${siteConfig.phones.join(', ')}`,
     ...(safeEmail ? [`- Help & Support Email: ${safeEmail}`] : []),
+    ...socialLinks.map((item) => `- Official ${item.label}: ${item.url}`),
     `- Faculty: ${siteConfig.lecturers.map((l) => `${l.name} (${l.qualification}, ${l.experience})`).join('; ')}`,
     `- Course Priority Order: 1. Competitive Exam English (Grammar & Language Skills) | 2. Spoken English Classes (4 Levels) | 3. B.E, B.Com & Diploma Core Subjects | 4. Classes 6th to 10th (All Subjects)`,
     '',

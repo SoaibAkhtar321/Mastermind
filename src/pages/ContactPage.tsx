@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import {
   getDirectionsUrl,
-  getFilledSocialLinks,
   getOpenInMapsUrl,
   getSafeEmail,
   getTelHref,
@@ -24,6 +23,7 @@ import { Layout } from '../components/Layout';
 import { WhatsAppEnquiryForm } from '../components/WhatsAppEnquiryForm';
 import { FormatOrdinals } from '../components/FormatText';
 import { AcademyLocationMap } from '../components/AcademyLocationMap';
+import { SocialLinks } from '../components/SocialLinks';
 import { Reveal } from '../components/MotionPrimitives';
 
 export function ContactPage() {
@@ -44,7 +44,6 @@ export function ContactPage() {
     breadcrumbs,
   });
 
-  const socialLinks = getFilledSocialLinks();
   const safeEmail = getSafeEmail();
   const directionsUrl = getDirectionsUrl();
   const openMapsUrl = getOpenInMapsUrl();
@@ -221,26 +220,12 @@ export function ContactPage() {
                   </p>
                 </div>
 
-                {socialLinks.length > 0 && (
-                  <div className="border-t border-[var(--hairline)] pt-3.5 space-y-2">
-                    <div className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)]">
-                      Follow us
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {socialLinks.map((item) => (
-                        <a
-                          key={item.id}
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex min-h-[44px] items-center rounded-xl border border-[var(--hairline)] bg-[var(--cream)] px-3.5 py-1.5 text-xs font-bold text-[var(--ink)] hover:border-[var(--royal)] hover:text-[var(--royal)]"
-                        >
-                          {item.label}
-                        </a>
-                      ))}
-                    </div>
+                <div className="border-t border-[var(--hairline)] pt-4 space-y-2.5">
+                  <div className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--gold-text)]">
+                    Follow Us
                   </div>
-                )}
+                  <SocialLinks variant="light" />
+                </div>
               </div>
             </Reveal>
           </div>

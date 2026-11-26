@@ -18,7 +18,6 @@ import {
 import {
   getCorePrograms,
   getDirectionsUrl,
-  getFilledSocialLinks,
   getSafeEmail,
   getTelHref,
   getWhatsAppUrl,
@@ -28,6 +27,7 @@ import { useEnquiryModal } from '../context/EnquiryModalContext';
 import { BrandLogo } from './BrandLogo';
 import { EASE_OUT } from './MotionPrimitives';
 import { FormatOrdinals } from './FormatText';
+import { SocialLinks } from './SocialLinks';
 import type { BreadcrumbItem } from '../lib/seo';
 
 interface LayoutProps {
@@ -129,7 +129,6 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
     };
   }, []);
 
-  const socialLinks = getFilledSocialLinks();
   const safeEmail = getSafeEmail();
   const waHref = getWhatsAppUrl(whatsappMessage);
   const directionsHref = getDirectionsUrl();
@@ -313,8 +312,10 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
             })}
           </nav>
 
-          {/* Right: Desktop Phone Button (hidden on mobile where sticky bottom bar handles it) + Mobile Menu */}
+          {/* Right: Desktop Social Icons + Phone Button + Mobile Menu */}
           <div className="flex items-center gap-2 shrink-0">
+            <SocialLinks variant="header" className="hidden lg:flex" />
+
             <a
               href={getTelHref(0)}
               className="btn-press hidden lg:inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[var(--navy)] px-4 py-2 text-sm font-bold text-white hover:bg-[var(--royal)] whitespace-nowrap shrink-0 tabular-nums"
@@ -394,7 +395,7 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
               >
                 Contact
               </Link>
-              <div className="pt-3">
+              <div className="pt-3 space-y-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -405,6 +406,12 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                 >
                   Enquire Now
                 </button>
+                <div className="space-y-1.5 pt-1">
+                  <p className="px-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold-text)]">
+                    Follow Us
+                  </p>
+                  <SocialLinks variant="drawer" />
+                </div>
               </div>
             </div>
           </nav>
@@ -650,21 +657,12 @@ export function Layout({ children, breadcrumbs, whatsappMessage }: LayoutProps) 
                 </div>
               </div>
 
-              {socialLinks.length > 0 && (
-                <div className="flex flex-wrap items-center gap-2 pt-2">
-                  {socialLinks.map((item) => (
-                    <a
-                      key={item.id}
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-[36px] items-center rounded-lg border border-white/20 px-3 py-1 text-xs font-semibold text-white hover:border-[var(--gold)] hover:text-[var(--gold)]"
-                    >
-                      {item.label}
-                    </a>
-                  ))}
-                </div>
-              )}
+              <div className="pt-2 space-y-2">
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
+                  Follow Us
+                </p>
+                <SocialLinks variant="footer" />
+              </div>
             </div>
 
             {/* Legal, Privacy & DPDP Act, 2023 Details */}

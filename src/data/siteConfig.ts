@@ -187,7 +187,7 @@ export const siteConfig = {
   canonicalDescription:
     'MASTERMIND ACADEMY is a coaching institute in Nehru Nagar, 2nd Cross, Belagavi, Karnataka (open 7:00 AM to 8:30 PM), offering Online and Offline classes across Belagavi and India across four dedicated programs: Competitive Exam English (Grammar & Language Skills for competitive examinations), Spoken English classes (Kids, Beginners or Intermediates, Advanced Level, and Interview Mastery with Personality Skill Development Program), core subjects for B.E, B.Com and Diploma students, and all subjects for Classes 6th to 10th (CBSE, ICSE, KVS and State Board).',
   lastUpdated: 'November 2026',
-  lastUpdatedIso: '2026-11-23',
+  lastUpdatedIso: '2026-11-26',
 
   // Recoloured official logo on clean white background + original file fallback
   brand: {
@@ -372,8 +372,9 @@ export const siteConfig = {
   },
 
   social: {
-    instagram: '',
-    facebook: '',
+    instagram:
+      'https://www.instagram.com/mastermindacademy20?utm_source=qr&jplx=MXA1bHU3OXgzdTI0OQ==',
+    facebook: 'https://www.facebook.com/share/1AC8AvFFrr/',
     youtube: '',
     others: [] as { label: string; url: string }[],
   },
